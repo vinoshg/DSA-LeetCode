@@ -1,0 +1,57 @@
+// https://leetcode.com/problems/cousins-in-binary-tree/
+class Solution {
+    public boolean isCousins(TreeNode root, int x, int y) {
+        if(root == null) {
+            return false;
+        }
+        TreeNode xx = findNode(root, x);
+        TreeNode yy = findNode(root, y);
+
+        return (
+            level(root, xx, 0) == level(root, yy, 0) && (!isSiblings(root, xx, yy))
+        );
+    }
+
+    public TreeNode findNode(TreeNode node, int x) {
+        if(node == null) {
+            return null;
+        }
+        if(node.val == x) {
+            return node;
+        }
+
+        TreeNode left = findNode(node.left, x);
+        if(left != null) {
+            return left;
+        } // else {return findNode(node.right, x);}
+        return findNode(node.right, x);
+    }
+
+    public boolean isSiblings(TreeNode node, TreeNode x, TreeNode y) {
+        if(node == null) {
+            return false;
+        }
+
+        return (
+            (node.left == x && node.right == y) || (node.left == y && node.right == x) || isSiblings(node.left, x, y) || isSiblings(node.right, x, y)
+        );
+    }
+
+    public int level(TreeNode node, TreeNode x, int lev) { 
+        // Separate Q for level find, I need to use helper func for arg - int lev
+        // intially is 0 ( They will give root and x)
+        //helper func using for including result (ans) in Arg
+        if(node == null) {
+            return 0; // if node = null, obviously x=null, so level = 0
+        }
+        if(node == x) {
+            return lev;
+        }
+
+        int l = level(node.left, x, lev + 1);
+        if(l != 0) {
+            return l;
+        }
+        return level(node.right, x, lev + 1);
+    }
+}
