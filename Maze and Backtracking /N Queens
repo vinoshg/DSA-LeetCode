@@ -1,0 +1,67 @@
+// https://leetcode.com/problems/n-queens/
+class Solution {
+    List<List<String>> result = new ArrayList<>();
+    public List<List<String>> solveNQueens(int n) {
+        char[][] board = new char[n][n];
+        for(int i = 0; i < board.length; i++) {
+            for(int j = 0; j < board.length; j++) {
+                board[i][j] = '.';
+            }
+        }
+
+        queens(board, 0);
+        return result;
+    }
+    public int queens(char[][] board, int row) { // helper func
+        if(row == board.length) {
+            result.add(display(board));
+            return 1;
+        }
+
+        int count = 0;
+
+        for(int col = 0; col < board.length; col++) {
+            if(isSafe(board, row, col)) {
+                board[row][col] = 'Q'; //true
+                count += queens(board, row + 1);
+                //Backtracking
+                board[row][col] = '.'; //false
+            }
+        }
+        return count;
+    }
+    public boolean isSafe(char[][] board, int row, int col) {
+        //Vertical
+        for(int i = 0; i < row; i++) {
+            if(board[i][col] == 'Q') {
+                return false;
+            }
+        }
+
+        //Diagonal left
+        int maxLeft = Math.min(row, col);
+        for(int i = 0; i <= maxLeft; i++) {
+            if(board[row - i][col - i] == 'Q') {
+                return false;
+            }
+        }
+
+        //Diagonal right
+        int maxRight = Math.min(row, board.length - col - 1);
+        for(int i = 0; i <= maxRight; i++) {
+            if(board[row - i][col + i] == 'Q') {
+                return false;
+            }
+        }
+
+        return true; //None of the above condition execute, then return true
+    }
+    public List<String> display(char[][] board) {
+        List<String> list = new ArrayList<>();
+        for(int i = 0; i < board.length; i++) {
+            String row = new String(board[i]); //*
+            list.add(row);
+            }
+        return list;
+    }
+}
