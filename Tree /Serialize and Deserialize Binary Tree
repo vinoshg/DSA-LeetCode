@@ -1,0 +1,53 @@
+// https://leetcode.com/problems/serialize-and-deserialize-binary-tree/
+public class Codec {
+
+    // Encodes a tree to a single string. 
+    public String serialize(TreeNode root) {
+        // List<String> list = new ArrayList<>();
+        StringBuilder str = new StringBuilder();
+        helper(root, str);
+        // for(String s : list) {
+        //     str.append(s + ",");
+        // }
+        return str.toString();
+    }
+    public void helper(TreeNode node, StringBuilder str) {
+        if(node == null) {
+            // list.add("null");
+            str.append("null,");
+            return; // It's NOT Optional - It will end that recursion func call
+        } // else.          (cont - Other wise it will execute below statement)
+        // list.add(String.valueOf(node.val));
+        str.append(node.val + ","); // String.valueOf(node.val)
+
+        helper(node.left, str);
+        helper(node.right, str);
+    }
+
+    // Decodes your encoded data to tree.
+    public TreeNode deserialize(String data) {
+        String[] str = data.split(",");
+        List<String> list = new ArrayList<>();
+        for(String s : str) {
+            list.add(s);
+        }
+        Collections.reverse(list);
+        return helper2(list);
+        
+    }
+
+    public TreeNode helper2(List<String> list) {
+        String value = list.remove(list.size() - 1);
+
+        if(value.charAt(0) == 'n') {
+            return null;
+        } // else
+        TreeNode node = new TreeNode(Integer.parseInt(value));
+
+        node.left = helper2(list);
+        node.right = helper2(list);
+
+        return node;
+    }
+}
+
