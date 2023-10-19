@@ -1,0 +1,25 @@
+// https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/
+class Solution {
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        //DFS - Pre Order
+        if(root == null) {
+            return null; // return null
+        }
+
+        if(root == p || root == q) {
+            return root;
+        }
+
+        //check for left and right
+        TreeNode left = lowestCommonAncestor(root.left, p, q);
+        TreeNode right = lowestCommonAncestor(root.right, p, q);
+
+        if(left != null && right != null) { // I found p and q
+            return root; // current node (their lowest common ancestor)
+        }
+
+        return left == null ? right : left; 
+        // left=null, right found means - ans is right otherise
+        // right=null, left found means - ans is left
+    }
+}
