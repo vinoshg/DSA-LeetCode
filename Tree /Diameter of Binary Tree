@@ -1,0 +1,24 @@
+// https://leetcode.com/problems/diameter-of-binary-tree/
+class Solution {
+    int diameter = 0;
+    public int diameterOfBinaryTree(TreeNode root) {
+        // int h = height(root);
+        height(root);
+        return diameter - 1;
+    } 
+//But leaf node height also become 1 here, WHILE returning DIAMETER of THE Tree substract 1 (No need to substract height, Height is correct)
+    
+    public int height(TreeNode node) {
+        if(node == null) { // (ALWAYS USE AND RETURN 0 FOR node = null HEIGHT) - 
+            return 0; // USE this
+        }
+
+        int leftHeight = height(node.left);
+        int rightHeight = height(node.right);
+        int dia = leftHeight + rightHeight + 1;
+        diameter = Math.max(diameter, dia);
+        //diameter = Math.max(diameter, leftHeight + rightHeight + 1);
+
+        return Math.max(leftHeight, rightHeight) + 1;
+    }
+}
