@@ -1,0 +1,26 @@
+// https://leetcode.com/problems/convert-sorted-array-to-binary-search-tree/
+class Solution {
+    public TreeNode sortedArrayToBST(int[] nums) {
+        // 2 ways - 1. Take mid as root and contruct tree 2. AVL tree
+        int start = 0;
+        // int end = nums.length; // if(start >= end)
+        int end = nums.length - 1; // if(start > end) (Start and end are index)
+
+        return sortedArrayToBST(nums, start, end); // recursion helper func
+    }
+
+    public TreeNode sortedArrayToBST(int[] nums, int start, int end) {
+        if(start > end) {
+            return null;
+        }
+
+        int mid = (start + end) / 2;
+
+        //Pre Order - DFS (Node, Left, Right)
+        TreeNode root = new TreeNode(nums[mid]);
+        // root.left = sortedArrayToBST(nums, start, mid);
+        root.left = sortedArrayToBST(nums, start, mid - 1); // if(start > end)
+        root.right = sortedArrayToBST(nums, mid + 1, end);
+        return root;
+    }
+}
