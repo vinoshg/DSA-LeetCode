@@ -15,6 +15,6 @@ class Solution { // return the index of smallest no >= target / ceiling
                 return mid;
             }
         }
-        return start; // Not founs
+        return start; // Not found
     }
 }
