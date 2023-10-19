@@ -1,0 +1,23 @@
+// https://leetcode.com/problems/number-of-dice-rolls-with-target-sum/
+class Solution {
+    private static final int MOD = 1000000007;
+
+    public int numRollsToTarget(int n, int k, int target) {
+        int[] dp = new int[target + 1];
+        dp[0] = 1;
+
+        for (int i = 1; i <= n; i++) {
+            int[] temp = new int[target + 1];
+            for (int j = 1; j <= target; j++) {
+                for (int num = 1; num <= k; num++) {
+                    if (j - num >= 0) {
+                        temp[j] = (temp[j] + dp[j - num]) % MOD;
+                    }
+                }
+            }
+            dp = temp;
+        }
+
+        return dp[target];
+    }
+}
