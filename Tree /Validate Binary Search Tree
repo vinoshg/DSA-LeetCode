@@ -1,0 +1,27 @@
+// https://leetcode.com/problems/validate-binary-search-tree/
+class Solution {
+    public boolean isValidBST(TreeNode root) {
+        return helper(root, null, null);
+    }
+
+    public boolean helper(TreeNode node, Integer low, Integer high) {
+        if(node == null) {
+            return true;
+        }
+
+        //Pre Order traversal - DFS
+        //Each node value should be in the range(low, high)
+        if(low != null && node.val <= low) {
+            return false;
+        }
+
+        if(high != null && node.val >= high) {
+            return false;
+        }
+
+        boolean leftTree = helper(node.left, low, node.val); //Update high
+        boolean rightTree = helper(node.right, node.val, high); // Update low
+
+        return leftTree && rightTree;
+    }
+}
