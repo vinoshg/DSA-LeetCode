@@ -1,0 +1,19 @@
+// https://www.hackerrank.com/challenges/game-of-two-stacks/problem
+class Result {
+  public static int twoStacks(int maxSum, List<Integer> a, List<Integer> b) {
+    return helper(maxSum, a, b, 0, 0);
+  }
+  public static int helper(int maxSum, List<Integer> a, List<Integer> b, int sum, int count) {
+    if(sum > maxSum) {
+      return count - 1;
+    }
+    if(a.size() == 0 || b.size() == 0) {
+      return count;
+    }
+
+    int left = helper(maxSum, a.subList(1, a.size()), b, sum + a.get(0), count + 1);
+    int right = helper(maxSum, a, b.subList(1, b.size()), sum + b.get(0), count + 1);
+
+    return Math.max(left, right);
+  }
+}
