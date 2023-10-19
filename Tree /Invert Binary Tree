@@ -1,0 +1,28 @@
+// https://leetcode.com/problems/invert-binary-tree/
+class Solution {
+    public TreeNode invertTree(TreeNode root) { 
+        // In Leetcode head / root (In func arg) is just node (Reference //
+        // variable), intial one is head / root.
+        // After we update node via recursion
+        if(root == null) {
+            return root; // or return null; (Base case)
+        }
+
+        //invertTree is swapping of left and right node. Result is mirror of i/p
+        //Time - O(n) and Space - O(log(n)) : recursion stack is height of tree
+       
+        //DFS and Post Order (L, R, Node)
+        TreeNode left = invertTree(root.left);
+        TreeNode right = invertTree(root.right);
+
+        //Node (Operation at Node)
+        root.left = right;
+        root.right = left;
+
+        // TreeNode temp = invertTree(root.left);
+        // root.left = invertTree(root.right);
+        // root.right = temp;
+
+        return root;
+    }
+}
