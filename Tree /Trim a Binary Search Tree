@@ -1,0 +1,27 @@
+// https://leetcode.com/problems/trim-a-binary-search-tree/description/
+class Solution {
+    public TreeNode trimBST(TreeNode root, int low, int high) {
+        //DFS - Post Order
+        if (root == null) 
+            return null;
+
+        // Recurse on left subtree
+        root.left = trimBST(root.left, low, high);
+
+        // Recurse on right subtree
+        root.right = trimBST(root.right, low, high);
+
+        // If current node's value is less than low, return left subtree
+        if (root.val < low) {
+            return root.right;
+        }
+
+        // If current node's value is more than high, return right subtree
+        if (root.val > high) {
+            return root.left;
+        }
+
+        // Otherwise, return current node (its value is between low and high)
+        return root;
+    }
+}
