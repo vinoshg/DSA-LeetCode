@@ -1,0 +1,30 @@
+// https://leetcode.com/problems/kth-smallest-element-in-a-bst/
+class Solution {
+    int count = 0; // Global Variable (Becoz Count from func removing from stack)
+    public int kthSmallest(TreeNode root, int k) {
+        return helper(root, k).val; // Asking val, nor node. Use helper func
+    }
+
+    public TreeNode helper(TreeNode root, int k) {
+        if(root == null) {
+            return null;
+        }
+
+        //In order
+        //LEFT
+        TreeNode left = helper(root.left, k);
+        // Got 1st smallest element
+        //NODE
+        if(left != null) {
+            return left; //Ans left=root; came from if(count == k) {return root}
+        } // else
+        count ++; // if(left == null) -> Do count ++;
+
+        if(count == k) {
+            return root; // ans
+        }
+
+        //RIGHT
+        return helper(root.right, k);
+    }
+}
