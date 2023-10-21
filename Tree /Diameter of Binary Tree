@@ -1,5 +1,5 @@
 // https://leetcode.com/problems/diameter-of-binary-tree/
-// //Time - O(n) and Space - O(logn) for Balanced tree, O(n) for skewed tree
+// Time - O(n) and Space - O(logn) for Balanced tree, O(n) for skewed tree
 class Solution {
     int diameter = 0;
     public int diameterOfBinaryTree(TreeNode root) {
