@@ -7,7 +7,7 @@ List<List<Integer>> findPaths(Node node, int sum) {
   }
   void helper(Node node, int sum, List<Integer> path, List<List<Integer>> paths) {
     if(node == null) {
-      return 0;
+      return;
     }
 
     path.add(node.val);
