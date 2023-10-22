@@ -1,23 +1,20 @@
 // https://practice.geeksforgeeks.org/problems/predecessor-and-successor/1
+
+Node pre = null;
+Node suc = null;
+
 public static void findPreSuc(Node root, int key){
-    // code here.
-    
-    /* There are two static nodes defined above pre(representing predecessor) and suc(representing successor) as follows:
-       static Node pre=null,suc=null
-       You need to update these both.
-       And the data inside these classes will be printed automatically by the driver code. 
-    */
     if(root == null) {
         return;
     }
     
-    if(root.data > key) {
+    if(root.val > key) {
         suc = root;
         findPreSuc(root.left, key);
-    } else if(root.data < key) {
+    } else if(root.val < key) {
         pre = root;
         findPreSuc(root.right, key);
-    } else { // if(root.data == key)
+    } else { // if(root.val == key)
         findPreSuc(root.left, key);
         findPreSuc(root.right, key);
     }    
