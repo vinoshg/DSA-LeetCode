@@ -95,7 +95,7 @@ Depth First Search (DFS):
 - [Path Sum](https://leetcode.com/problems/path-sum/) `leetcode`
 - [Sum Root to Leaf Numbers](https://leetcode.com/problems/sum-root-to-leaf-numbers/) `leetcode`
 - [Binary Tree Maximum Path Sum](https://leetcode.com/problems/binary-tree-maximum-path-sum/) `leetcode`
-- [Binary Tree Paths / Path Exists in Binary Tree from Root to Leaf](https://leetcode.com/problems/binary-tree-paths/) `leetcode`
+- [Binary Tree Paths](https://leetcode.com/problems/binary-tree-paths/) `leetcode`
 - [Path Exists in Binary Tree from Root to Leaf](https://www.geeksforgeeks.org/check-root-leaf-path-given-sequence/)
 - [Path Exists in Binary Tree at Any Nodes](https://www.geeksforgeeks.org/print-path-between-any-two-nodes-in-a-binary-tree/)
 - [Trim a Binary Search Tree](https://leetcode.com/problems/trim-a-binary-search-tree/description/)  
