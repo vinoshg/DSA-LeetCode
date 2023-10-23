@@ -1,5 +1,6 @@
 // https://leetcode.com/problems/n-queens/
-class Solution {
+//Time : O(n^n) and Space : O(n!) = O(n^2 + n! + n)
+class Solution { 
     List<List<String>> result = new ArrayList<>();
     public List<List<String>> solveNQueens(int n) {
         char[][] board = new char[n][n];
