@@ -105,3 +105,9 @@ Depth First Search (DFS):
 - [Top 50 Tree Coding Problems on GeeksForGeeks](https://www.geeksforgeeks.org/top-50-tree-coding-problems-for-interviews/) 
 - [AVL Tree and Segment Tree]() 
 
+## Heaps
+- [Max Heap / Min Heap / Heap Sort / Priority Queue]() `leetcode`
+
+## HashSet and HashMap
+- [Majority Element]([https://leetcode.com/problems/implement-queue-using-stacks/](https://leetcode.com/problems/majority-element/)) `leetcode`
+
