@@ -109,5 +109,5 @@ Depth First Search (DFS):
 - [Max Heap / Min Heap / Heap Sort / Priority Queue]() `leetcode`
 
 ## HashSet and HashMap
-- [Majority Element]([https://leetcode.com/problems/implement-queue-using-stacks/](https://leetcode.com/problems/majority-element/)) `leetcode`
+- [Majority Element](https://leetcode.com/problems/majority-element/) `leetcode`
 
