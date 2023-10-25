@@ -110,4 +110,7 @@ Depth First Search (DFS):
 
 ## HashSet and HashMap
 - [Majority Element](https://leetcode.com/problems/majority-element/) `leetcode`
+- [Union of 2 Arrays](https://www.geeksforgeeks.org/find-union-and-intersection-of-two-unsorted-arrays/) `leetcode`
+- [Intersection of Two Arrays](https://leetcode.com/problems/intersection-of-two-arrays/description/) `leetcode`
+- [Intersection of Two Arrays II](https://leetcode.com/problems/intersection-of-two-arrays-ii/description/) `leetcode`
 
