@@ -1,0 +1,70 @@
+// https://leetcode.com/problems/word-break/description/
+lass Solution {
+    class Node {
+        Node[] children;
+        boolean eow;
+
+        Node() {
+            children = new Node[26];
+            eow = false;
+        }
+    }
+
+    Node root = new Node();
+
+    public boolean wordBreak(String s, List<String> wordDict) { // Time : O(N . L + 2^L . L) = (Trie construction + recursion comparison) and Space : O(N . L)
+        for(String word : wordDict) {
+            insert(word);
+        }
+
+        return helper(s);
+    }
+
+    public boolean helper(String s) {
+        if(s.length() == 0) {
+            return true;
+        }
+
+        for(int i = 1; i <= s.length(); i++) {
+            if(search(s.substring(0, i)) && helper(s.substring(i))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void insert(String word) {
+        int idx = 0;
+        Node node = root;
+
+        for(int i = 0; i< word.length(); i++) {
+            idx = word.charAt(i) - 'a';
+
+            if(node.children[idx] == null) {
+                node.children[idx] = new Node();
+            }
+
+            node = node.children[idx];
+        }
+        node.eow = true;
+    }
+
+    public boolean search(String key) {
+        int idx = 0;
+        Node node = root;
+
+        for(int i = 0; i < key.length(); i++) {
+            idx = key.charAt(i) - 'a';
+
+            if(node.children[idx] == null) {
+                return false;
+            }
+            if(i == key.length() - 1 && node.children[idx].eow == false) {
+                return false;
+            }
+
+            node = node.children[idx];
+        }
+        return true;
+    }
+}
