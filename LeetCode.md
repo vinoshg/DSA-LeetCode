@@ -109,8 +109,14 @@ Depth First Search (DFS):
 - [Max Heap / Min Heap / Heap Sort / Priority Queue]() `leetcode`
 
 ## HashSet and HashMap
+- [HashSet]() 
+- [HashMap]() 
+- [HashMap Implement]() 
 - [Majority Element](https://leetcode.com/problems/majority-element/) `leetcode`
-- [Union of 2 Arrays](https://www.geeksforgeeks.org/find-union-and-intersection-of-two-unsorted-arrays/) `leetcode`
+- [Union of Two Arrays](https://www.geeksforgeeks.org/find-union-and-intersection-of-two-unsorted-arrays/) `leetcode`
 - [Intersection of Two Arrays](https://leetcode.com/problems/intersection-of-two-arrays/description/) `leetcode`
 - [Intersection of Two Arrays II](https://leetcode.com/problems/intersection-of-two-arrays-ii/description/) `leetcode`
+- [Find Itinerary from a given list of tickets](https://www.geeksforgeeks.org/find-itinerary-from-a-given-list-of-tickets/) `leetcode`
+- [Reconstruct Itinerary](https://leetcode.com/problems/reconstruct-itinerary/description/) `leetcode`
+- [Subarray Sum Equals K](https://leetcode.com/problems/subarray-sum-equals-k/description/) `leetcode`
 
