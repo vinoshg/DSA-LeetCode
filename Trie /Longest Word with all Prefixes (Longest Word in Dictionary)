@@ -1,0 +1,64 @@
+// https://leetcode.com/problems/longest-word-in-dictionary/description/
+// Time : O(N . L + 2^L .L) and Space : O(N. L)
+class Solution {
+    class Node {
+        Node[] children;
+        boolean eow;
+
+        Node() {
+            children = new Node[26];
+            for(int i = 0; i < 26; i++) {
+                children[i] = null;
+            }
+            eow = false;
+        }
+    }
+
+    Node root = new Node();
+    String ans = "";
+
+    public String longestWord(String[] words) {
+        for(int i = 0; i < words.length; i++) {
+            insert(words[i]);
+        }
+        longestWord(root, new StringBuilder(""));
+        return ans;
+    }
+
+    public void longestWord(Node root, StringBuilder temp) {
+        if(root == null) {
+            return;
+        }
+
+        for(int i = 0; i < 26; i++) {
+            if(root.children[i] != null && root.children[i].eow == true) {
+                temp.append((char)(i + 'a'));
+                if(temp.length() > ans.length()) {
+                    ans = temp.toString();
+                }
+
+                // Recursive call 
+                longestWord(root.children[i], temp);
+
+                //Backtracking
+                temp.deleteCharAt(temp.length() - 1);
+            }
+        }
+    }
+
+    public void insert(String word) {
+        int index = 0;
+        Node current = root;
+
+        for(int i = 0; i < word.length(); i++) {
+            index = word.charAt(i) - 'a';
+
+            if(current.children[index] == null) {
+                current.children[index] = new Node();
+            }
+
+            current = current.children[index];
+        }
+        current.eow = true;
+    }
+}
