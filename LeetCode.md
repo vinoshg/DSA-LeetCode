@@ -120,3 +120,7 @@ Depth First Search (DFS):
 - [Reconstruct Itinerary](https://leetcode.com/problems/reconstruct-itinerary/description/) `leetcode`
 - [Subarray Sum Equals K](https://leetcode.com/problems/subarray-sum-equals-k/description/) `leetcode`
 
+## Trie
+- [Implement Trie (Prefix Tree)](https://leetcode.com/problems/implement-trie-prefix-tree/description/) `leetcode`
+- [Word Break](https://leetcode.com/problems/word-break/description/) `leetcode`
+- [Word Break II](https://leetcode.com/problems/word-break-ii/) `leetcode`
