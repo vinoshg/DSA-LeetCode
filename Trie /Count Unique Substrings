@@ -1,0 +1,60 @@
+// https://www.geeksforgeeks.org/count-number-of-distinct-substring-in-a-string/
+public static void buildTrie(String str) {
+       //insert all suffixes to Trie
+       root = new Node();
+       for(int i=0; i<str.length(); i++) {
+           insert(str.substring(i));
+       }
+   }
+
+
+   public static int countNodes(Node root) {
+       if(root == null) {
+           return 0;
+       }
+
+
+       int count = 0;
+       for(int i=0; i<26; i++) {
+           if(root.children[i] != null) {
+               count+= countNodes(root.children[i]);
+           }
+       }
+       return 1+count; //extra one for the self node
+   }
+}
+
+---------------------------
+// Java program to count all distinct substrings in a string
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+
+public class DistinctSubstring {
+
+	public static int distinctSubstring(String str)
+	{
+		// Put all distinct substring in a HashSet
+		Set<String> result = new HashSet<String>();
+
+		// List All Substrings
+		for (int i = 0; i <= str.length(); i++) {
+			for (int j = i + 1; j <= str.length(); j++) {
+
+				// Add each substring in Set
+				result.add(str.substring(i, j));
+			}
+		}
+
+		// Return size of the HashSet
+		return result.size();
+	}
+
+	// Driver Code
+	public static void main(String[] args)
+	{
+		String str = "aaaa";
+		System.out.println(distinctSubstring(str));
+	}
+}
+
