@@ -1,0 +1,81 @@
+// https://leetcode.com/problems/word-break-ii/description/
+// TIme O(nl + 2^l.l) and Space O(nl)
+class Solution {
+    class Node {
+        Node[] children;
+        boolean eow;
+
+        Node() {
+            children = new Node[26];
+            eow = false;
+        }
+    }
+
+    Node root = new Node();
+
+    public List<String> wordBreak(String s, List<String> wordDict) {
+        for(String word : wordDict) {
+            insert(word);
+        }
+
+        List<String> result = new ArrayList<>();
+        helper(s, new StringBuilder(), result);
+        return result;
+    }
+
+    public void helper(String s, StringBuilder current, List<String> result) {
+        if(s.length() == 0) {
+            result.add(current.toString().trim());
+            return;
+        }
+
+        for(int i = 1; i <= s.length(); i++) {
+            String prefix = s.substring(0, i);
+            if(search(prefix)) {
+                int originalLength = current.length();
+                if (originalLength > 0) {
+                    current.append(" ");
+                }
+                current.append(prefix);
+                helper(s.substring(i), current, result); //recursion
+
+                current.setLength(originalLength); //checking other possibility
+            }
+        }
+    }
+
+    public void insert(String word) {
+        int idx = 0;
+        Node node = root;
+
+        for(int i = 0; i < word.length(); i++) {
+            idx = word.charAt(i) - 'a';
+
+            if(node.children[idx] == null) {
+                node.children[idx] = new Node();
+            }
+
+            node = node.children[idx];
+        }
+        node.eow = true;
+    }
+
+    public boolean search(String key) {
+        int idx = 0;
+        Node node = root;
+
+        for(int i = 0; i < key.length(); i++) {
+            idx = key.charAt(i) - 'a';
+
+            if(node.children[idx] == null) {
+                return false;
+            }
+            if(i == key.length() - 1 && node.children[idx].eow == false) {
+                return false;
+            }
+
+            node = node.children[idx];
+        }
+        return true;
+    }
+}
