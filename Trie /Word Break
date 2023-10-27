@@ -1,6 +1,6 @@
 // https://leetcode.com/problems/word-break/description/
 // TIme O(nl + 2^l.l) and Space O(nl)
-lass Solution {
+class Solution {
     class Node {
         Node[] children;
         boolean eow;
