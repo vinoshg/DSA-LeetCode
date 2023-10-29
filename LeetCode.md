@@ -30,6 +30,7 @@
 ## Subsets, Subsequence and Permutation (p, up)
 - [Letter Combinations of a Phone Number](https://leetcode.com/problems/letter-combinations-of-a-phone-number/)
 - [Number of Dice Rolls With Target Sum](https://leetcode.com/problems/number-of-dice-rolls-with-target-sum/)
+- [Count Unique Characters of All Substrings of a Given String](https://leetcode.com/problems/count-unique-characters-of-all-substrings-of-a-given-string/description/) `leetcode`
 
 ## Maze and Backtracking
 - [N Queens](https://leetcode.com/problems/n-queens/) `leetcode`
@@ -119,7 +120,7 @@ Depth First Search (DFS):
 - [Find Itinerary from a given list of tickets](https://www.geeksforgeeks.org/find-itinerary-from-a-given-list-of-tickets/) `leetcode`
 - [Reconstruct Itinerary](https://leetcode.com/problems/reconstruct-itinerary/description/) `leetcode`
 - [Subarray Sum Equals K](https://leetcode.com/problems/subarray-sum-equals-k/description/) `leetcode`
-- [Count Unique Characters of All Substrings of a Given String](https://leetcode.com/problems/count-unique-characters-of-all-substrings-of-a-given-string/description/) `leetcode`
+
 
 ## Trie
 - [Implement Trie (Prefix Tree)](https://leetcode.com/problems/implement-trie-prefix-tree/description/) `leetcode`
