@@ -132,3 +132,6 @@ Depth First Search (DFS):
 ## Graph
 - [Breadth First Search (BFS)]() `leetcode`
 - [Depth First Search (DFS)]() `leetcode`
+- [All Paths From Source to Target](https://leetcode.com/problems/all-paths-from-source-to-target/description/) `leetcode`
+- [Rotting Oranges](https://leetcode.com/problems/rotting-oranges/description/) `leetcode`
+- [Number of Islands](https://leetcode.com/problems/number-of-islands/description/) `leetcode`
