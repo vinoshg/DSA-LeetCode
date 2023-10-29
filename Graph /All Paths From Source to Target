@@ -1,0 +1,30 @@
+// https://leetcode.com/problems/all-paths-from-source-to-target/description/
+class Solution { // Time : O(2^n) and Space : O(2^n) - All possible paths
+    List<List<Integer>> result = new ArrayList<>();
+    public List<List<Integer>> allPathsSourceTarget(int[][] graph) {
+        // boolean[] visited = new boolean[graph.length];
+        List<Integer> path = new ArrayList<>();
+        path.add(0);
+        // visited[0] = true;
+        dfs(graph, 0, path);
+        return result;
+    }
+
+    public void dfs(int[][] graph, int curr, List<Integer> path) {
+        if(curr == graph.length - 1) {
+            result.add(new ArrayList<Integer>(path));
+            return;
+        }
+
+        for(int next : graph[curr]) {
+            // if(!visited[next]) {
+                path.add(next);
+                // visited[next] = true;
+                dfs(graph, next, path);
+                //Backtracking
+                path.remove(path.size() - 1);
+                // visited[next] = false;
+            // }
+        }
+    }
+}
