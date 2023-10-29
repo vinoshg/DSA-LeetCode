@@ -119,6 +119,7 @@ Depth First Search (DFS):
 - [Find Itinerary from a given list of tickets](https://www.geeksforgeeks.org/find-itinerary-from-a-given-list-of-tickets/) `leetcode`
 - [Reconstruct Itinerary](https://leetcode.com/problems/reconstruct-itinerary/description/) `leetcode`
 - [Subarray Sum Equals K](https://leetcode.com/problems/subarray-sum-equals-k/description/) `leetcode`
+- [Count Unique Characters of All Substrings of a Given String](https://leetcode.com/problems/count-unique-characters-of-all-substrings-of-a-given-string/description/) `leetcode`
 
 ## Trie
 - [Implement Trie (Prefix Tree)](https://leetcode.com/problems/implement-trie-prefix-tree/description/) `leetcode`
