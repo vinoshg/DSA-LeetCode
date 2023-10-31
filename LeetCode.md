@@ -135,3 +135,5 @@ Depth First Search (DFS):
 - [All Paths From Source to Target](https://leetcode.com/problems/all-paths-from-source-to-target/description/) `leetcode`
 - [Rotting Oranges](https://leetcode.com/problems/rotting-oranges/description/) `leetcode`
 - [Number of Islands](https://leetcode.com/problems/number-of-islands/description/) `leetcode`
+- [Cycle Detection (Directed Graph)]() `leetcode`
+- [Cycle Detection (Undirected Graph)]() `leetcode`
