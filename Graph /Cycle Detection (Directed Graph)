@@ -37,7 +37,7 @@ public class CycleDirected {
                 return true;
             // } else if (!vis[e.dest] && isCyclicDirected(graph, e.dest, vis, stack)) {
             } else if (!vis[e.dest]) {
-                isCyclicDirected(graph, e.dest, vis, stack) {
+                if(isCyclicDirected(graph, e.dest, vis, stack)) {
                     return true;
                 }
             }
