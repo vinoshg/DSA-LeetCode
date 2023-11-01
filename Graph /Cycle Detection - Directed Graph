@@ -20,7 +20,7 @@ class Solution { //Time:O(V+E) Space:O(V)
     return false;
   }
 
-  boolean isCyclicUtil(List<Integer>[] graph, int node, boolean[] visited, boolean[] recursionStack) {
+  public boolean isCyclicUtil(List<Integer>[] graph, int node, boolean[] visited, boolean[] recursionStack) {
 
     if(recursionStack[node]) {
       return true;  
