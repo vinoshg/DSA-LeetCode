@@ -1,0 +1,44 @@
+class Solution {
+
+  public boolean isCyclicDirected(List<Integer>[] graph) {
+
+    boolean[] visited = new boolean[graph.length];
+    boolean[] recursionStack = new boolean[graph.length];
+
+    for(int i = 0; i < graph.length; i++) {
+      
+      if(!visited[i]) {
+        if(isCyclicUtil(graph, i, visited, recursionStack)) {
+          return true;
+        }
+      }
+    }
+
+    return false;
+  }
+
+  boolean isCyclicUtil(List<Integer>[] graph, int node, boolean[] visited, boolean[] recursionStack) {
+
+    if(recursionStack[node]) {
+      return true;  
+    }
+    
+    if(visited[node]) {
+      return false;
+    }
+
+    visited[node] = true;
+    recursionStack[node] = true;
+
+    for(int neighbor : graph[node]) {
+      if(isCyclicUtil(graph, neighbor, visited, recursionStack)) {
+        return true;
+      }
+    }
+
+    recursionStack[node] = false;
+    return false;
+
+  }
+
+}
