@@ -52,6 +52,7 @@ class Solution {
   }
 
   public void bfs(int node, boolean[] visited, List<Integer>[] graph, List<Integer> list) {
+
     Queue<Integer> q = new LinkedList<>();
     q.add(node);
     visited[node] = true;
