@@ -135,6 +135,9 @@ Depth First Search (DFS):
 - [All Paths From Source to Target](https://leetcode.com/problems/all-paths-from-source-to-target/description/) `leetcode`
 - [Rotting Oranges](https://leetcode.com/problems/rotting-oranges/description/) `leetcode`
 - [Number of Islands](https://leetcode.com/problems/number-of-islands/description/) `leetcode`
-- [Cycle Detection (Directed Graph)]() `leetcode`
-- [Cycle Detection (Undirected Graph)]() `leetcode`
-- [Topological Sort]() `leetcode`
+- [Cycle Detection (Directed Graph)](https://practice.geeksforgeeks.org/problems/detect-cycle-in-a-directed-graph/1) 
+- [Cycle Detection (Undirected Graph)](https://practice.geeksforgeeks.org/problems/detect-cycle-in-an-undirected-graph/1) 
+- [Topological Sort](https://www.geeksforgeeks.org/problems/topological-sort/1)
+- [Course Schedule](https://leetcode.com/problems/course-schedule/description/) `leetcode`
+- [Course Schedule II](https://leetcode.com/problems/course-schedule-ii/description/) `leetcode`
+- [Find Eventual Safe States](https://leetcode.com/problems/find-eventual-safe-states/description/) `leetcode`
