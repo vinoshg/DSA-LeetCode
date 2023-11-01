@@ -1,0 +1,39 @@
+class Solution { //Time:O(V+E) Space:O(V+E)
+
+  public List<Integer> topologicalSortUsingBFS(List<Integer>[] graph) {
+    
+    int n = graph.length;
+
+    int[] indegree = new int[n];
+
+    for(int i = 0; i < n; i++) {
+      for(int neighbor : graph[i]) {
+        indegree[neighbor]++;
+      }
+    }
+
+    Queue<Integer> queue = new LinkedList<>();
+    for(int i = 0; i < n; i++) {
+      if(indegree[i] == 0) {
+        queue.add(i);
+      }
+    }
+
+    List<Integer> topologicalOrder = new ArrayList<>();
+
+    while(!queue.isEmpty()) {
+      int current = queue.poll();
+      topologicalOrder.add(current);
+
+      for(int neighbor : graph[current]) {
+        indegree[neighbor]--;
+        if(indegree[neighbor] == 0) {
+          queue.add(neighbor);
+        }
+      }
+    }
+
+    return topologicalOrder;
+  }
+
+}
