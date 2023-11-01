@@ -30,7 +30,7 @@ class Solution { //Time:O(V.E) Space:O(V)
       if(dist[u] != Integer.MAX_VALUE && dist[u] + w < dist[v]) {
         // System.out.println("Graph contains negative weight cycle");
         // return;
-        return new int[]{-1};
+        return new int[] {-1};
       }
     }
 
