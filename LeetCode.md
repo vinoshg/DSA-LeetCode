@@ -142,3 +142,5 @@ Depth First Search (DFS):
 - [Course Schedule II](https://leetcode.com/problems/course-schedule-ii/description/) `leetcode`
 - [Find Eventual Safe States](https://leetcode.com/problems/find-eventual-safe-states/description/) `leetcode`
 - [Dijkstra’s Algorithm (Shortest Distance)](https://www.geeksforgeeks.org/problems/implementing-dijkstra-set-1-adjacency-matrix/1)
+- [Bellman Ford Algorithm (Shortest Distance)](https://www.geeksforgeeks.org/problems/distance-from-the-source-bellman-ford-algorithm/1)
+- [Cheapest Flights Within K Stops](https://leetcode.com/problems/cheapest-flights-within-k-stops/) `leetcode`
