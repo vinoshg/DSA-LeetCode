@@ -1,4 +1,4 @@
-class Solution {
+class Solution { //Time:O(V.E) Space:O(V)
 
   static int[] bellman_ford(int V, ArrayList<ArrayList<Integer>> edges, int S) {
 
