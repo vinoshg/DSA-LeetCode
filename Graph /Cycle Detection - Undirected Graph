@@ -1,4 +1,7 @@
-class Solution {
+-------------------------------------
+Both Connected and Disconnected Graph
+-------------------------------------
+class Solution { //Time:O(V+E) Space:O(V)
 
     public boolean isCycleUndirected(List<Integer>[] graph) {
         int n = graph.length;
