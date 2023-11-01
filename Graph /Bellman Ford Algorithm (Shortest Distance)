@@ -3,7 +3,7 @@ class Solution { //Time:O(V.E) Space:O(V)
   static int[] bellman_ford(int V, ArrayList<ArrayList<Integer>> edges, int S) {
 
     int[] dist = new int[V];
-    Arrays.fill(dist, Integer.MAX_VALUE); //GFC - Take Integer.MAX_VALUE=100000000
+    Arrays.fill(dist, Integer.MAX_VALUE); //GFC - Take Integer.MAX_VALUE=100000000 = 10^8
 
     dist[S] = 0;
 
