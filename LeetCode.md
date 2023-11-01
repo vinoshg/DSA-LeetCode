@@ -141,3 +141,4 @@ Depth First Search (DFS):
 - [Course Schedule](https://leetcode.com/problems/course-schedule/description/) `leetcode`
 - [Course Schedule II](https://leetcode.com/problems/course-schedule-ii/description/) `leetcode`
 - [Find Eventual Safe States](https://leetcode.com/problems/find-eventual-safe-states/description/) `leetcode`
+- [Dijkstra’s Algorithm (Shortest Distance)](https://www.geeksforgeeks.org/problems/implementing-dijkstra-set-1-adjacency-matrix/1)
