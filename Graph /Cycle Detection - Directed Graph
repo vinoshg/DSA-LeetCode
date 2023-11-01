@@ -9,8 +9,7 @@ class Solution { //Time:O(V+E) Space:O(V)
     boolean[] visited = new boolean[n];
     boolean[] recursionStack = new boolean[n];
 
-    for(int i = 0; i < n; i++) {
-      
+    for(int i = 0; i < n; i++) { 
       if(!visited[i]) {
         if(isCyclicUtil(graph, i, visited, recursionStack)) {
           return true;
