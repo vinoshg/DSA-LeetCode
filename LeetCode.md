@@ -144,3 +144,9 @@ Depth First Search (DFS):
 - [Dijkstra’s Algorithm (Shortest Distance)](https://www.geeksforgeeks.org/problems/implementing-dijkstra-set-1-adjacency-matrix/1)
 - [Bellman Ford Algorithm (Shortest Distance)](https://www.geeksforgeeks.org/problems/distance-from-the-source-bellman-ford-algorithm/1)
 - [Cheapest Flights Within K Stops](https://leetcode.com/problems/cheapest-flights-within-k-stops/) `leetcode`
+- [Prim’s Algorithm (MST - Minimum Spanning Tree)](https://www.geeksforgeeks.org/problems/minimum-spanning-tree/1)
+- [Kosaraju’s Algorithm (Strongly Connected Components)](https://www.geeksforgeeks.org/problems/strongly-connected-components-kosarajus-algo/1)
+- [Remove Max Number of Edges to Keep Graph Fully Traversable](https://leetcode.com/problems/remove-max-number-of-edges-to-keep-graph-fully-traversable/description/) `leetcode`
+- [Bridge in Graph (Tarjan’s Algorithm)](https://www.geeksforgeeks.org/problems/bridge-edge-in-graph/1)
+- [Articulation Point in Graph (Tarjan’s Algorithm)](https://www.geeksforgeeks.org/problems/articulation-point-1/1)
+- [Critical Connections in a Network](https://leetcode.com/problems/critical-connections-in-a-network/description/) `leetcode`
