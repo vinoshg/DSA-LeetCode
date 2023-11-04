@@ -158,3 +158,4 @@ Depth First Search (DFS):
 ## Dynamic Programming
 - [Fibonacci Number](https://leetcode.com/problems/fibonacci-number/description/) `leetcode`
 - [Min Cost Climbing Stairs](https://leetcode.com/problems/min-cost-climbing-stairs/description/) `leetcode`
+- [Coin Change](https://leetcode.com/problems/coin-change/description/) `leetcode`
