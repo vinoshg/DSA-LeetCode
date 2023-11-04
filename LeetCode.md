@@ -151,6 +151,10 @@ Depth First Search (DFS):
 - [Articulation Point in Graph (Tarjan’s Algorithm)](https://www.geeksforgeeks.org/problems/articulation-point-1/1)
 - [Critical Connections in a Network](https://leetcode.com/problems/critical-connections-in-a-network/description/) `leetcode`
 
+## Kadane's Algorithm
+- [Maximum Subarray](https://leetcode.com/problems/maximum-subarray/description/) `leetcode`
+- [Maximum Product Subarray](https://leetcode.com/problems/maximum-product-subarray/description/) `leetcode`
+
 ## Dynamic Programming
 - [Fibonacci Number](https://leetcode.com/problems/fibonacci-number/description/) `leetcode`
 - [Min Cost Climbing Stairs](https://leetcode.com/problems/min-cost-climbing-stairs/description/) `leetcode`
