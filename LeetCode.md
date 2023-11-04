@@ -150,3 +150,7 @@ Depth First Search (DFS):
 - [Bridge in Graph (Tarjan’s Algorithm)](https://www.geeksforgeeks.org/problems/bridge-edge-in-graph/1)
 - [Articulation Point in Graph (Tarjan’s Algorithm)](https://www.geeksforgeeks.org/problems/articulation-point-1/1)
 - [Critical Connections in a Network](https://leetcode.com/problems/critical-connections-in-a-network/description/) `leetcode`
+
+## Dynamic Programming
+- [Fibonacci Number](https://leetcode.com/problems/fibonacci-number/description/) `leetcode`
+- [Min Cost Climbing Stairs](https://leetcode.com/problems/min-cost-climbing-stairs/description/) `leetcode`
