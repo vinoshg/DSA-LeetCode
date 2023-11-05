@@ -159,3 +159,5 @@ Depth First Search (DFS):
 - [Fibonacci Number](https://leetcode.com/problems/fibonacci-number/description/) `leetcode`
 - [Min Cost Climbing Stairs](https://leetcode.com/problems/min-cost-climbing-stairs/description/) `leetcode`
 - [Coin Change](https://leetcode.com/problems/coin-change/description/) `leetcode`
+- [Target Sum](https://leetcode.com/problems/target-sum/description/) `leetcode`
+- [Climbing Stairs](https://leetcode.com/problems/climbing-stairs/description/) `leetcode`
