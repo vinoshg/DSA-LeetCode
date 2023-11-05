@@ -157,7 +157,9 @@ Depth First Search (DFS):
 
 ## Dynamic Programming
 - [Fibonacci Number](https://leetcode.com/problems/fibonacci-number/description/) `leetcode`
-- [Min Cost Climbing Stairs](https://leetcode.com/problems/min-cost-climbing-stairs/description/) `leetcode`
-- [Coin Change](https://leetcode.com/problems/coin-change/description/) `leetcode`
-- [Target Sum](https://leetcode.com/problems/target-sum/description/) `leetcode`
 - [Climbing Stairs](https://leetcode.com/problems/climbing-stairs/description/) `leetcode`
+- [Min Cost Climbing Stairs](https://leetcode.com/problems/min-cost-climbing-stairs/description/) `leetcode`
+- [Target Sum](https://leetcode.com/problems/target-sum/description/) `leetcode`
+- [Minimum Cost For Tickets](https://leetcode.com/problems/minimum-cost-for-tickets/description/) `leetcode`
+- [Coin Change](https://leetcode.com/problems/coin-change/description/) `leetcode`
+- [Coin Change II](https://leetcode.com/problems/coin-change-ii/description/) `leetcode`
