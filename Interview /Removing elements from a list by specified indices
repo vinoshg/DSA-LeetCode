@@ -1,0 +1,21 @@
+import java.util.ArrayList;
+import java.util.List;
+
+public class Main {
+
+  public static void main(String[] args) {
+
+    List<String> list1 = new ArrayList<>();
+    list1.add("a");
+    list1.add("b");
+    list1.add("c");
+
+    List<Integer> list2 = new ArrayList<>();
+    list2.add(1); 
+
+    list2.forEach(index -> list1.remove(index.intValue()));
+
+    System.out.println(list1);
+  }
+
+}
