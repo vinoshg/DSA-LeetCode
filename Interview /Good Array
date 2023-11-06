@@ -1,0 +1,32 @@
+import java.util.*;
+
+public class Solution {
+
+  public static List<Integer> getQueryResults(long n, List<List<Integer>> queries) {
+
+    List<Integer> goodArray = new ArrayList<>();
+    
+    // Alternative way to generate goodArray
+    int i = 0;
+    while(n > 0){
+      int curr = (int) Math.pow(2, i);
+      if(curr <= n){
+        goodArray.add(curr); 
+        n -= curr;
+      }
+      i++;
+    }
+
+    List<Integer> result = new ArrayList<>();
+    for(List<Integer> query : queries) {
+      int l = query.get(0);
+      int r = query.get(1);
+      int m = query.get(2);
+
+      result.add(goodArray.get(l) * goodArray.get(r) % m);
+    }
+
+    return result;
+  }
+
+}
