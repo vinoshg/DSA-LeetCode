@@ -14,3 +14,37 @@ public class Solution {
         System.out.println(resultList);
     }
 }
+
+----------------------
+Certainly! Let me explain each method used in the provided code with examples.
+
+IntStream.range(start, end):
+
+This method creates a sequential IntStream from start (inclusive) to end (exclusive).
+Example: IntStream.range(0, 5) generates a stream of integers [0, 1, 2, 3, 4].
+filter(predicate):
+
+The filter method is an intermediate operation that returns a stream consisting of elements that match the given predicate.
+Example: stream.filter(x -> x > 2) filters out elements greater than 2 from the stream.
+mapToObj(mapper):
+
+The mapToObj method converts each element in the stream to an object using the provided mapper function.
+Example: stream.mapToObj(x -> "Number: " + x) maps integers to strings prefixed with "Number: ".
+collect(Collectors.toList()):
+
+The collect method is a terminal operation that transforms the elements of the stream into a different form, such as a List, Set, or Map.
+Example: stream.collect(Collectors.toList()) collects the stream elements into a List.
+In the provided code:
+
+java
+Copy code
+List<Integer> resultList = IntStream.range(0, list1.size())
+    .filter(i -> !list2.contains(i))
+    .mapToObj(list1::get)
+    .collect(Collectors.toList());
+
+IntStream.range(0, list1.size()) generates a stream of indices from 0 to list1.size() - 1.
+.filter(i -> !list2.contains(i)) filters out indices that are present in list2.
+.mapToObj(list1::get) maps the remaining indices back to the corresponding elements in list1.
+.collect(Collectors.toList()) collects these elements into a new List<Integer> called resultList.
+This approach ensures that the elements at the indices specified in list2 are excluded from the final list, resulting in the output [0] for the given example data.
