@@ -15,7 +15,7 @@ public class Solution {
     }
 }
 
-----------------------
+------------------------------------------------------------------------------
 Certainly! Let me explain each method used in the provided code with examples.
 
 IntStream.range(start, end):
@@ -48,3 +48,96 @@ IntStream.range(0, list1.size()) generates a stream of indices from 0 to list1.s
 .mapToObj(list1::get) maps the remaining indices back to the corresponding elements in list1.
 .collect(Collectors.toList()) collects these elements into a new List<Integer> called resultList.
 This approach ensures that the elements at the indices specified in list2 are excluded from the final list, resulting in the output [0] for the given example data.
+
+---------------------------------------------------------------------------------
+Certainly! In the provided code snippet:
+
+java
+Copy code
+.mapToObj(list1::get)
+Here, list1::get is a method reference. In Java, a method reference is a shorthand notation of a lambda expression to call a method. In this case, list1::get refers to the get method of the List interface, which is used to retrieve an element from a specific index in the list.
+
+Let me illustrate this with an example using list1::get:
+
+Consider the list1 list: [10, 20, 30, 40, 50].
+
+Using a method reference, you can convert the elements of this list into strings by calling the toString method on each element. Here's how you can do it using the map operation with a method reference:
+
+java
+Copy code
+List<Integer> list1 = Arrays.asList(10, 20, 30, 40, 50);
+
+List<String> stringList = list1.stream()
+    .map(Object::toString) // Using method reference to call toString method on each element
+    .collect(Collectors.toList());
+
+System.out.println(stringList);
+In this example, Object::toString is a method reference that calls the toString method on each element of the stream. When you run this code, it will output:
+
+csharp
+Copy code
+[10, 20, 30, 40, 50]
+Here, map(Object::toString) applies the toString method to each element of the stream, converting the integers to strings.
+
+In the context of your original code, list1::get is used to map the indices from the stream back to the corresponding elements in list1. Each index is used as an argument to the get method of the list1 list, retrieving the element at that index.
+
+-----------------------------------------------------------------------
+Method referencing in Java is a shorthand notation to call a method. It allows you to refer to a method without executing it. It is often used in lambda expressions to provide a concise way to refer to methods.
+
+There are four types of method references in Java:
+
+Static Method Reference: Syntax: ClassName::staticMethodName
+
+Example: Integer::parseInt refers to the static method parseInt in the Integer class. It can be used instead of a lambda expression to parse integers.
+Instance Method of a Particular Object: Syntax: object::instanceMethodName
+
+Example: System.out::println refers to the instance method println of the PrintStream object System.out. It can be used to print to the console.
+Instance Method of an Arbitrary Object of a Particular Type: Syntax: ClassName::instanceMethodName
+
+Example: String::length refers to the instance method length of the String class. It can be used to get the length of a string.
+Constructor Reference: Syntax: ClassName::new
+
+Example: ArrayList::new refers to the constructor of the ArrayList class. It can be used to create new ArrayList instances.
+Here are a few examples to illustrate method referencing:
+
+Static Method Reference:
+
+java
+Copy code
+// Lambda expression
+Function<String, Integer> parser1 = s -> Integer.parseInt(s);
+
+// Method reference
+Function<String, Integer> parser2 = Integer::parseInt;
+Instance Method of a Particular Object:
+
+java
+Copy code
+List<String> strings = Arrays.asList("apple", "orange", "banana");
+
+// Lambda expression
+strings.forEach(s -> System.out.println(s));
+
+// Method reference
+strings.forEach(System.out::println);
+Instance Method of an Arbitrary Object of a Particular Type:
+
+java
+Copy code
+List<String> strings = Arrays.asList("apple", "orange", "banana");
+
+// Lambda expression
+Function<String, Integer> lengthGetter1 = s -> s.length();
+
+// Method reference
+Function<String, Integer> lengthGetter2 = String::length;
+Constructor Reference:
+
+java
+Copy code
+// Lambda expression
+Supplier<List<String>> listSupplier1 = () -> new ArrayList<>();
+
+// Constructor reference
+Supplier<List<String>> listSupplier2 = ArrayList::new;
+Method references provide a more concise and readable way to write lambda expressions when the lambda's sole purpose is to call a method. They are especially useful when working with functional interfaces (interfaces with a single abstract method) such as Runnable, Callable, Comparator, and various functional interfaces in the Java Stream API.
