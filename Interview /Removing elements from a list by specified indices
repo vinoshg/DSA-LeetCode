@@ -7,7 +7,7 @@ public class Solution {
         List<Integer> list2 = new ArrayList<>(Arrays.asList(3, 1, 2));
 
         List<Integer> resultList = IntStream.range(0, list1.size())
-            .filter(i -> !list2.contains(i))
+            .filter(item -> !list2.contains(item))
             .mapToObj(list1::get)
             .collect(Collectors.toList());
 
