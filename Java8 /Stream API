@@ -1,0 +1,52 @@
+import java.util.*;
+import java.util.stream.*;
+//Not changing existing data, Processing data by creating new
+//Stream can't reuse it, use stream data use only once (after consumed)
+
+public class Main {
+    public static void main(String[] args) {
+//        List<String> list = Arrays.asList("Vinosh","Virat","Kunal");
+        List<Integer> list1 = Arrays.asList(0,1,2,3,4,5);
+//        List<Integer> list2 = Arrays.asList(0,2,3);
+        HashMap<Integer, String> map = new HashMap<>();
+//        map.put(1, "a"); map.put(2, "b"); map.put(3, "c");
+//
+//        list.stream().filter(item -> item.startsWith("V")).forEach(item -> System.out.println(item));
+//
+        map.forEach((key, value) -> System.out.println(key + " " + value));
+        map.entrySet().stream().forEach(item -> System.out.println(item));
+        map.entrySet().stream().filter(item -> item.getKey() % 2 == 0).forEach(item -> System.out.println(item));
+//
+//        list1.stream().forEach(item -> System.out.println(item));
+//
+//        list1.stream().sorted().forEach(item -> System.out.println(item));
+//        list1.stream().sorted(Comparator.reverseOrder()).forEach(item -> System.out.println(item));
+//
+//        List<Integer> result = list1.stream().filter(item -> item > 0).collect(Collectors.toList());
+//        System.out.println(result);
+        //     Optional<Integer> result = list1.stream()
+        //                              .filter(item -> item != null)
+        //                             //  .map(item -> item * 2)
+        //                              .reduce((a,b) -> a + b);
+        //                             //  .collect(Collectors.toList());
+
+        //   result.ifPresent(ans -> System.out.println(ans));
+        //   int ans = result.orElse(0);
+        //     System.out.println(ans);
+
+        list1.stream().forEach(item -> System.out.println(item)); //forEach
+        System.out.println(list1.stream().count()); //Total Elements
+        List<Integer> result = list1.stream().sorted().collect(Collectors.toList()); //Ascending Order
+        System.out.println(result);
+        System.out.println(list1.stream().sorted(Comparator.reverseOrder()).collect(Collectors.toList())); //Descending Order
+        List<Integer> map = list1.stream().map(item -> item * 2).collect(Collectors.toList());
+        System.out.println(map);
+        System.out.println(list1.stream().filter(item -> item > 2).collect(Collectors.toList())); //filter
+        list1.stream().map(item -> item * 10).forEach(item -> System.out.println(item)); //map
+        list1.stream().filter(item -> item % 2 == 0).map(item -> item * 2).forEach(item -> System.out.println(item));//Double only even No.
+        System.out.println(list1.stream().reduce((a, b) -> a + b));
+        list1.stream().reduce((a, b) -> a + b).ifPresent(item -> System.out.println(item));
+
+
+    }
+}
