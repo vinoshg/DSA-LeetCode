@@ -46,6 +46,7 @@ public class Main {
         list1.stream().filter(item -> item % 2 == 0).map(item -> item * 2).forEach(item -> System.out.println(item));//Double only even No.
         System.out.println(list1.stream().reduce((a, b) -> a + b));
         list1.stream().reduce((a, b) -> a + b).ifPresent(item -> System.out.println(item));
+        list1.stream().reduce((a, b) -> a * b).ifPresent(item -> System.out.println(item));
 
 
     }
