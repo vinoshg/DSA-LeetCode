@@ -155,6 +155,10 @@ Depth First Search (DFS):
 - [Maximum Subarray](https://leetcode.com/problems/maximum-subarray/description/) `leetcode`
 - [Maximum Product Subarray](https://leetcode.com/problems/maximum-product-subarray/description/) `leetcode`
 
+## Two Pointer and Sliding Window
+- [Best Time to Buy and Sell Stock](https://leetcode.com/problems/best-time-to-buy-and-sell-stock/description/) `leetcode`
+- [Minimum Size Subarray Sum](https://leetcode.com/problems/minimum-size-subarray-sum/description/) `leetcode`
+
 ## Dynamic Programming
 - [Fibonacci Number](https://leetcode.com/problems/fibonacci-number/description/) `leetcode`
 - [Climbing Stairs](https://leetcode.com/problems/climbing-stairs/description/) `leetcode`
