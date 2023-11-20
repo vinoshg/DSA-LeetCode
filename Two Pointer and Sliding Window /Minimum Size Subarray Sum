@@ -1,0 +1,19 @@
+class Solution { //Time:O(n) Space:O(1)
+    public int minSubArrayLen(int target, int[] nums) {
+        int left = 0;
+        int sum = 0;
+        int result = Integer.MAX_VALUE; //Sum of all elements + 1, result is min
+
+        for(int i = 0; i < nums.length; i++) {
+            sum += nums[i]; //i=right
+
+            while(sum >= target) { // remove left until this condition fails
+                result = Math.min(i - left + 1, result);
+                sum -= nums[left];
+                left ++;
+            }
+        }
+
+        return result == Integer.MAX_VALUE ? 0 : result;
+    }
+}
