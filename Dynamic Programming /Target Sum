@@ -1,0 +1,28 @@
+class Solution {
+    HashMap<String, Integer> memo = new HashMap<>();
+    public int findTargetSumWays(int[] nums, int target) {
+        return helper(nums, target, 0, 0);
+    }
+
+    public int helper(int[] nums, int target, int index, int sum) {
+        if(index == nums.length) {
+            if(sum == target) {
+                return 1;
+            } else {
+                return 0;
+            }
+        }
+
+        String key = index + "," + sum;
+        if(memo.containsKey(key)) {
+            return memo.get(key);
+        }
+
+        // return helper(nums, target, index + 1, sum + nums[index]) + helper(nums, target, index + 1, sum - nums[index]);
+        int add = helper(nums, target, index+1, sum + nums[index]);
+        int subtract = helper(nums, target, index+1, sum - nums[index]);
+
+         memo.put(key, add + subtract);
+         return add + subtract;
+    }
+}
