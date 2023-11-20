@@ -1,0 +1,34 @@
+class Solution {
+    public int mincostTickets(int[] days, int[] costs) {
+        int[] durations = {1, 7, 30};
+
+        Integer[] memo = new Integer[days.length];
+        Arrays.fill(memo, null);
+
+        return dp(0, days, costs, durations, memo);
+    }
+
+    public int dp(int i, int[] days, int[] costs, int[] durations, Integer[] memo) {
+        if (i >= days.length) {
+            return 0; 
+        }
+        
+        if(memo[i] != null) {
+            return memo[i];
+        }
+
+        int ans = Integer.MAX_VALUE;
+        int j = i;
+
+        for(int c = 0; c < costs.length; c++) {
+            int duration = durations[c];
+            while(j < days.length && days[j] < days[i] + duration) {
+                j++; 
+            }
+            ans = Math.min(ans, dp(j, days, costs, durations, memo) + costs[c]);
+        }
+
+        memo[i] = ans;
+        return ans;
+    }
+}
