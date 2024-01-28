@@ -1,4 +1,5 @@
 // https://leetcode.com/problems/binary-tree-level-order-traversal/
+Time : O(n) and Space : O(n)
 class Solution {
     public List<List<Integer>> levelOrder(TreeNode root) {
         List<List<Integer>> result = new ArrayList<>();
