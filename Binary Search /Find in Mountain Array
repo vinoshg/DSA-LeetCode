@@ -15,13 +15,13 @@ class Solution {
         int start = 0;
         int end = arr.length() - 1;
 
-        while (start < end) {
+        while (start <= end) {
             int mid = start + (end - start) / 2;
             if (arr.get(mid) > arr.get(mid+1)) {
                 // you are in dec part of array
                 // this may be the ans, but look at left
                 // this is why end != mid - 1
-                end = mid;
+                end = mid - 1;
             } else {
                 // you are in asc part of array
                 start = mid + 1; // because we know that mid+1 element > mid element
