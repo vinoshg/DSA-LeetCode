@@ -168,3 +168,4 @@ Depth First Search (DFS):
 - [Minimum Cost For Tickets](https://leetcode.com/problems/minimum-cost-for-tickets/description/) `leetcode`
 - [Coin Change](https://leetcode.com/problems/coin-change/description/) `leetcode`
 - [Coin Change II](https://leetcode.com/problems/coin-change-ii/description/) `leetcode`
+- [Longest Common Subsequence](https://leetcode.com/problems/longest-common-subsequence/description/) `leetcode`
