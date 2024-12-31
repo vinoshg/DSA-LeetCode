@@ -1,7 +1,7 @@
 // https://leetcode.com/problems/remove-duplicates-from-sorted-list/
 class Solution {
     public ListNode deleteDuplicates(ListNode head) {
-        if(head == null || head.next == null) {
+        if(head == null) { //No need to check node.next == null, Anyway It will work for a single element
             return head;
         }
 
