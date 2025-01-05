@@ -170,3 +170,6 @@ Depth First Search (DFS):
 - [Coin Change](https://leetcode.com/problems/coin-change/description/) `leetcode`
 - [Coin Change II](https://leetcode.com/problems/coin-change-ii/description/) `leetcode`
 - [Longest Common Subsequence](https://leetcode.com/problems/longest-common-subsequence/description/) `leetcode`
+
+## Greedy Algorithm
+- [Longest Consecutive Sequence](https://leetcode.com/problems/longest-consecutive-sequence/description/) `leetcode`
