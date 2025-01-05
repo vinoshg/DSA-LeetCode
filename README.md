@@ -71,7 +71,7 @@
 - [The Celebrity Problem](https://practice.geeksforgeeks.org/problems/the-celebrity-problem/1/) `Google` `GFG`
 
 ## Tree
-Breadth First Search (BFS) :
+Breadth First Search (BFS) : Using Queue
 - [Binary Tree Level Order Traversal](https://leetcode.com/problems/binary-tree-level-order-traversal/) `leetcode`
 - [Average of Levels in Binary Tree](https://leetcode.com/problems/average-of-levels-in-binary-tree/) `leetcode`
 - [Level Order Successor of a node](https://www.geeksforgeeks.org/level-order-successor-of-a-node-in-binary-tree/) 
@@ -83,7 +83,7 @@ Breadth First Search (BFS) :
 - [Cousins in Binary Tree](https://leetcode.com/problems/cousins-in-binary-tree/) `leetcode` - DFS (Level and not Siblings)
 - [Symmetric Tree](https://leetcode.com/problems/symmetric-tree/) `leetcode`
 
-Depth First Search (DFS): PreOrder, InOrder and PostOrder
+Depth First Search (DFS): PreOrder, InOrder and PostOrder using recursion
 - [Diameter of Binary Tree](https://leetcode.com/problems/diameter-of-binary-tree/) `leetcode`
 - [Invert Binary Tree](https://leetcode.com/problems/invert-binary-tree/) `leetcode`
 - [Maximum Depth of Binary Tree](https://leetcode.com/problems/maximum-depth-of-binary-tree/) `leetcode`
