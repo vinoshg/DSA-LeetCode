@@ -80,7 +80,7 @@ Breadth First Search (BFS) :
 - [Binary Tree Level Order Traversal II](https://leetcode.com/problems/binary-tree-level-order-traversal-ii/) `leetcode`
 - [Populating Next Right Pointers in Each Node](https://leetcode.com/problems/populating-next-right-pointers-in-each-node/) `leetcode`
 - [Binary Tree Right Side View](https://leetcode.com/problems/binary-tree-right-side-view/) `leetcode`
-- [Cousins in Binary Tree](https://leetcode.com/problems/cousins-in-binary-tree/) `leetcode`
+- [Cousins in Binary Tree](https://leetcode.com/problems/cousins-in-binary-tree/) `leetcode` - DFS (Level and not Siblings)
 - [Symmetric Tree](https://leetcode.com/problems/symmetric-tree/) `leetcode`
 
 Depth First Search (DFS):
