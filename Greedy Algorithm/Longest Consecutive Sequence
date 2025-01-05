@@ -11,7 +11,7 @@ class Solution {
 
         int longestStreak = 0;
 
-        for (int num : nums) {
+        for (int num : set) { //Time limit - Avoid duplicate
             // Check if it's the start of a sequence
             if (!set.contains(num - 1)) {
                 int currentNum = num;
