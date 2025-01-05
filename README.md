@@ -83,7 +83,7 @@ Breadth First Search (BFS) :
 - [Cousins in Binary Tree](https://leetcode.com/problems/cousins-in-binary-tree/) `leetcode` - DFS (Level and not Siblings)
 - [Symmetric Tree](https://leetcode.com/problems/symmetric-tree/) `leetcode`
 
-Depth First Search (DFS):
+Depth First Search (DFS): PreOrder, InOrder and PostOrder
 - [Diameter of Binary Tree](https://leetcode.com/problems/diameter-of-binary-tree/) `leetcode`
 - [Invert Binary Tree](https://leetcode.com/problems/invert-binary-tree/) `leetcode`
 - [Maximum Depth of Binary Tree](https://leetcode.com/problems/maximum-depth-of-binary-tree/) `leetcode`
