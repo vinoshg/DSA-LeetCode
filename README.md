@@ -96,7 +96,7 @@ Depth First Search (DFS): PreOrder, InOrder and PostOrder using recursion
 - [Serialize and Deserialize Binary Tree](https://leetcode.com/problems/serialize-and-deserialize-binary-tree/) `leetcode`
 - [Path Sum](https://leetcode.com/problems/path-sum/) `leetcode`
 - [Sum Root to Leaf Numbers](https://leetcode.com/problems/sum-root-to-leaf-numbers/) `leetcode`
-- [Binary Tree Maximum Path Sum](https://leetcode.com/problems/binary-tree-maximum-path-sum/) `leetcode`
+- [Binary Tree Maximum Path Sum](https://leetcode.com/problems/binary-tree-maximum-path-sum/) `leetcode` - Similar to Diameter, But Here we're considering node.val (Make sure handle -ve sum! like left = Math.max(0, left)
 - [Binary Tree Paths](https://leetcode.com/problems/binary-tree-paths/) `leetcode`
 - [Path Exists in Binary Tree from Root to Leaf](https://www.geeksforgeeks.org/check-root-leaf-path-given-sequence/)
 - [Path Exists in Binary Tree at Any Nodes](https://www.geeksforgeeks.org/print-path-between-any-two-nodes-in-a-binary-tree/)
