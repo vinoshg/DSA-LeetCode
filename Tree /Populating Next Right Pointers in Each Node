@@ -5,7 +5,7 @@ class Solution {
             return root;
         }
 
-        Node leftMost = root;
+        Node leftMost = root; // Ignore null pointer!
         while(leftMost.left != null) {
             Node current = leftMost;
             while(current != null) {
