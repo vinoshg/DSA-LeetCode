@@ -8,7 +8,7 @@
 - [Find in Mountain Array](https://leetcode.com/problems/find-in-mountain-array/)
 - [Search in Rotated Sorted Array](https://leetcode.com/problems/search-in-rotated-sorted-array/)
 - [Search in Rotated Sorted Array II - with Duplicates (Multiple Solution)](https://leetcode.com/problems/search-in-rotated-sorted-array-ii/)
-- [Rotation Count in Rotated Sorted Array (Pivot - 1)](https://www.geeksforgeeks.org/find-rotation-count-rotated-sorted-array/)
+- [Rotation Count in Rotated Sorted Array (Pivot + 1)](https://www.geeksforgeeks.org/find-rotation-count-rotated-sorted-array/)
 - [Split Array Largest Sum](https://leetcode.com/problems/split-array-largest-sum/)
 - [Book allocation](https://www.geeksforgeeks.org/allocate-minimum-number-pages/)
 - [Capacity To Ship Packages Within D Days](https://leetcode.com/problems/capacity-to-ship-packages-within-d-days/)
