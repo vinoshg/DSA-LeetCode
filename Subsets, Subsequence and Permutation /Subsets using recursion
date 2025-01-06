@@ -1,0 +1,30 @@
+import java.util.ArrayList;
+import java.util.List;
+
+public class Subsets {
+    public static void main(String[] args) {
+        int[] nums = {1, 2, 3};
+        List<List<Integer>> result = new ArrayList<>();
+        generateSubsets(0, nums, new ArrayList<>(), result);
+
+        System.out.println("Subsets: " + result);
+    }
+
+    static void generateSubsets(int index, int[] nums, List<Integer> current, List<List<Integer>> result) {
+        // Base case: if we've considered all elements
+        if (index == nums.length) {
+            result.add(new ArrayList<>(current)); // Add the current subset to the result
+            return;
+        }
+
+        // Recursive case: exclude the current element
+        generateSubsets(index + 1, nums, current, result);
+
+        // Recursive case: include the current element
+        current.add(nums[index]); // Add the element to the current subset
+        generateSubsets(index + 1, nums, current, result);
+
+        // Backtrack: remove the element before returning to the previous state
+        current.remove(current.size() - 1);
+    }
+}
