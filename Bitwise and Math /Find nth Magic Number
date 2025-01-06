@@ -10,7 +10,7 @@ public class MagicNumber {
             int last = n & 1;
             n = n >> 1;
             ans += last * base;
-            base = base * 5;
+            base = base * base;
         }
 
         System.out.println(ans);
