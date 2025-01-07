@@ -1,0 +1,47 @@
+public class PowerCalculation { // O(log(n))
+    public static void main(String[] args) {
+        int base = 2;
+        int exponent = 5;
+
+        int result = power(base, exponent);
+        System.out.println("2^5 using optimized method: " + result);
+    }
+
+    static int power(int base, int exponent) {
+        int result = 1;
+
+        while (exponent > 0) {
+            // If exponent is odd, multiply base with result
+            if ((exponent & 1) == 1) {
+                result *= base;
+            }
+            // Square the base and halve the exponent
+            base *= base;
+            exponent >>= 1; // equivalent to exponent = exponent / 2
+        }
+
+        return result;
+    }
+}
+
+
+---------------
+public class PowerCalculation { O(pow) 
+    public static void main(String[] args) {
+        int base = 2;
+        int exponent = 5;
+
+        // Using Math.pow
+        int result1 = (int) Math.pow(base, exponent);
+        System.out.println("2^5 using Math.pow: " + result1);
+
+        // Using a loop
+        int result2 = 1;
+        for (int i = 0; i < exponent; i++) {
+            result2 *= base;
+        }
+        System.out.println("2^5 using a loop: " + result2);
+
+        // Output: Both should print 32
+    }
+}
