@@ -18,7 +18,7 @@ class Solution {
             return root; // current node (their lowest common ancestor)
         }
 
-        return left == null ? right : left; 
+        return left != null ? left : right; 
         // left=null, right found means - ans is right otherise
         // right=null, left found means - ans is left
     }
