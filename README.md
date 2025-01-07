@@ -127,7 +127,7 @@ Depth First Search (DFS): PreOrder, InOrder and PostOrder using recursion
 - [Implement Trie (Prefix Tree)](https://leetcode.com/problems/implement-trie-prefix-tree/description/) `leetcode`
 - [Word Break](https://leetcode.com/problems/word-break/description/) `leetcode`
 - [Word Break II](https://leetcode.com/problems/word-break-ii/) `leetcode`
-- [Count Unique Substrings](https://www.geeksforgeeks.org/count-number-of-distinct-substring-in-a-string/) `leetcode`
+- [Count Unique Substrings / Count Trie Nodes](https://www.geeksforgeeks.org/count-number-of-distinct-substring-in-a-string/) `leetcode`
 - [Longest word with all prefixes / Longest Word in Dictionary](https://leetcode.com/problems/longest-word-in-dictionary/description/) `leetcode`
 
 ## Graph
