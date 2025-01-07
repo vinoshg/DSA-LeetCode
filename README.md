@@ -90,7 +90,7 @@ Depth First Search (DFS): PreOrder, InOrder and PostOrder using recursion
 - [Convert Sorted Array to Binary Search Tree](https://leetcode.com/problems/convert-sorted-array-to-binary-search-tree/) `leetcode`
 - [Flatten Binary Tree to Linked List](https://leetcode.com/problems/flatten-binary-tree-to-linked-list/) `leetcode`
 - [Validate Binary Search Tree](https://leetcode.com/problems/validate-binary-search-tree/) `leetcode`
-- [Lowest Commom Ancestor of a Binary Tree](https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/) `leetcode`
+- [Lowest Commom Ancestor of a Binary Tree - LCA](https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/) `leetcode`
 - [Kth Smallest Element in a BST](https://leetcode.com/problems/kth-smallest-element-in-a-bst/) `leetcode`
 - [Construct Binary Tree from Preorder and Inorder Traversal](https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/) `leetcode`
 - [Serialize and Deserialize Binary Tree](https://leetcode.com/problems/serialize-and-deserialize-binary-tree/) `leetcode`
