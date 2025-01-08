@@ -1,0 +1,91 @@
+Steps to Calculate Path Distance:
+1. Find the Lowest Common Ancestor (LCA):
+
+Use the LCA algorithm to determine the lowest common ancestor of the two nodes.
+2. Find the Distance from the LCA to Each Node:
+
+Use a helper function to compute the distance between the LCA and a target node.
+
+Calculate the Total Distance:
+3. Sum up the distances from the LCA to both nodes.
+
+
+class TreeNode {
+    int val;
+    TreeNode left, right;
+
+    TreeNode(int val) {
+        this.val = val;
+        left = right = null;
+    }
+}
+
+public class BinaryTree {
+
+    // Function to find the Lowest Common Ancestor (LCA)
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        if (root == null || root == p || root == q) {
+            return root;
+        }
+
+        TreeNode left = lowestCommonAncestor(root.left, p, q);
+        TreeNode right = lowestCommonAncestor(root.right, p, q);
+
+        if (left != null && right != null) {
+            return root;
+        }
+        return left != null ? left : right;
+    }
+
+    // Helper function to find the distance from a given node to the target
+    public int findDistance(TreeNode root, TreeNode target, int distance) {
+        if (root == null) {
+            return -1; // Target not found
+        }
+
+        if (root == target) {
+            return distance;
+        }
+
+        // Search in the left subtree
+        int left = findDistance(root.left, target, distance + 1);
+        if (left != -1) {
+            return left;
+        }
+
+        // Search in the right subtree
+        return findDistance(root.right, target, distance + 1);
+    }
+
+    // Function to find the path distance between two nodes
+    public int pathDistance(TreeNode root, TreeNode node1, TreeNode node2) {
+        // Step 1: Find the LCA of the two nodes
+        TreeNode lca = lowestCommonAncestor(root, node1, node2);
+
+        // Step 2: Find the distances from the LCA to each node
+        int distance1 = findDistance(lca, node1, 0);
+        int distance2 = findDistance(lca, node2, 0);
+
+        // Step 3: Return the total distance
+        return distance1 + distance2;
+    }
+
+    // Example usage
+    public static void main(String[] args) {
+        BinaryTree tree = new BinaryTree();
+        TreeNode root = new TreeNode(6);
+        root.left = new TreeNode(2);
+        root.right = new TreeNode(8);
+        root.left.left = new TreeNode(0);
+        root.left.right = new TreeNode(4);
+        root.right.left = new TreeNode(7);
+        root.right.right = new TreeNode(9);
+        root.left.right.left = new TreeNode(3);
+        root.left.right.right = new TreeNode(5);
+
+        TreeNode node1 = root.left.right.left; // Node 3
+        TreeNode node2 = root.left.right.right; // Node 5
+
+        System.out.println("Path Distance: " + tree.pathDistance(root, node1, node2));
+    }
+}
