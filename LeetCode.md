@@ -4,7 +4,6 @@
 - Question: Break the word into multiple parts and check whether all parts are present in the dictionary
 - Solution: Reverse DP
 ```
-class Solution {
     public boolean wordBreak(String s, List<String> wordDict) {
         boolean[] dp = new boolean[s.length() + 1];
         dp[s.length()] = true;
@@ -21,7 +20,6 @@ class Solution {
         }
         return dp[0];
     }
-}
 ```
 3. Word Break II 
 4. Count Unique Substrings / Count Trie Nodes 
