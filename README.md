@@ -1,4 +1,4 @@
-## Binary Search
+## Binary Search - O(log(n)) and O(1)
 - [Binary Search](https://leetcode.com/problems/binary-search/)
 - [Search Insert Position / Ceiling of a Number (start) and Floor of a Number (end)](https://leetcode.com/problems/search-insert-position/)
 - [Find Smallest Letter Greater Than Target](https://leetcode.com/problems/find-smallest-letter-greater-than-target/)
@@ -13,7 +13,7 @@
 - [Book allocation](https://www.geeksforgeeks.org/allocate-minimum-number-pages/)
 - [Capacity To Ship Packages Within D Days](https://leetcode.com/problems/capacity-to-ship-packages-within-d-days/)
 
-## Cyclic Sort
+## Cyclic Sort - O(n) and O(n)
 - [Cycle Sort](https://www.geeksforgeeks.org/cycle-sort/)
 - [Sort an Array - Sorting Algorithm](https://leetcode.com/problems/sort-an-array/)
 - [Missing Number](https://leetcode.com/problems/missing-number/)
@@ -71,7 +71,7 @@
 - [The Celebrity Problem](https://practice.geeksforgeeks.org/problems/the-celebrity-problem/1/) `Google` `GFG`
 
 ## Tree
-Breadth First Search (BFS) : Using Queue
+Breadth First Search (BFS) : Using Queue - O(n) and O(n)
 - [Binary Tree Level Order Traversal](https://leetcode.com/problems/binary-tree-level-order-traversal/) `leetcode`
 - [Average of Levels in Binary Tree](https://leetcode.com/problems/average-of-levels-in-binary-tree/) `leetcode`
 - [Level Order Successor of a node](https://www.geeksforgeeks.org/level-order-successor-of-a-node-in-binary-tree/) 
@@ -83,7 +83,7 @@ Breadth First Search (BFS) : Using Queue
 - [Cousins in Binary Tree](https://leetcode.com/problems/cousins-in-binary-tree/) `leetcode` - DFS (Level and not Siblings)
 - [Symmetric Tree](https://leetcode.com/problems/symmetric-tree/) `leetcode`
 
-Depth First Search (DFS): PreOrder, InOrder and PostOrder using recursion
+Depth First Search (DFS): PreOrder, InOrder and PostOrder using recursion - O(n) and O(log(n))
 - [Diameter of Binary Tree](https://leetcode.com/problems/diameter-of-binary-tree/) `leetcode`
 - [Invert Binary Tree](https://leetcode.com/problems/invert-binary-tree/) `leetcode`
 - [Maximum Depth of Binary Tree](https://leetcode.com/problems/maximum-depth-of-binary-tree/) `leetcode`
