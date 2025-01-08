@@ -3,7 +3,7 @@
 2. Word Break 
 - Question: Break the word into multiple parts and check whether all parts are present in the dictionary
 - Solution: Reverse DP
-```java
+```
 class Solution {
     public boolean wordBreak(String s, List<String> wordDict) {
         boolean[] dp = new boolean[s.length() + 1];
@@ -22,7 +22,7 @@ class Solution {
         return dp[0];
     }
 }
-
+```
 3. Word Break II 
 4. Count Unique Substrings / Count Trie Nodes 
 5. Longest word with all prefixes / Longest Word in Dictionary 
