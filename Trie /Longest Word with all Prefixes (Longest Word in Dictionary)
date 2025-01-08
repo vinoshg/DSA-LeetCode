@@ -1,25 +1,21 @@
 // https://leetcode.com/problems/longest-word-in-dictionary/description/
 
-import java.util.*;
-
 class Solution {
     public String longestWord(String[] words) {
-        Arrays.sort(words); // Sort words lexicographically
-        Set<String> built = new HashSet<>();
-        String result = "";
+        Arrays.sort(words);
+        HashSet<String> set = new HashSet<>();
+        String ans = "";
 
-        for (String word : words) {
-            // Check if the word can be built (or is a single letter)
-            if (word.length() == 1 || built.contains(word.substring(0, word.length() - 1))) {
-                built.add(word); // Add to the set of valid words
-                // Update the result if it's longer or lexicographically smaller
-                if (word.length() > result.length()) {
-                    result = word;
+        for(String w : words) {
+            if(w.length() == 1 || set.contains(w.substring(0, w.length() - 1))) {
+                set.add(w);
+                if(w.length() > ans.length()) {
+                    ans = w;
                 }
             }
         }
 
-        return result;
+        return ans;
     }
 }
 
