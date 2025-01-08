@@ -91,6 +91,8 @@ Depth First Search (DFS): PreOrder, InOrder and PostOrder using recursion - O(n)
 - [Flatten Binary Tree to Linked List](https://leetcode.com/problems/flatten-binary-tree-to-linked-list/) `leetcode`
 - [Validate Binary Search Tree](https://leetcode.com/problems/validate-binary-search-tree/) `leetcode`
 - [Lowest Commom Ancestor of a Binary Tree - LCA](https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/) `leetcode`
+- [LCA of BST](https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/) `leetcode`
+- [Path distance between the 2 nodes](https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/) `leetcode`
 - [Kth Smallest Element in a BST](https://leetcode.com/problems/kth-smallest-element-in-a-bst/) `leetcode`
 - [Construct Binary Tree from Preorder and Inorder Traversal](https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/) `leetcode`
 - [Serialize and Deserialize Binary Tree](https://leetcode.com/problems/serialize-and-deserialize-binary-tree/) `leetcode`
