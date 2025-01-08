@@ -1,0 +1,50 @@
+---------------- O(log(n)) and O(1)
+class TreeNode {
+    int val;
+    TreeNode left, right;
+
+    TreeNode(int val) {
+        this.val = val;
+        left = right = null;
+    }
+}
+
+public class BinarySearchTree {
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        while (root != null) {
+            // If both nodes are smaller, go to the left subtree
+            if (p.val < root.val && q.val < root.val) {
+                root = root.left;
+            }
+            // If both nodes are larger, go to the right subtree
+            else if (p.val > root.val && q.val > root.val) {
+                root = root.right;
+            } 
+            // If the current node is the split point, it's the LCA
+            else {
+                return root;
+            }
+        }
+        return null;
+    }
+}
+
+----------------- O(log(n)) and O(log(n))
+public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+    // Base case: If root is null or one of the nodes matches the root
+    if (root == null || root == p || root == q) {
+        return root;
+    }
+    
+    // If both nodes are smaller, recurse to the left subtree
+    if (p.val < root.val && q.val < root.val) {
+        return lowestCommonAncestor(root.left, p, q);
+    }
+    // If both nodes are larger, recurse to the right subtree
+    else if (p.val > root.val && q.val > root.val) {
+        return lowestCommonAncestor(root.right, p, q);
+    }
+    
+    // If one is smaller and the other is larger, root is the LCA
+    return root;
+}
