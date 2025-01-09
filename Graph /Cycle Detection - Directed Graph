@@ -1,6 +1,27 @@
 -------------------------------------
 Both Connected and Disconnected Graph
 -------------------------------------
+    public static boolean isCyclicDirected(ArrayList <Integer> [] graph, int curr, boolean vis[], boolean stack[]) {
+        vis[curr] = true;
+        stack[curr] = true;
+        for (int i = 0; i < graph[curr].size(); i++) {
+            int next = graph[curr].get(i);
+            if (stack[next]) { //cycle exists
+                return true;
+            // } else if (!vis[next] && isCyclicDirected(graph, next, vis, stack)) {
+            } else if (!vis[e.dest]) {
+                if(isCyclicDirected(graph, next, vis, stack)) {
+                    return true;
+                }
+            }
+        }
+        stack[curr] = false;
+        return false;
+    }
+
+------------------
+
+
 class Solution { //Time:O(V+E) Space:O(V)
 
   public boolean isCyclicDirected(List<Integer>[] graph) {
