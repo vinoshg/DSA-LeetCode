@@ -10,3 +10,5 @@
 - Solution: 1. HashSet contains its prefix of (length - 1) 2. Trie inserts and builds a string with it's all prefixes present in the dictionary along with recursion and backtracking
 ## Graph
 1. Connected and Disconnected Graph - BFS (Using Queue) and DFS (Using Recursion)
+2. All Paths From Source to Target
+- Solution: DFS with Backtracking (As per the question nodes are to be visited multiple times, so the visited array is not required and backtracking will handle this)
