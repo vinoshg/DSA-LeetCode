@@ -11,4 +11,4 @@
 ## Graph
 1. Connected and Disconnected Graph - BFS (Using Queue) and DFS (Using Recursion)
 2. All Paths From Source to Target
-- Solution: DFS with Backtracking (As per the question nodes are to be visited multiple times, so the visited array is not required and backtracking will handle this)
+- Solution: 1. DFS with Backtracking (As per the question nodes are to be visited multiple times, so the visited array is not required and backtracking will handle this)
