@@ -9,4 +9,4 @@
 4. Longest word with all prefixes / Longest Word in Dictionary
 - Solution: 1. HashSet contains its prefix of (length - 1) 2. Trie inserts and builds a string with it's all prefixes present in the dictionary along with recursion and backtracking
 ## Graph
-1. Connected and Dis connected Graph - BFS (Using Queue) and DFS (Using Recursion)
+1. Connected and Disconnected Graph - BFS (Using Queue) and DFS (Using Recursion)
