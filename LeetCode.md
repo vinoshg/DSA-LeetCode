@@ -8,3 +8,5 @@
 - Solution: 1. HashSet with Nested loops to get a substring 2. Trie insert and count nodes
 4. Longest word with all prefixes / Longest Word in Dictionary
 - Solution: 1. HashSet contains its prefix of (length - 1) 2. Trie inserts and builds a string with it's all prefixes present in the dictionary along with recursion and backtracking
+## Graph
+1. Connected and Dis connected Graph - BFS (Using Queue) and DFS (Using Recursion)
