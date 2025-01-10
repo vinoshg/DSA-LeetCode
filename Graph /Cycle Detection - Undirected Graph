@@ -3,8 +3,7 @@ Both Connected and Disconnected Graph
 -------------------------------------
     public static boolean isCyclicUndirected(ArrayList <Integer> [] graph, boolean vis[], int curr, int par) {
         vis[curr] = true;
-        for (int i = 0; i < graph[curr].size(); i++) {
-            int neighbor = graph[curr].get(i);
+        for (int neighbor : graph[curr]) {
             //case1
             if (vis[neighbor] && neighbor != par) {
                 return true;
