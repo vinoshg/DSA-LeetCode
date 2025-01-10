@@ -1,6 +1,39 @@
 -------------------------------------
 Both Connected and Disconnected Graph
 -------------------------------------
+    public static boolean isCyclicUndirected(ArrayList < Edge > [] graph, boolean vis[], int curr, int par) {
+        vis[curr] = true;
+        for (int i = 0; i < graph[curr].size(); i++) {
+            Edge e = graph[curr].get(i);
+            //case1
+            if (vis[e.dest] && e.dest != par) {
+                return true;
+            // } else if (e.dest == par) {
+            //     //case 2
+            //     continue;
+            } else if (!vis[e.dest]) {
+                //case 3
+                if (isCyclicUndirected(graph, vis, e.dest, curr)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    //O(V+E) - Disconnected Graph
+    public static boolean isCyclic(ArrayList < Edge > [] graph, boolean vis[]) {
+        for (int i = 0; i < graph.length; i++) {
+            if (isCyclicUndirected(graph, vis, i, -1)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+
+--------------------------
+
 class Solution { //Time:O(V+E) Space:O(V)
 
     public boolean isCycleUndirected(List<Integer>[] graph) {
