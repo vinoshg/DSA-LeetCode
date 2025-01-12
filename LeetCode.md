@@ -8,7 +8,7 @@
 - Solution: 1. HashSet with Nested loops to get a substring 2. Trie insert and count nodes
 4. Longest word with all prefixes / Longest Word in Dictionary
 - Solution: 1. HashSet contains its prefix of (length - 1) 2. Trie inserts and builds a string with it's all prefixes present in the dictionary along with recursion and backtracking
-## Graph
+## Graph - Time:O(V+E) Space:O(V)
 1. Connected and Disconnected Graph - BFS (Using Queue) and DFS (Using Recursion) along with the visited boolean array
 2. All Paths From Source to Target
 - Solution: 1. DFS with Backtracking (As per the question nodes are to be visited multiple times, so the visited array is not required and backtracking will handle this list.remove(list.size() - 1))
@@ -17,5 +17,11 @@
 4. Cycle Detection - Undirected Graph
 - Solution: 1. DFS recursion with parent element and visited array
 5. Topological Sort - DAG
-- Question: Directed Acyclic Graph(DAG) with no cycle (Not for non DAGs). It's a linear order of vertices u->v
-- Solution: 1. 
+- Question: Directed Acyclic Graph(DAG) with no cycle (Not for non-DAGs). It's a linear order of vertices u->v (Dependency)
+- Solution: 1. DFS recursion with Stack
+6. Dijkstra’s Algorithm (Shortest Distance) - O(E+ElogV)
+- Question: Applicable only for a positive weight and its Greedy Algorithm
+- Solution: 1. BFS with Priority Queue as Pair(node, distance) and distance array initialize with Integer.MAX for all nodes except the source with relaxation condition dist[u] + edge.weight < dist[v] then dist[v] = dist[u] + edge.weight (u-current and v-neighbor node)
+7. Bellman Ford Algorithm (Shortest Distance) - O(E.V) More than Dijktra's 
+- Question: The shortest distance for -ve weights and without a cycle. DP Algorithm - Perform relaxation in the loop V-1 times
+- Solution: 1. It's just a V-1 times loop and another i and j loop for relaxation with Dist array. (NO DFS/BFS/Visited array)
