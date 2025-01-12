@@ -12,6 +12,10 @@
 1. Connected and Disconnected Graph - BFS (Using Queue) and DFS (Using Recursion) along with the visited boolean array
 2. All Paths From Source to Target
 - Solution: 1. DFS with Backtracking (As per the question nodes are to be visited multiple times, so the visited array is not required and backtracking will handle this list.remove(list.size() - 1))
-3. Cycle Detection (Directed Graph)
-- Solution: DFS recursion with stack along with visited array
-- 
+3. Cycle Detection - Directed Graph
+- Solution: 1. DFS recursion with the boolean stack and visited array
+4. Cycle Detection - Undirected Graph
+- Solution: 1. DFS recursion with parent element and visited array
+5. Topological Sort - DAG
+- Question: Directed Acyclic Graph(DAG) with no cycle (Not for non DAGs). It's a linear order of vertices u->v
+- Solution: 1. 
