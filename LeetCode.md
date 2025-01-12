@@ -23,5 +23,10 @@
 - Question: Applicable only for a positive weight and its Greedy Algorithm
 - Solution: 1. BFS with Priority Queue as Pair(node, distance) and distance array initialize with Integer.MAX for all nodes except the source with relaxation condition dist[u] + edge.weight < dist[v] then dist[v] = dist[u] + edge.weight (u-current and v-neighbor node)
 7. Bellman Ford Algorithm (Shortest Distance) - O(E.V) More than Dijktra's 
-- Question: The shortest distance for -ve weights and without a cycle. DP Algorithm - Perform relaxation in the loop V-1 times
+- Question: The shortest distance for -ve weights and without a cycle. DP Algorithm - Perform relaxation in the loop V-1 times.
+  Detect -ve weight cycle by running nested i and j loop code again
 - Solution: 1. It's just a V-1 times loop and another i and j loop for relaxation with Dist array. (NO DFS/BFS/Visited array)
+8. Minimum Spanning Tree / Minimum Weight Spanning Tree (MST)
+- Question: Sub-Graph with all vertices with minimum possible total edge weight without any cycle. All vertices are connected. A graph has multiple spanning trees, but it has an MST (Undirected Weighted Graph)
+9. Prim's Algorithm (MST)
+- Solution: 
