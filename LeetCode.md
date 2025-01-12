@@ -28,5 +28,5 @@
 - Solution: 1. It's just a V-1 times loop and another i and j loop for relaxation with Dist array. (NO DFS/BFS/Visited array)
 8. Minimum Spanning Tree / Minimum Weight Spanning Tree (MST)
 - Question: Sub-Graph with all vertices with minimum possible total edge weight without any cycle. All vertices are connected. A graph has multiple spanning trees, but it has an MST (Undirected Weighted Graph)
-9. Prim's Algorithm (MST)
-- Solution: 
+9. Prim's Algorithm (MST) - O(ElogE)
+- Solution: 1. BFS with Priority Queue as Pair(node, cost) is Non-MST Set and Visited Array is MST Set. 
