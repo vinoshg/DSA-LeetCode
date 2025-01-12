@@ -29,4 +29,5 @@
 8. Minimum Spanning Tree / Minimum Weight Spanning Tree (MST)
 - Question: Sub-Graph with all vertices with minimum possible total edge weight without any cycle. All vertices are connected. A graph has multiple spanning trees, but it has an MST (Undirected Weighted Graph)
 9. Prim's Algorithm (MST) - O(ElogE)
+- Question: Calculate minimum cost
 - Solution: 1. BFS with Priority Queue as Pair(node, cost) is Non-MST Set and Visited Array is MST Set. 
