@@ -16,7 +16,7 @@
 - Solution: 1. DFS recursion with the boolean stack and visited array
 4. Cycle Detection - Undirected Graph
 - Solution: 1. DFS recursion with parent element and visited array
-5. Topological Sort - DAG
+5. Topological Sort - DAG O(V+E)
 - Question: Directed Acyclic Graph(DAG) with no cycle (Not for non-DAGs). It's a linear order of vertices u->v (Dependency)
 - Solution: 1. DFS recursion with Stack
 6. Dijkstra’s Algorithm (Shortest Distance) - O(E+ElogV)
@@ -31,6 +31,12 @@
 9. Prim's Algorithm (MST) - O(ElogE)
 - Question: Calculate minimum cost
 - Solution: 1. BFS with Priority Queue as Pair(node, cost) is Non-MST Set and Visited Array is MST Set.
-10. Kosaraju's Algorithm (SCC)
-- Question: Strongly Connected Component - We can reach every vertex of the component from every other vertex in that componenet
-- Solution: 1.  
+10. Kosaraju's Algorithm (SCC / Directed Unweighted Graph) - O(V+E)
+- Question: Strongly Connected Component - We can reach every vertex of the component from every other vertex in that component
+- Solution: 1. Reverse DFS i.e. a) Get a node in a Stack(Topological Sort) b) Transpose the Graph (Reverse the edge direction) c) Do DFS according to stack nodes on the transpose graph
+11. Bridge in Graph (Tarjan's Algorithm) - Undirected Graph
+- Question: A bridge is an edge whose deletion increases the graph's number of components
+- Solution: 1. DFS, Parent element, dt[V] and low[V]. If not visited then dt[current] < low[neighbor]
+12. Articulation Point in Graph (Tarjan's Algorithm)
+- Question: 
+- Solution: 
