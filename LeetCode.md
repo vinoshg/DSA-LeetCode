@@ -34,9 +34,11 @@
 10. Kosaraju's Algorithm (SCC / Directed Unweighted Graph) - O(V+E)
 - Question: Strongly Connected Component - We can reach every vertex of the component from every other vertex in that component
 - Solution: 1. Reverse DFS i.e. a) Get a node in a Stack(Topological Sort) b) Transpose the Graph (Reverse the edge direction) c) Do DFS according to stack nodes on the transpose graph
-11. Bridge in Graph (Tarjan's Algorithm) - Undirected Graph
+11. Bridge in Graph (Tarjan's Algorithm) - Undirected Connected Graph (UCG) - O(V+E)
 - Question: A bridge is an edge whose deletion increases the graph's number of components
 - Solution: 1. DFS, Parent element, dt[V] and low[V]. If not visited then dt[current] < low[neighbor]
-12. Articulation Point in Graph (Tarjan's Algorithm)
-- Question: 
-- Solution: 
+12. Articulation Point in Graph (Tarjan's Algorithm) - Undirected Connected Graph (UCG)
+- Question: Vertex in an undirected connected graph, if removing it disconnects the graph
+- Ancestor: Node A, discovered before the current node in DFS, is the ancestor of the curr. To track the ancestor we're using discovery time dt and lowest dt array
+- Solution: 1. a) Starting node with parent=-1 & disconnected children's > 1 b) u-v then v is unvisited i.e it's not ancestor (No Back edge) then u is ap or u is the starting point of the cycle => a) par=-1 & children>1 b) par!=-1 & dt[curr] < low[neigh]
+Here are 3 cases of current node neighbor 1. Parent 2. Visited (Ancestor) 3.Not Visited (Child)
