@@ -43,4 +43,4 @@
 - Solution: 1. a) Starting node with parent=-1 & disconnected children's > 1 b) u-v then v is unvisited i.e it's not ancestor (No Back edge) then u is ap or u is the starting point of the cycle => a) par=-1 & children>1 b) par!=-1 & dt[curr] < low[neigh]
 Here are 3 cases of current node neighbor 1. Parent (Ignore) 2. Visited (Ancestor) - low[curr] = Math.min(low[curr], dt[neigh]) 3.Not Visited (Child) - low[curr] = Math.min(low[curr], low[neigh]) 2. Naive approach - O(V.(V+E)) - More
 13. Number of Islands - O(nm) and O(nm)
-- Solution: 1. Nested loops with DFS on all four directions making it grid[i][j] = 0 when I found the island
+- Solution: 1. Nested loops with DFS on all four directions making it grid[i][j] = 0 when I found the island 2. BFS
