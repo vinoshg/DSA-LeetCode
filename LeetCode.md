@@ -1,3 +1,21 @@
+## Binary Search 
+1. Binary Search - O(logn) and O(1)
+- Question: Find a target in a Sorted Array or range
+- Solution: 1. Take start and end pointers, while loop start <= end calculate mid and compare the target with mid to reduce the range update start and end
+2. Search Insert Position / Ceiling of a Number (start) and Floor of a Number (end)
+- Solution: 1. Binary search with return start (Ceiling) / end (Floor) instead of -1
+3. Find Smallest Letter Greater Than Target
+- Solution: 1. Binary search with return array[start % array.length] instead of -1
+4. Find First and Last Position of Element in Sorted Array
+- Solution: 1. Binary search with target and target-1 or target+1
+5. Position of an Element in Infinite Sorted Array
+- Solution: 1. Binary search by fixing the range (Exponentially increasing) start=0, end=1 and while target>array[end] then temp=end, end = end + (end-start+1)*2, start=temp
+6. Peak Index in a Mountain Array
+Solution: 1. Binary search with array[mid] < array[mid+1] then start= mid+1 else end=mid-1. Finally, return start instead of -1
+7. Find in Mountain Array
+- Solution: 1. Find Peak index and apply 2 times Binary search with the range of (0,peak) and (peak+1, array.length-1)
+8.
+
 ## Trie
 1. Implement Trie (Prefix Tree) - insert, search, startsWithPrefix
 - Node[] children; boolean eow;
