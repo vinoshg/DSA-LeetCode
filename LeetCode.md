@@ -11,7 +11,7 @@
 5. Position of an Element in Infinite Sorted Array
 - Solution: 1. Binary search by fixing the range (Exponentially increasing) start=0, end=1 and while target>array[end] then temp=end, end = end + (end-start+1)*2, start=temp
 6. Peak Index in a Mountain Array
-Solution: 1. Binary search with array[mid] < array[mid+1] then start= mid+1 else end=mid-1. Finally, return start instead of -1
+- Solution: 1. Binary search with array[mid] < array[mid+1] then start= mid+1 else end=mid-1. Finally, return start instead of -1
 7. Find in Mountain Array
 - Solution: 1. Find Peak index and apply 2 times Binary search with the range of (0,peak) and (peak+1, array.length-1)
 8. Find the Pivot element in the Rotated Sorted Array
