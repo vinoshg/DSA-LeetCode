@@ -27,16 +27,19 @@
 1. Cyclic Sort - O(n) and O(n)
 - Question: Range (0,n) or (1,n) - Find the target element in an unsorted array
 - Solution: 1. while loop i<array.length index=array[i]-1, if array[i]!=array[index] then swap else i++
-3. Sort an Array - Sorting Algorithm - O(n*n) and O(1)
+2. Sort an Array - Sorting Algorithm - O(n*n) and O(1)
 - Solution: 1. Bubble Sort - Nested loops i=0 to array.length and j=0 to array.length-i, if array[j]>array[j+1] swap and end ith loop flag break; 2. Insertion Sort - Nested loops i=0 to array.length and j=i+1;j>0;j--, if array[j]<array[j-1] swap else break; 3. Selection Sort - For loop i=0 to array.length last=array.length-i-1 getMaxIndex= range(0, last) swap(last,maxIndex)
-4. Missing Number / Find all numbers disappeared in an array
+3. Missing Number / Find all numbers disappeared in an array
 - Solution: 1. Apply Cyclic Sort and then For loop if array[i]!=i+1 got and(i+1)
-5. Find the Duplicate Number / Find all Duplicates in an array
+4. Find the Duplicate Number / Find all Duplicates in an array
 - Solution: 1. Apply Cyclic Sort and then For loop if array[i]!=i+1 got ans(array[i])
-6. Set Mismatch
+5. Set Mismatch
 - Solution: 1. Apply Cyclic Sort and then For loop if array[i]!=i+1 got ans(array[i], i+1)
-7. First missing Positive
+6. First missing Positive
 - Solution: 1. Apply Cyclic Sort and then For loop if array[i]!=i+1 got ans(i+1) if not found return array.length-1
+
+## Prefix Sum
+
 
 ## Trie
 1. Implement Trie (Prefix Tree) - insert, search, startsWithPrefix
