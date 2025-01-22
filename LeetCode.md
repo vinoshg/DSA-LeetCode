@@ -14,7 +14,14 @@
 Solution: 1. Binary search with array[mid] < array[mid+1] then start= mid+1 else end=mid-1. Finally, return start instead of -1
 7. Find in Mountain Array
 - Solution: 1. Find Peak index and apply 2 times Binary search with the range of (0,peak) and (peak+1, array.length-1)
-8.
+8. Find the Pivot element in the Rotated Sorted Array
+- Solution: 1. Binary search with 4 cases - 1. mid < end && arr[mid] > arr[mid + 1] = mid 2. mid > start && arr[mid - 1] > arr[mid] = mid-1 
+                                            3. arr[mid] <= arr[start] - end=mid-1 else start=mid+1 after while loop return -1
+9. Search in Rotated Sorted Array
+- Solution: 1. Get Pivot element, target==pivot and apply Binary search 2 times (0, pivot-1) and (pivot+1, array.length-1)
+10. Rotation Count in Rotated Sorted Array =  (Pivot + 1)
+11. Split Array Largest Sum / Book allocation / Capacity To Ship Packages Within D Days
+- Solution: 1. 
 
 ## Trie
 1. Implement Trie (Prefix Tree) - insert, search, startsWithPrefix
