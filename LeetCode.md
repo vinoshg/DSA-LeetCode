@@ -21,7 +21,7 @@
 - Solution: 1. Get Pivot element, target==pivot and apply Binary search 2 times (0, pivot-1) and (pivot+1, array.length-1)
 10. Rotation Count in Rotated Sorted Array =  (Pivot + 1)
 11. Split Array Largest Sum / Book allocation / Capacity To Ship Packages Within D Days
-- Solution: 1. 
+- Solution: 1. Binary search by taking start=max element, end=sum of all elements and sum=0,pieces=1 if sum+num > mid then sum=num,pieces++ else sum+=num after loop pieces>m - start=mid+1 else end=mid-1. After while loop return start instead of -1 (while loop inside another for loop)
 
 ## Trie
 1. Implement Trie (Prefix Tree) - insert, search, startsWithPrefix
