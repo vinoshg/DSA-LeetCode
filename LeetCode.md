@@ -38,8 +38,13 @@
 6. First missing Positive
 - Solution: 1. Apply Cyclic Sort and then For loop if array[i]!=i+1 got ans(i+1) if not found return array.length-1
 
-## Prefix Sum
-
+## Prefix Sum - O(n)
+1. Prefix Sum Array
+- Solution: 1. For loop i=1 to array.length array[i] = array[i-1] + array[i]
+2. Range Sum Query
+- Solution: 1. Build Prefix Sum Array and return prefixSum[right] - prefixSum[left-1]. Handle if left==0 then return prefixSum[right]
+3. Number of Subarrays whose sum is k
+- Solution: 1. 
 
 ## Trie
 1. Implement Trie (Prefix Tree) - insert, search, startsWithPrefix
