@@ -44,7 +44,7 @@
 2. Range Sum Query
 - Solution: 1. Build Prefix Sum Array and return prefixSum[right] - prefixSum[left-1]. Handle if left==0 then return prefixSum[right]
 3. Number of Subarrays whose sum is k
-- Solution: 1. PrefixSum with HashMap for if map.containsKey(prefixSum-k) - map.put(prefixSum, map.getOrDefault(prefixSum,0) + 1)          
+- Solution: 1. PrefixSum with HashMap for if map.containsKey(prefixSum-k) after map.put(prefixSum, map.getOrDefault(prefixSum,0) + 1)          
             2. Nested loops
 
 ## Trie - O(L) and O(N*L)
