@@ -1,5 +1,5 @@
-## Binary Search 
-1. Binary Search - O(logn) and O(1)
+## Binary Search - O(logn) and O(1)
+1. Binary Search 
 - Question: Find a target in a Sorted Array or range
 - Solution: 1. Take start and end pointers, while loop start <= end calculate mid and compare the target with mid to reduce the range update start and end
 2. Search Insert Position / Ceiling of a Number (start) and Floor of a Number (end)
@@ -23,8 +23,8 @@
 11. Split Array Largest Sum / Book allocation / Capacity To Ship Packages Within D Days
 - Solution: 1. Binary search by taking start=max element, end=sum of all elements and sum=0,pieces=1 if sum+num > mid then sum=num,pieces++ else sum+=num after loop pieces>m - start=mid+1 else end=mid-1. After while loop return start instead of -1 (while loop inside another for loop)
 
-## Cyclic Sort 
-1. Cyclic Sort - O(n) and O(n)
+## Cyclic Sort - O(n) and O(n)
+1. Cyclic Sort 
 - Question: Range (0,n) or (1,n) - Find the target element in an unsorted array
 - Solution: 1. while loop i<array.length index=array[i]-1, if array[i]!=array[index] then swap else i++
 2. Sort an Array - Sorting Algorithm - O(n*n) and O(1)
@@ -40,13 +40,13 @@
 
 ## Prefix Sum - O(n)
 1. Prefix Sum Array
-- Solution: 1. For loop i=1 to array.length array[i] = array[i-1] + array[i]
+- Solution: 1. For loop i=1 to array.length array[i] = array[i-1] + array[i] 
 2. Range Sum Query
 - Solution: 1. Build Prefix Sum Array and return prefixSum[right] - prefixSum[left-1]. Handle if left==0 then return prefixSum[right]
 3. Number of Subarrays whose sum is k
-- Solution: 1. PrefixSum with HashMap for if map.containsKey(prefixSum-k) - map.put(prefixSum, map.getOrDefault(prefixSum,0) + 1)
+- Solution: 1. PrefixSum with HashMap for if map.containsKey(prefixSum-k) - map.put(prefixSum, map.getOrDefault(prefixSum,0) + 1) 2. Nested loops
 
-## Trie
+## Trie - O(L) and O(N*L)
 1. Implement Trie (Prefix Tree) - insert, search, startsWithPrefix
 - Node[] children; boolean eow;
 2. Word Break 
@@ -56,6 +56,7 @@
 - Solution: 1. HashSet with Nested loops to get a substring 2. Trie insert and count nodes
 4. Longest word with all prefixes / Longest Word in Dictionary
 - Solution: 1. HashSet contains its prefix of (length - 1) 2. Trie inserts and builds a string with it's all prefixes present in the dictionary along with recursion and backtracking
+
 ## Graph - Time:O(V+E) Space:O(V)
 1. Connected and Disconnected Graph - BFS (Using Queue) and DFS (Using Recursion) along with the visited boolean array
 2. All Paths From Source to Target
