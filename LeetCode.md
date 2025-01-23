@@ -44,8 +44,18 @@
 2. Range Sum Query
 - Solution: 1. Build Prefix Sum Array and return prefixSum[right] - prefixSum[left-1]. Handle if left==0 then return prefixSum[right]
 3. Number of Subarrays whose sum is k
-- Solution: 1. PrefixSum with HashMap for if map.containsKey(prefixSum-k) after map.put(prefixSum, map.getOrDefault(prefixSum,0) + 1)          
-            2. Nested loops
+- Solution: 1. PrefixSum with HashMap for if map.containsKey(prefixSum-k) after map.put(prefixSum, map.getOrDefault(prefixSum,0) + 1)          2. Nested loops
+
+## Kadane's Algorithm - O(n)
+1. Maximum Subarray - Array has -ve elemnets as well
+- Solution: 1. for loop currentSum=Math.max(currentSum, surrentSum+num) and compare with maxSum 2. Nested loop
+
+## Top K elements - O(nlogk) and O(k)
+- Question: K largest/smallest, K most/least frequent, Top k elements
+1. Top K largest elements
+- Solution: 1. Min heap(Priority Queue) add at max k elements and remaining poll 2. Sort Array and take elements - O(nlogn)
+2. K most frequent elements
+- Solution: 1. Min heap having HashMap - PriorityQueue<Map.Entry<Integer, Integer>> minHeap = new PriorityQueue<>((a,b) -> b
 
 ## Trie - O(L) and O(N*L)
 1. Implement Trie (Prefix Tree) - insert, search, startsWithPrefix
