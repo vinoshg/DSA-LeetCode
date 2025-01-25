@@ -54,8 +54,15 @@
 - Question: K largest/smallest, K most/least frequent, Top k elements
 1. Top K largest elements
 - Solution: 1. Min heap(Priority Queue) add at max k elements and remaining poll 2. Sort Array and take elements - O(nlogn)
-2. K most frequent elements
-- Solution: 1. Min heap having HashMap - PriorityQueue<Map.Entry<Integer, Integer>> minHeap = new PriorityQueue<>((a,b) -> b
+2. K most frequent elements i.e. large in frequency- O(nlogk) & O(n+k)
+- Solution: 1. Min heap having HashMap - PriorityQueue<Map.Entry<Integer, Integer>> minHeap = new PriorityQueue<>((a,b) -> a.getValue() - b.getValue())
+3. K closest points to the origin
+- Solution: 1. Max heap - PriorityQueue<int[]> maxHeap = new PriorityQueue<>((a,b) -> getDistance(b) - getDistance(a)) and getDistance is point[0]^2+point[1]^2
+
+## Monotonic Stack - O(n)
+- Question: 1. Next greater/smaller, previous greater/smaller
+1. Next greater element for each number in an array
+- Solution: 1. Monotonic decreasing stack i.e. greater element index at top -For loop and  while !stack.isEmpty() && array[i]>stack.peek() then index= stack.pop(); result[index]=array[i] afer while stack.push(i); 2. Nested loops - O(n^2)
 
 ## Trie - O(L) and O(N*L)
 1. Implement Trie (Prefix Tree) - insert, search, startsWithPrefix
