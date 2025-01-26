@@ -62,7 +62,20 @@
 ## Monotonic Stack - O(n)
 - Question: 1. Next greater/smaller, previous greater/smaller
 1. Next greater element for each number in an array
-- Solution: 1. Monotonic decreasing stack i.e. greater element index at top -For loop and  while !stack.isEmpty() && array[i]>stack.peek() then index= stack.pop(); result[index]=array[i] afer while stack.push(i); 2. Nested loops - O(n^2)
+- Solution: 1. Monotonic decreasing stack i.e. greater element index at top -For loop and  while !stack.isEmpty() && array[i]>array[stack.peek()] then index= stack.pop(); result[index]=array[i] afer while stack.push(i); 2. Nested loops - O(n^2)
+- For Smaller element : change while !stack.isEmpty() && array[i]<array[stack.peek()]
+2. Given a list of daily temperatures, determine how many days you've to wait for the next warmer day
+- Solution: 1. Like Next greater element - result[index]=i - index
+
+## Sliding Window - O(n)
+- Question: 1. Fixed Sliding window (Find Subarray/Substring of a fixed length) 2. Dynamic Sliding window (Longest/Shortest Subarray or Substring that satisfies the condition)
+1. Find the Maximum Subarray of length k / Max avg sum of Subarray (avg=max/array.length) - Fixed Sliding window
+- Solution: 1. windowSum += array[i] - array[i-k] 2. Nested loops
+2. Find length of the longest substring without repeating character - Dynamic Sliding window
+- Solution: 1. HashSet with left=0 and for right=0 to array.length / Freq array with sliding window (Less number of char and only lower case, array size 128)
+
+## Two Pointers - O(n)
+
 
 ## Trie - O(L) and O(N*L)
 1. Implement Trie (Prefix Tree) - insert, search, startsWithPrefix
