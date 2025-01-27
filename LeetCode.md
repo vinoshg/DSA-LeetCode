@@ -87,6 +87,10 @@
 5. Container with most water - Array of vertical lines, find two lines that can trap most water
 - Solution: 1. left=0,right=array.length-1 while(left<=right) area=width*minHeight; if(array[left]<array[right]) left++ else right--         2. Nested loops with find all possible area - i=0 to array.length and j=i+1 to array.length with area
 
+## Greedy Algorithm
+1. Longest Consecutive Sequence
+- Solution: 1. HashSet fill with array element. For num if (!set.contains(num - 1)) currentNum=num while (set.contains(currentNum + 1)
+
 ## Trie - O(L) and O(N*L)
 1. Implement Trie (Prefix Tree) - insert, search, startsWithPrefix
 - Node[] children; boolean eow;
