@@ -74,13 +74,18 @@
 2. Find length of the longest substring without repeating character - Dynamic Sliding window
 - Solution: 1. HashSet with left=0 and for right=0 to array.length / Freq array with sliding window (Less number of char and only lower case, array size 128)
 
-## Two Pointers - O(n)
-1. Converging pointers
+## Two Pointers - O(n) and O(1)
+- Question: Applicable to Linear Data Structure Arrays, String, LinkedList
+1. Converging pointers - Two pointers start at 0th and array.length-1 and converging together
 - Question: 1. Palindrome (Applicable for both Subarray/Substrings)
 2. Parallel pointers
 - Question: 1. The right pointer is used to get new info and the left is used to track. Both start from 0/1
 3. Trigger based pointers
-- Question: 1. 
+- Question: 1. left pointer move only after right pointer reaches particular position
+4. Move all zeros to the end of the array
+- Solution: 1. Trigger-based pointers (left, right) - for right=0 to array.length if(array[right]!=0) then swap, left++ 2. Take result array fill with 0 and traverse the array, add non-zero element to it
+5. Container with most water - Array of vertical lines, find two lines that can trap most water
+- Solution: 1. left=0,right=array.length-1 while(left<=right) area=width*minHeight; if(array[left]<array[right]) left++ else right--         2. Nested loops with find all possible area - i=0 to array.length and j=i+1 to array.length with area
 
 ## Trie - O(L) and O(N*L)
 1. Implement Trie (Prefix Tree) - insert, search, startsWithPrefix
