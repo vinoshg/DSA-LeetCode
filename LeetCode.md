@@ -75,7 +75,12 @@
 - Solution: 1. HashSet with left=0 and for right=0 to array.length / Freq array with sliding window (Less number of char and only lower case, array size 128)
 
 ## Two Pointers - O(n)
-
+1. Converging pointers
+- Question: 1. Palindrome (Applicable for both Subarray/Substrings)
+2. Parallel pointers
+- Question: 1. The right pointer is used to get new info and the left is used to track. Both start from 0/1
+3. Trigger based pointers
+- Question: 1. 
 
 ## Trie - O(L) and O(N*L)
 1. Implement Trie (Prefix Tree) - insert, search, startsWithPrefix
