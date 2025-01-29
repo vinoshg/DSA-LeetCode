@@ -96,7 +96,7 @@
 - Solution: 1. dp[m+1][n+1] Nested loops i,j=1 if (text1.charAt(i - 1) == text2.charAt(j - 1)) dp[i][j] = dp[i - 1][j - 1] + 1; else dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]); after return dp[m][n];
 
 ## Linked List
-- Fast and Slow pointers - O(n) & O(1)
+- Fast and Slow pointers - O(n) & O(1) | Reverse a Linked List using Three pointers - O(n) & O(1)
 1. Linked List Cycle
 - Solution: 1. Fast and Slow pointers while(fast != null && fast.next != null) if(fast == slow) return true after while return false;     
      2. HashSet - while(current != null) if(set.contains(current)) return true; set.add(current) current=current.next; - O(n) & O(n)
@@ -106,6 +106,8 @@
 - Question: Given num 14 = 1^2+4^2 = 17 ... If it ends with '1' it means Happy, else the loop again 17 is not a happy number
 - Solution: 1. Fast and Slow pointers - slow=n,fast=getNext(n) while(fast!=1 && slow != fast) slow,fast increment after while return fast==1
   2. HashSet - while(n>0) findSquare and check in the if set.contains(square) return true otherwise set.add(squre)  after while return false
+4. Reverse a Linked List
+- Solution: 1. Three-pointers - prev=null,current=head while(current!=null) next=current.next,current.next=prev,prev=current,current=next after while loop return prev 2. Copy all the elements to an array and reverse it. Update LL according to the array - O(n) & O(n)
     
 ## Trie - O(L) and O(N*L)
 1. Implement Trie (Prefix Tree) - insert, search, startsWithPrefix
