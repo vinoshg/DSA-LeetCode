@@ -98,7 +98,8 @@
 ## LinkedList
 - Fast and Slow pointers - O(n) & O(1)
 1. Linked List Cycle
-
+- Solution: 1. Fast and Slow pointers while(fast != null && fast.next != null) if(fast == slow) return true after while return false;     
+     2. HashSet - while(current != null) if(set.contains(current)) return true; set.add(current) current=current.next; - O(n) & O(n)
 
 ## Trie - O(L) and O(N*L)
 1. Implement Trie (Prefix Tree) - insert, search, startsWithPrefix
