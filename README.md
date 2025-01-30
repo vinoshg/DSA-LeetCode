@@ -163,7 +163,8 @@ Depth First Search (DFS): PreOrder, InOrder and PostOrder using recursion - O(n)
 - [Minimum Size Subarray Sum](https://leetcode.com/problems/minimum-size-subarray-sum/description/) `leetcode`
 - [Longest Substring Without Repeating Characters](https://leetcode.com/problems/longest-substring-without-repeating-characters/description/) `leetcode`
 - [Remove Duplicates from Sorted Array](https://leetcode.com/problems/remove-duplicates-from-sorted-array/description/) `leetcode`
-
+- [Two Sum II - Input Array Is Sorted](https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/description/) `leetcode`
+  
 ## Dynamic Programming
 - [Fibonacci Number](https://leetcode.com/problems/fibonacci-number/description/) `leetcode`
 - [Climbing Stairs](https://leetcode.com/problems/climbing-stairs/description/) `leetcode`
