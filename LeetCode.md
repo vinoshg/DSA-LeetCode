@@ -68,7 +68,7 @@
 - Solution: 1. Like Next greater element - result[index]=i - index
 
 ## Sliding Window - O(n)
-- Question: 1. Fixed Sliding window (Find Subarray/Substring of a fixed length) 2. Dynamic Sliding window (Longest/Shortest Subarray or Substring that satisfies the condition)
+- Question: 1. Fixed Sliding window (Find Subarray/Substring of a fixed length) 2. Dynamic Sliding window (Longest/Shortest Subarray or Substring that satisfies the condition) - (e.g., max sum, longest substring with unique characters)
 1. Find the Maximum Subarray of length k / Max avg sum of Subarray (avg=max/array.length) - Fixed Sliding window
 - Solution: 1. windowSum += array[i] - array[i-k] 2. Nested loops
 2. Find length of the longest substring without repeating character - Dynamic Sliding window
