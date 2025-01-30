@@ -97,7 +97,7 @@
 - Question: Overlapping intervals, scheduling conflicts - Approach: Sort intervals and merge overlapping ones
 1. Merge Intervals
 - Question: intervals[][] (2D Array)
-- Solution: 1. Sort an array based on start of the interval: Arrays.sort(array, (a,b) -> Integer.comapre(a[0],b[0]) / Arrays.sort(array, (a,b) -> a[0] - b[0]); Take a list and add 0th element. for i=1 to array.length if(last[0] <= current[1]) last[1] = Math.max(last[1], current[1]) else list.add(array[i]); after loop return list.toArray(new int[list.size()][])
+- Solution: 1. Sort an array based on start of the interval: Arrays.sort(array, (a,b) -> Integer.comapre(a[0],b[0]) / Arrays.sort(array, (a,b) -> a[0] - b[0]); Take a list and add 0th element. for i=1 to array.length if(current[0] <= last[1]) last[1] = Math.max(last[1], current[1]) else list.add(array[i]); after loop return list.toArray(new int[list.size()][])
 
 ## Greedy Algorithm
 1. Longest Consecutive Sequence
