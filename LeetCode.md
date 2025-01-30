@@ -93,6 +93,12 @@
 - Question: Given an array return the two indices (start from 1,2,3), sum of two numbers = target
 - Solution: 1. Two pointers(Converging pointers) left=0,right=array.length-1 while(left<right) sum=array[left]+array[right] if(sum==target) return new int[]{left+1,right+1} else if(sum<target) left++ else right--; after while retrun new int[]{-1,-1} 2. Nested loops i=0 to array.length; j=i+1 to array.length
 
+## Merge Intervals - O(nlogn) & O(n)
+- Question: Overlapping intervals, scheduling conflicts - Approach: Sort intervals and merge overlapping ones
+1. Merge Intervals
+- Question: intervals[][] (2D Array)
+- Solution: 1. Sort an array based on start of the interval: Arrays.sort(array, (a,b) -> Integer.comapre(a[0],b[0]) / Arrays.sort(array, (a,b) -> a[0] - b[0]); Take a list and add 0th element. for i=1 to array.length if(last[0] <= current[1]) last[1] = Math.max(last[1], current[1]) else list.add(array[i]); after loop return list.toArray(new int[list.size()][])
+
 ## Greedy Algorithm
 1. Longest Consecutive Sequence
 - Solution: 1. HashSet fill with array element. For num if (!set.contains(num - 1)) currentNum=num while (set.contains(currentNum + 1)
