@@ -74,8 +74,8 @@
 2. Find length of the longest substring without repeating character - Dynamic Sliding window
 - Solution: 1. HashSet with left=0 and for right=0 to array.length / Freq array with sliding window (Less number of char and only lower case, array size 128)
 
-## Two Pointers - O(n) and O(1)
-- Question: Applicable to Linear Data Structure Arrays, String, LinkedList - Converging pointers | Parallel pointers | Trigger based pointers
+## Two Pointers - O(n) and O(1) 
+- Question: Applicable to Linear Data Structure Arrays, String, LinkedList - Converging pointers | Parallel pointers | Trigger based pointers (Usually Apply for Sorted Array/LL)
 1. Converging pointers - Two pointers start at 0th and array.length-1 and converging together
 - Question: 1. Palindrome (Applicable for both Subarray/Substrings)
 2. Parallel pointers
