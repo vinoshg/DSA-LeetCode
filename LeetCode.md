@@ -91,7 +91,7 @@
 - Solution: 1. Two pointers - k=1 for i=1 to array.length if(array[i]!=array[i-1]) swap array[k]=array[i] k++ after loop return k. If both elements are same continue 2. HashMap and New Array
 7. Two Sum II - Input Array Is Sorted
 - Question: Given an array return the two indices (start from 1,2,3), sum of two numbers = target
-- Solution: 1. Two pointers(Converging pointers) left=0,right=array.length-1 while(left<right) sum=array[left]+array[right] if(sum==target) return int[]{left+1,right+1} else if(sum<target) left++ else right--  2. Nested loops i=0 to array.length; j=i+1 to array.length
+- Solution: 1. Two pointers(Converging pointers) left=0,right=array.length-1 while(left<right) sum=array[left]+array[right] if(sum==target) return int[]{left+1,right+1} else if(sum<target) left++ else right--; after while retrun int[]{-1,-1} 2. Nested loops i=0 to array.length; j=i+1 to array.length
 
 ## Greedy Algorithm
 1. Longest Consecutive Sequence
