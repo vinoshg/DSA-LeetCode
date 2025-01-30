@@ -93,7 +93,7 @@
 - Question: Given an array return the two indices (start from 1,2,3), sum of two numbers = target
 - Solution: 1. Two pointers(Converging pointers) left=0,right=array.length-1 while(left<right) sum=array[left]+array[right] if(sum==target) return new int[]{left+1,right+1} else if(sum<target) left++ else right--; after while retrun new int[]{-1,-1} 2. Nested loops i=0 to array.length; j=i+1 to array.length
 
-## Merge Intervals - O(nlogn) & O(n)
+## Overlapping Intervals - O(nlogn) & O(n)
 - Question: Overlapping intervals, scheduling conflicts - Approach: Sort intervals and merge overlapping ones
 1. Merge Intervals
 - Question: intervals[][] (2D Array)
