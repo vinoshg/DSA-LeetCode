@@ -86,6 +86,10 @@
 - Solution: 1. Trigger-based pointers (left, right) - for right=0 to array.length if(array[right]!=0) then swap, left++ 2. Take result array fill with 0 and traverse the array, add non-zero element to it
 5. Container with most water - Array of vertical lines, find two lines that can trap most water
 - Solution: 1. left=0,right=array.length-1 while(left<=right) area=width*minHeight; if(array[left]<array[right]) left++ else right--         2. Nested loops with find all possible area - i=0 to array.length and j=i+1 to array.length with area
+6. Remove Duplicates from Sorted Array
+- Question: Remove duplicates from Sorted array and return unique elemenets
+- Solution: 1. Two pointers - k=1 for i=1 to array.length if(array[i]!=array[i-1]) swap array[k]=array[i] k++ after loop return k. If both elements are same continue
+
 
 ## Greedy Algorithm
 1. Longest Consecutive Sequence
