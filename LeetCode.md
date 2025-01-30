@@ -88,7 +88,7 @@
 - Solution: 1. left=0,right=array.length-1 while(left<=right) area=width*minHeight; if(array[left]<array[right]) left++ else right--         2. Nested loops with find all possible area - i=0 to array.length and j=i+1 to array.length with area
 6. Remove Duplicates from Sorted Array - Trigger based pointers
 - Question: Remove duplicates from Sorted array and return unique elemenets
-- Solution: 1. Two pointers - k=1 for i=1 to array.length if(array[i]!=array[i-1]) swap array[k]=array[i] k++ after loop return k. If both elements are same continue
+- Solution: 1. Two pointers - k=1 for i=1 to array.length if(array[i]!=array[i-1]) swap array[k]=array[i] k++ after loop return k. If both elements are same continue 2. HashMap and New Array
 
 
 ## Greedy Algorithm
