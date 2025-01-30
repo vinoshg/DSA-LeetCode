@@ -48,7 +48,7 @@
 
 ## Kadane's Algorithm - O(n)
 1. Maximum Subarray - Array has -ve elemnets as well
-- Solution: 1. for loop currentSum=Math.max(currentSum, surrentSum+num) and compare with maxSum 2. Nested loop
+- Solution: 1. for loop currentSum=Math.max(currentSum, currentSum+num) and compare with maxSum 2. Nested loop
 
 ## Top K elements - O(nlogk) and O(k)
 - Question: K largest/smallest, K most/least frequent, Top k elements
@@ -72,7 +72,7 @@
 1. Find the Maximum Subarray of length k / Max avg sum of Subarray (avg=max/array.length) - Fixed Sliding window
 - Solution: 1. windowSum += array[i] - array[i-k] 2. Nested loops
 2. Find length of the longest substring without repeating character - Dynamic Sliding window
-- Solution: 1. HashSet with left=0 and for right=0 to array.length / Freq array with sliding window (Less number of char and only lower case, array size 128)
+- Solution: 1. Two pointers with HashMap - left=0,maxLength=0 for right=0 to str.length() if(map.containsKey(ch) && map.get(ch) >= left) left=map.get(ch)+1 after map.put(ch, right) maxLength=Math.max(maxLength, right-left+1) 2. HashSet with left=0 and for right=0 to array.length while(set.contains(str.charAt(right)) set.remove(str.charAt(left)) left++ after while loop set.add(str.charAt(right)) sum=Math.max(sum, right-left+1) / Freq array with sliding window (Less number of char and only lower case, array size 128)
 
 ## Two Pointers - O(n) and O(1) 
 - Question: Applicable to Linear Data Structure Arrays, String, LinkedList - Converging pointers | Parallel pointers | Trigger based pointers (Usually Apply for Sorted Array/LL)
