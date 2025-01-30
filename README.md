@@ -162,6 +162,7 @@ Depth First Search (DFS): PreOrder, InOrder and PostOrder using recursion - O(n)
 - [Best Time to Buy and Sell Stock](https://leetcode.com/problems/best-time-to-buy-and-sell-stock/description/) `leetcode`
 - [Minimum Size Subarray Sum](https://leetcode.com/problems/minimum-size-subarray-sum/description/) `leetcode`
 - [Longest Substring Without Repeating Characters](https://leetcode.com/problems/longest-substring-without-repeating-characters/description/) `leetcode`
+- [Remove Duplicates from Sorted Array](https://leetcode.com/problems/remove-duplicates-from-sorted-array/description/) `leetcode`
 
 ## Dynamic Programming
 - [Fibonacci Number](https://leetcode.com/problems/fibonacci-number/description/) `leetcode`
