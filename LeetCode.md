@@ -98,7 +98,7 @@
 1. Merge Intervals
 - Question: intervals[][] (2D Array)
 - Solution: 1. Sort an array based on start of the interval: Arrays.sort(array, (a,b) -> Integer.comapre(a[0],b[0]) / Arrays.sort(array, (a,b) -> a[0] - b[0]); Take a list and add 0th element. for i=1 to array.length if(current[0] <= last[1]) last[1] = Math.max(last[1], current[1]) else list.add(array[i]); after loop return list.toArray(new int[list.size()][])
-2. Insert Interval
+2. Insert Interval - O(n) if array's sorted & O(n)
 - Solution: 1. Sort an array with three cases a) For intervals that come before the new interval and don't overlap, I can add them directly
   b) Merging Overlapping Intervals and Inserting the Merged Interval c) Add the remaining intervals that don't overlap after the merged part
   Initialize newStart=newInterval[0],newEnd=newInterval[1],i=0,n=intervals.length
