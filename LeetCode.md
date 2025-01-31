@@ -102,6 +102,7 @@
 - Solution: 1. Sort an array with three cases a) For intervals that come before the new interval and don't overlap, I can add them directly
   b) Merging Overlapping Intervals and Inserting the Merged Interval c) Add the remaining intervals that don't overlap after the merged part
   Initialize newStart=newInterval[0],newEnd=newInterval[1],i=0,n=intervals.length
+  
   a) while(i<n && intervals[i][1] < newStart) result.add(intervals[i]) i++; All intervals with end < newInterval's start
   b) while(i<n && intervals[i][0] <= newEnd) newStart=Min(two start),newEnd=Max(two end); After while result.add(new int[]{newStart,newEnd})
      interval start <= new/merged interval end along with comply(auto) by interval end >= new/merged interval start
