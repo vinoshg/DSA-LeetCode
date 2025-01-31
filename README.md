@@ -167,6 +167,7 @@ Depth First Search (DFS): PreOrder, InOrder and PostOrder using recursion - O(n)
 
 ## Overlapping Intervals
 - [Merge Intervals](https://leetcode.com/problems/merge-intervals/description/) `leetcode`
+- [Insert Interval](https://leetcode.com/problems/insert-interval/description/) `leetcode`
 
 ## Dynamic Programming
 - [Fibonacci Number](https://leetcode.com/problems/fibonacci-number/description/) `leetcode`
