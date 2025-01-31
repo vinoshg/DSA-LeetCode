@@ -104,8 +104,10 @@
   Initialize newStart=newInterval[0],newEnd=newInterval[1],i=0,n=intervals.length
   
   a) while(i<n && intervals[i][1] < newStart) result.add(intervals[i]) i++; All intervals with end < newInterval's start
+  
   b) while(i<n && intervals[i][0] <= newEnd) newStart=Min(two start),newEnd=Max(two end); After while result.add(new int[]{newStart,newEnd})
      interval start <= new/merged interval end along with comply(auto) by interval end >= new/merged interval start
+  
   c) while(i<n) / while(i<n && intervals[i][0] > newEnd) result.add(intervals[i]) i++; add all intervals that come after the merged 
      interval (start > merged interval's end)
 
