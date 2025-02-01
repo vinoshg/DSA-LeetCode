@@ -116,8 +116,12 @@
 - Solution: 1. HashSet fill with array element. For num if (!set.contains(num - 1)) currentNum=num while (set.contains(currentNum + 1)
 
 ## Dynamic Programming
+- Question: Optimize recursive problems with overlapping subproblems - 0/1 Knapsack | Unbounded Knapsack | Longest Common Subsequence (LCS)
 1. Longest Common Subsequence - O(mn)
 - Solution: 1. dp[m+1][n+1] Nested loops i,j=1 if (text1.charAt(i - 1) == text2.charAt(j - 1)) dp[i][j] = dp[i - 1][j - 1] + 1; else dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]); after return dp[m][n];
+2. Target Sum - O(n*S) & O(S) [0/1 Knapsack]
+- Question: Finding the number of ways to assign '+' and '-' signs to elements of an array such that their sum equals a given target
+- Solution: 1. 0/1 Knapsack - if ((totalSum + target) % 2 != 0 || (totalSum + target) < 0) return 0 (S1 is even and non-negetive, if not return 0 - target > totalSum return 0); S1 = (totalSum + target) / 2; dp[S1+1] and dp[0]=1; for( j=S1 to num j>=num, j--) dp[j]+=dp[j-num];  after loop return return dp[S1];
 
 ## Linked List
 - Fast and Slow pointers - O(n) & O(1) | Reversal of Linked List using Three pointers - O(n) & O(1)
