@@ -117,6 +117,7 @@
 
 ## Dynamic Programming - Iteration(Two variable & dp[] array) and Memoization(Recursion)
 - Question: Optimize recursive problems with overlapping subproblems - 0/1 Knapsack | Unbounded Knapsack | Longest Common Subsequence (LCS)
+- 0/1 Knapsack(Subset selection with constraints) | Unbounded Knapsack(Unlimited item usage) | LCS(String alignment problems)
 1. Longest Common Subsequence - O(mn)
 - Solution: 1. dp[m+1][n+1] Nested loops i,j=1 if (text1.charAt(i - 1) == text2.charAt(j - 1)) dp[i][j] = dp[i - 1][j - 1] + 1; else dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]); after return dp[m][n];
 2. Target Sum - O(n*S) & O(S) [0/1 Knapsack] - Subsets problem
