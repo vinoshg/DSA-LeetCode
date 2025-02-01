@@ -116,6 +116,7 @@
 - Solution: 1. HashSet fill with array element. For num if (!set.contains(num - 1)) currentNum=num while (set.contains(currentNum + 1)
 
 ## Dynamic Programming - Iteration(Two variable & dp[] array) and Memoization(Recursion)
+- Maximise/Minimise/Fewest of certain value or number of ways
 - Question: Optimize recursive problems with overlapping subproblems - 0/1 Knapsack | Unbounded Knapsack | Longest Common Subsequence (LCS)
 - 0/1 Knapsack(Subset selection with constraints) | Unbounded Knapsack(Unlimited item usage) | LCS(String alignment problems)
 1. Longest Common Subsequence - O(mn)
