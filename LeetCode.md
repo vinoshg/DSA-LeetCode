@@ -88,7 +88,7 @@
 - Solution: 1. left=0,right=array.length-1 while(left<=right) area=width*minHeight; if(array[left]<array[right]) left++ else right--         2. Nested loops with find all possible area - i=0 to array.length and j=i+1 to array.length with area
 6. Remove Duplicates from Sorted Array - Trigger based pointers
 - Question: Remove duplicates from Sorted array and return unique elemenets
-- Solution: 1. Two pointers - k=1 for i=1 to array.length if(array[i]!=array[i-1]) swap array[k]=array[i] k++ after loop return k. If both elements are same continue 2. HashMap and New Array
+- Solution: 1. Two pointers - k=1 for i=1 to array.length if(array[i]!=array[i-1]) swap array[k]=array[i] k++ after loop return k. If both elements are same continue 2. HashSet and New Array
 7. Two Sum II - Input Array Is Sorted (Keep in mind array declaration with two elements - return new int[]{left+1,right+1})
 - Question: Given an array return the two indices (start from 1,2,3), sum of two numbers = target
 - Solution: 1. Two pointers(Converging pointers) left=0,right=array.length-1 while(left<right) sum=array[left]+array[right] if(sum==target) return new int[]{left+1,right+1} else if(sum<target) left++ else right--; after while retrun new int[]{-1,-1} 2. Nested loops i=0 to array.length; j=i+1 to array.length
