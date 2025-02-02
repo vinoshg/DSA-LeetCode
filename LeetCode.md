@@ -124,6 +124,10 @@
 2. Target Sum - O(n*S) & O(S) [0/1 Knapsack] - Subsets problem
 - Question: Finding the number of ways to assign '+' and '-' signs to elements of an array such that their sum equals a given target
 - Solution: 1. 0/1 Knapsack - if ((totalSum + target) % 2 != 0 || (totalSum + target) < 0) return 0 (S1 is even and non-negetive, if not return 0 - target > totalSum return 0); S1 = (totalSum + target) / 2; dp[S1+1] and dp[0]=1; for( j=S1 to num j>=num, j--) dp[j]+=dp[j-num];  after loop return return dp[S1]; 2. Recursion (p,up)
+3. Coin Change - Unbounded Knapsack
+- Question: Finding the minimum number of coins (having infinite coins) needed to make up a given amount
+- Solution: 1. Knapsack - dp[amount + 1],Arrays.fill(dp, amount + 1) dp[0] = 0 for i=1 to amount for coin - if(coin <= i) dp[i] = Math.min(dp[i], dp[i - coin] + 1); after loops return dp[amount] > amount ? -1 : dp[amount]; 2. Recursion
+
 
 ## Linked List
 - Fast and Slow pointers - O(n) & O(1) | Reversal of Linked List using Three pointers - O(n) & O(1)
