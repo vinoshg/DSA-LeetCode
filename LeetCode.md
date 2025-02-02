@@ -117,7 +117,7 @@
 
 ## Dynamic Programming - Iteration(Two variable & dp[] array) and Memoization(Recursion)
 - Maximise/Minimise/Fewest of certain value or number of ways
-- Question: Optimize recursive problems with overlapping subproblems - 0/1 Knapsack | Unbounded Knapsack | Longest Common Subsequence (LCS)
+- Question: Optimize recursive problems with overlapping subproblems - 0/1 Knapsack | Unbounded Knapsack | Longest Common Subsequence (LCS) | Fibonacci sequence pattern
 - 0/1 Knapsack(Subset selection with constraints) | Unbounded Knapsack(Unlimited item usage) | LCS(String alignment problems)
 1. Longest Common Subsequence - O(mn)
 - Solution: 1. dp[m+1][n+1] Nested loops i,j=1 if (text1.charAt(i - 1) == text2.charAt(j - 1)) dp[i][j] = dp[i - 1][j - 1] + 1; else dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]); after return dp[m][n];
@@ -127,7 +127,12 @@
 3. Coin Change - Unbounded Knapsack
 - Question: Finding the minimum number of coins (having infinite coins) needed to make up a given amount
 - Solution: 1. Knapsack - dp[amount + 1],Arrays.fill(dp, amount + 1) dp[0] = 0 for i=1 to amount for coin - if(coin <= i) dp[i] = Math.min(dp[i], dp[i - coin] + 1); after loops return dp[amount] > amount ? -1 : dp[amount]; 2. Recursion
-
+4. Climbing Stairs - O(n) & O(1)
+- Question: Finding the number of distinct ways to climb n stairs where you can take 1 or 2 steps at a time (Fibonacci sequence pattern)
+- Solution: 1. if(n==1 || n==2) return n; first=1,second=2 for i=3 to n update third, first and second after loop return second; 
+5. Longest Increasing Subsequence - O(nlogn) & O(n)
+- Question: Length of the Longest Increasing Subsequence of an array
+- Solution: 1. DP+Binary Search, for num if(list.size()==0 || num > list.get(list.size()-1) list.add(num) else index=Collections.binarySearch(list, num) if(index<0) index=-(index+1); list.set(index, num); after return list.size(); 2. Nested loops n^2
 
 ## Linked List
 - Fast and Slow pointers - O(n) & O(1) | Reversal of Linked List using Three pointers - O(n) & O(1)
