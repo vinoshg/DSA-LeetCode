@@ -184,7 +184,7 @@ class Solution {
                 tails.add(num);
             } else {
                 int index = Collections.binarySearch(tails, num);
-                if (index < 0) {
+                if (index < 0) { // Collections.binarySearch returns the index if present, else returns (-insertion point -1). So the insertion point is (-(index +1)).
                     index = -(index + 1);
                 }
                 tails.set(index, num);
