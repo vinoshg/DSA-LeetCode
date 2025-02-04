@@ -161,9 +161,35 @@ class Solution {
 2. Target Sum - O(n*S) & O(S) [0/1 Knapsack] - Subsets problem
 - Question: Finding the number of ways to assign '+' and '-' signs to elements of an array such that their sum equals a given target
 - Solution: 1. 0/1 Knapsack - if ((totalSum + target) % 2 != 0 || (totalSum + target) < 0) return 0 (S1 is even and non-negetive, if not return 0 - target > totalSum return 0); S1 = (totalSum + target) / 2; dp[S1+1] and dp[0]=1; for( j=S1 to num j>=num, j--) dp[j]+=dp[j-num];  after loop return return dp[S1]; 2. Recursion (p,up)
-3. Coin Change - Unbounded Knapsack
+3. [Coin Change - Unbounded Knapsack](https://leetcode.com/problems/coin-change/description/) - O(n * amount) & O(amount)
 - Question: Finding the minimum number of coins (having infinite coins) needed to make up a given amount
-- Solution: 1. Knapsack - dp[amount + 1],Arrays.fill(dp, amount + 1) dp[0] = 0 for i=1 to amount for coin - if(coin <= i) dp[i] = Math.min(dp[i], dp[i - coin] + 1); after loops return dp[amount] > amount ? -1 : dp[amount]; 2. Recursion
+- Solution: 1. Dynamic programming - Knapsack  2. Recursion
+- Initialize a DP array of size amount+1, filled with a value larger than the maximum possible (like amount+1), except dp[0] = 0.
+- For each amount from 1 to amount:
+a. For each coin in coins:
+i. If the coin value <= current amount, check if dp[current amount - coin value] +1 is less than current dp[current amount]. If so, update.
+- After processing all, if dp[amount] is still larger than amount, return -1, else return dp[amount].
+```
+class Solution {
+    public int coinChange(int[] coins, int amount) {
+        if (amount == 0) return 0;
+        
+        int[] dp = new int[amount + 1];
+        Arrays.fill(dp, amount + 1);
+        dp[0] = 0;
+        
+        for (int i = 1; i <= amount; i++) {
+            for (int coin : coins) {
+                if (coin <= i) {
+                    dp[i] = Math.min(dp[i], dp[i - coin] + 1);
+                }
+            }
+        }
+        
+        return dp[amount] > amount ? -1 : dp[amount];
+    }
+}
+```
 4. Climbing Stairs - O(n) & O(1)
 - Question: Finding the number of distinct ways to climb n stairs where you can take 1 or 2 steps at a time (Fibonacci sequence pattern)
 - Solution: 1. Dynamic programming problem similar to the Fibonacci sequence.
