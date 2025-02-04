@@ -373,6 +373,37 @@ class Solution {
     }
 }
 ```
+7. [Palindromic Substrings](https://leetcode.com/problems/palindromic-substrings/description/) - O(n^2) & O(1)
+- Question: Count all the palindromic substrings in a given string
+- Solution: 1. Expand Around Centers (expanding around potential centers of palindromes) 2. Brute force approach would be to check every possible substring and see if it's a palindrome. But that's O(n^3) time because there are O(n^2) substrings and checking each takes O(n) time
+- Initialize a count variable to 0.
+- For each index i in the string:
+a. Expand around i as the center (odd length palindromes).
+b. Expand around i and i+1 as the center (even length palindromes).
+- For each expansion, check if the left and right characters are equal. If yes, increment count and move left and right pointers outward.
+```
+class Solution {
+    public int countSubstrings(String s) {
+        int count = 0;
+        for (int i = 0; i < s.length(); i++) {
+            count += expand(s, i, i);    // Odd length palindromes
+            count += expand(s, i, i + 1); // Even length palindromes
+        }
+        return count;
+    }
+    
+    private int expand(String s, int left, int right) {
+        int currentCount = 0;
+        while (left >= 0 && right < s.length() && s.charAt(left) == s.charAt(right)) {
+            currentCount++;
+            left--;
+            right++;
+        }
+        return currentCount;
+    }
+}
+```
+4. Return the total count.
 ## Overlapping Intervals - O(nlogn) & O(n)
 - Question: Overlapping intervals, scheduling conflicts - Approach: Sort intervals and merge overlapping ones
 1. [Merge Intervals](https://leetcode.com/problems/merge-intervals/description/) - O(nlogn) & O(n)
@@ -583,6 +614,56 @@ class Solution {
     }
 }
 ```
+6. [Word Break](https://leetcode.com/problems/word-break/description/) - O(n * maxLen) & O(n), n is the length of the string and maxLen is the maximum word length in the dictionary
+- Question: Determine if a given string s can be segmented into a sequence of one or more words from a provided dictionary wordDict. The same word from the dictionary can be reused multiple times in the segmentation.
+- Solution: 1. Dynamic programming 2. Brute force way would be to try every possible split. Like, for each position in the string, check if the substring up to that position is in the dictionary, and then recursively check the remaining part. But that's probably going to be very inefficient for longer strings because of overlapping subproblems
+- Dynamic programming approach: Maybe I can create a boolean array dp where dp[i] indicates whether the substring s[0..i-1] can be segmented into dictionary words. Then, for each position i, I check all possible j < i, and if dp[j] is true and the substring from j to i is in the dictionary, then set dp[i] to true. The base case would be dp[0] = true, meaning the empty string is trivially segmented.
+- Let me outline the steps. Initialize a dp array of size s.length() + 1. Set dp[0] to true. Then iterate through the string from 1 to n (length of s). For each i, check all j from 0 to i-1. If dp[j] is true and the substring s[j..i-1] is present in the wordDict, then set dp[i] to true and break the loop for that i. Finally, return dp[n].
+- Alternatively, we can convert the wordDict into a set for O(1) lookups. That way, checking if a substring is present becomes O(1). So converting the list to a set first would help. Then the time complexity becomes O(n^2) for the loops, plus O(m) for converting the list to a set, which is acceptable.
+- Another optimization: instead of checking all j for each i, maybe we can limit j to i - maxLength, where maxLength is the maximum word length in the dictionary. Because if the substring from j to i is longer than the longest word in the dictionary, it's impossible for it to be in the dictionary. So for each i, we can check j from i - maxLength to i-1, but making sure that j doesn't go below 0. This can reduce the number of checks per i.
+- So first, find the maximum word length in wordDict. Then, for each i, j starts from max(0, i - maxLength) to i-1. That could save some time.
+- So the steps would be:
+- Convert wordDict into a set for O(1) lookups.
+- Find the maximum word length in wordDict. If wordDict is empty, return false.
+- Initialize dp array of size n+1 (n is s.length()), set dp[0] = true.
+- For each i from 1 to n:
+a. For j from i-1 down to max(0, i - maxLength):
+b. If dp[j] is true and s.substring(j, i) is in the set, then set dp[i] to true and break.
+- Return dp[n].
+```
+class Solution {
+    public boolean wordBreak(String s, List<String> wordDict) {
+        if (s.isEmpty()) {
+            return false;
+        }
+        Set<String> wordSet = new HashSet<>(wordDict);
+        if (wordSet.isEmpty()) {
+            return false;
+        }
+        
+        int maxLen = 0;
+        for (String word : wordSet) {
+            maxLen = Math.max(maxLen, word.length());
+        }
+        
+        int n = s.length();
+        boolean[] dp = new boolean[n + 1];
+        dp[0] = true;
+        
+        for (int i = 1; i <= n; i++) {
+            int start = Math.max(0, i - maxLen);
+            for (int j = i - 1; j >= start; j--) {
+                if (dp[j] && wordSet.contains(s.substring(j, i))) {
+                    dp[i] = true;
+                    break;
+                }
+            }
+        }
+        
+        return dp[n];
+    }
+}
+```
 ## Linked List
 - Fast and Slow pointers - O(n) & O(1) | Reversal of Linked List using Three pointers - O(n) & O(1)
 1. Linked List Cycle
@@ -697,8 +778,10 @@ class Solution {
 - For each neighbor of the current node, clone them and add to the clone's neighbors list.
 - Let me outline the BFS approach: Check if the input node is null. If yes, return null.
 - Initialize the hash map. Let's call it visited.
-- Create the clone of the input node. Add it to visited with original node as key. Create a queue and add the original node to it.
-- While the queue is not empty: Dequeue a node (current). Iterate over all neighbors of current. For each neighbor: If neighbor is not in visited: Create a clone of neighbor and Add to visited.
+- Create the clone of the input node. Add it to visited with original node as key.
+- Create a queue and add the original node to it.
+- While the queue is not empty: Dequeue a node (current). Iterate over all neighbors of current.
+- For each neighbor: If neighbor is not in visited: Create a clone of neighbor and Add to visited.
 - Enqueue the neighbor (original) to the queue. Add the clone of the neighbor (from visited) to the cloned current node's neighbors list.
 - Return the clone of the input node.
 ```
@@ -721,7 +804,7 @@ class Solution {
             
             for (Node neighbor : current.neighbors) {
                 if (!visited.containsKey(neighbor)) {
-                    visited.put(neighbor, new Node(neighbor.val));
+                    visited.put(neighbor, new Node(neighbor.val)); //Create neighbor node
                     queue.add(neighbor);
                 }
                 visited.get(current).neighbors.add(visited.get(neighbor));
