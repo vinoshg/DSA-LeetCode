@@ -122,8 +122,44 @@ class Solution {
 ```
 ## Two Pointers - O(n) and O(1) 
 - Applicable to Linear Data Structure Arrays, String, LinkedList - Converging pointers (Two pointers start at 0th and array.length-1 and converge together) | Parallel pointers (Right pointer is used to get new info and the left is used to track. Both start from 0/1) | Trigger based pointers (left pointer move only after right pointer reaches particular position) | Expand Around Center
-1. Palindrome (Applicable for both Subarray/Substrings)
-2. [Move Zeroes](https://leetcode.com/problems/move-zeroes/description/) - O(n) & O(1)
+1. [Valid Palindrome](https://leetcode.com/problems/valid-palindrome/description/) - O(n) & O(1)
+- Question: To determine if a given string is a palindrome after ignoring non-alphanumeric characters and case differences - Applicable for both Subarray/Substrings
+- Solution: 1. Two-pointer approach
+- Convert the entire string to lowercase (or uppercase, but lowercase is probably easier). Remove all non-alphanumeric characters. So, keep only a-z, 0-9. Check if the processed string is a palindrome.
+- Initialize left pointer at 0 and right pointer at s.length() - 1.
+- While left < right:
+- Move left pointer to the right until it points to an alphanumeric character.
+- Move right pointer to the left until it points to an alphanumeric character.
+- Compare the characters at left and right (case-insensitive).
+- If they are not equal, return false.
+- Otherwise, move both pointers inward.
+```
+class Solution {
+    public boolean isPalindrome(String s) {
+        int left = 0;
+        int right = s.length() - 1;
+        
+        while (left < right) {
+            // Move left pointer to the next alphanumeric character
+            while (left < right && !Character.isLetterOrDigit(s.charAt(left))) {
+                left++;
+            }
+            // Move right pointer to the previous alphanumeric character
+            while (left < right && !Character.isLetterOrDigit(s.charAt(right))) {
+                right--;
+            }
+            // Compare characters case-insensitively
+            if (Character.toLowerCase(s.charAt(left)) != Character.toLowerCase(s.charAt(right))) {
+                return false;
+            }
+            left++;
+            right--;
+        }
+        return true;
+    }
+}
+```
+3. [Move Zeroes](https://leetcode.com/problems/move-zeroes/description/) - O(n) & O(1)
 - Question: Moving all zeros to the end of an array while maintaining the order of non-zero elements
 - Solution: 1. Trigger-based pointers  2. Take result array fill with 0 and traverse the array, add non-zero element to it - O(n) & O(n)
 - Initialize a variable, say 'insertPos' to 0. This will track where the next non-zero should be placed.
