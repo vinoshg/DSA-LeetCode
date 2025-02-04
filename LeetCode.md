@@ -167,10 +167,33 @@ class Solution {
 4. Climbing Stairs - O(n) & O(1)
 - Question: Finding the number of distinct ways to climb n stairs where you can take 1 or 2 steps at a time (Fibonacci sequence pattern)
 - Solution: 1. if(n==1 || n==2) return n; first=1,second=2 for i=3 to n update third, first and second after loop return second; 
-5. Longest Increasing Subsequence - O(nlogn) & O(n)
-- Question: Length of the Longest Increasing Subsequence of an array
-- Solution: 1. DP+Binary Search, for num if(list.size()==0 || num > list.get(list.size()-1) list.add(num) else index=Collections.binarySearch(list, num) if(index<0) index=-(index+1); list.set(index, num); after return list.size(); 2. Nested loops n^2
-
+5. [Longest Increasing Subsequence](https://leetcode.com/problems/longest-increasing-subsequence/description/) - O(nlogn) & O(n)
+- Question: Find the length of the longest subsequence in an array that is strictly increasing. A subsequence means the elements don't have to be consecutive, but they have to be in order.
+- Solution: 1. Dynamic programming approach combined with binary search 2. Dynamic programming approach For each element, the idea is to check all previous elements and see if the current element can extend their subsequences. But that would be O(n^2) 
+- Initialize an empty list.
+- For each number in the array:
+a.If the number is greater than the last element in the list, append it.
+b. Else, find the index of the first element in the list >= current number, replace it with current number.
+- The length of the list is the answer.
+```
+class Solution {
+    public int lengthOfLIS(int[] nums) {
+        ArrayList<Integer> tails = new ArrayList<>();
+        for (int num : nums) {
+            if (tails.isEmpty() || num > tails.get(tails.size() - 1)) {
+                tails.add(num);
+            } else {
+                int index = Collections.binarySearch(tails, num);
+                if (index < 0) {
+                    index = -(index + 1);
+                }
+                tails.set(index, num);
+            }
+        }
+        return tails.size();
+    }
+}
+```
 ## Linked List
 - Fast and Slow pointers - O(n) & O(1) | Reversal of Linked List using Three pointers - O(n) & O(1)
 1. Linked List Cycle
