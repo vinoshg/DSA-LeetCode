@@ -71,9 +71,37 @@
 - Question: 1. Fixed Sliding window (Find Subarray/Substring of a fixed length) 2. Dynamic Sliding window (Longest/Shortest Subarray or Substring that satisfies the condition) - (e.g., max sum, longest substring with unique characters)
 1. Find the Maximum Subarray of length k / Max avg sum of Subarray (avg=max/array.length) - Fixed Sliding window
 - Solution: 1. windowSum += array[i] - array[i-k] 2. Nested loops
-2. Find length of the longest substring without repeating character - Dynamic Sliding window
-- Solution: 1. Two pointers with HashMap - left=0,maxLength=0 for right=0 to str.length() if(map.containsKey(ch) && map.get(ch) >= left) left=map.get(ch)+1 after map.put(ch, right) maxLength=Math.max(maxLength, right-left+1) 2. Two pointers with HashSet with left=0 and for right=0 to array.length while(set.contains(str.charAt(right)) set.remove(str.charAt(left)) left++ after while loop set.add(str.charAt(right)) sum=Math.max(sum, right-left+1) / Freq array with sliding window (Less number of char and only lower case, array size 128)
-
+2. [Longest Substring Without Repeating Characters](https://leetcode.com/problems/longest-substring-without-repeating-characters/description/) - O(n) & O(min(m,n)) m is the size of the character set (e.g., ASCII) - Dynamic Sliding window
+- Solution: 1. Sliding Window with Two Pointers and HashMap / Freq array (Less number of char and only lower case, array size 128) 2. Sliding Window with Two Pointers and HashSet
+- Sliding window usually involves two pointers, left and right. The right pointer expands the window as we iterate through the string, and the left pointer adjusts when a duplicate is found
+- Initialize a hash map to store the last index of each character.
+- Initialize left = 0 and max_length = 0.
+- Iterate with right from 0 to s.length - 1:
+a. If the current character is in the map and its last index >= left, then update left to be max(left, last index + 1).
+b. Update the last index of the current character to right.
+c. Update max_length with the current window size (right - left + 1).
+```
+class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        Map<Character, Integer> charIndexMap = new HashMap<>();
+        int maxLength = 0;
+        int left = 0;
+        
+        for (int right = 0; right < s.length(); right++) {
+            char currentChar = s.charAt(right);
+            
+            if (charIndexMap.containsKey(currentChar) && charIndexMap.get(currentChar) >= left) {
+                left = charIndexMap.get(currentChar) + 1;
+            }
+            
+            charIndexMap.put(currentChar, right);
+            maxLength = Math.max(maxLength, right - left + 1);
+        }
+        
+        return maxLength;
+    }
+}
+```
 ## Two Pointers - O(n) and O(1) 
 - Question: Applicable to Linear Data Structure Arrays, String, LinkedList - Converging pointers | Parallel pointers | Trigger based pointers (Usually Apply for Sorted Array/LL) | Expand Around Center
 1. Converging pointers - Two pointers start at 0th and array.length-1 and converging together
