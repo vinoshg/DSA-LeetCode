@@ -175,7 +175,7 @@ class Solution {
         }
         
         // Check if the target is achievable
-        if ((totalSum + target) % 2 != 0 || (totalSum + target) < 0) {
+        if ((totalSum + target) % 2 != 0 || (totalSum + target) < 0) { //S1 has to be even and non-negative value otherwise return 0
             return 0;
         }
         
@@ -184,7 +184,7 @@ class Solution {
         dp[0] = 1; // Base case: one way to get sum 0 (using no elements)
         
         for (int num : nums) {
-            for (int j = requiredSum; j >= num; j--) {
+            for (int j = requiredSum; j >= num; j--) { //j=S1 to num
                 dp[j] += dp[j - num];
             }
         }
@@ -222,7 +222,7 @@ class Solution {
     }
 }
 ```
-4. Climbing Stairs - O(n) & O(1)
+4. [Climbing Stairs](https://leetcode.com/problems/climbing-stairs/description/) - O(n) & O(1)
 - Question: Finding the number of distinct ways to climb n stairs where you can take 1 or 2 steps at a time (Fibonacci sequence pattern)
 - Solution: 1. Dynamic programming problem similar to the Fibonacci sequence.
 - If n is 1, return 1.
