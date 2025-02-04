@@ -121,7 +121,7 @@ class Solution {
 }
 ```
 ## Two Pointers - O(n) and O(1) 
-- Question: Applicable to Linear Data Structure Arrays, String, LinkedList - Converging pointers (Two pointers start at 0th and array.length-1 and converge together) | Parallel pointers (Right pointer is used to get new info and the left is used to track. Both start from 0/1) | Trigger based pointers (left pointer move only after right pointer reaches particular position) | Expand Around Center
+- Applicable to Linear Data Structure Arrays, String, LinkedList - Converging pointers (Two pointers start at 0th and array.length-1 and converge together) | Parallel pointers (Right pointer is used to get new info and the left is used to track. Both start from 0/1) | Trigger based pointers (left pointer move only after right pointer reaches particular position) | Expand Around Center
 1. Palindrome (Applicable for both Subarray/Substrings)
 2. [Move Zeroes](https://leetcode.com/problems/move-zeroes/description/) - O(n) & O(1)
 - Question: Moving all zeros to the end of an array while maintaining the order of non-zero elements
