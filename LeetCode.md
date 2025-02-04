@@ -87,7 +87,7 @@ class Solution {
 
 ## Sliding Window - O(n) & O(1)
 - Fixed Sliding window (Find Subarray/Substring of a fixed length) 2. Dynamic Sliding window (Longest/Shortest Subarray or Substring that satisfies the condition) - (e.g., max sum, longest substring with unique characters)
-1. [Maximum Sum of Distinct Subarrays With Length K](https://leetcode.com/problems/maximum-sum-of-distinct-subarrays-with-length-k/description/) - O(n) & O(1)
+1. [Maximum Sum of Subarrays With Length K / Maximum sum of a subarray of size k](https://leetcode.com/problems/maximum-average-subarray-i/description/) - O(n) & O(1)
 - Question: Find the maximum sum of any contiguous subarray of length k / Max avg sum of Subarray (avg=max/array.length) - Fixed Sliding window
 - Solution: 1. Sliding Window 2. Nested loops - O(n^2) & O(1)
 - Compute the initial sum of the first k elements.
@@ -123,7 +123,53 @@ class Solution {
     }
 }
 ```
-2. [Longest Substring Without Repeating Characters](https://leetcode.com/problems/longest-substring-without-repeating-characters/description/) - O(n) & O(min(m,n)) m is the size of the character set (e.g., ASCII)
+2. [Maximum Sum of Distinct Subarrays With Length K](https://leetcode.com/problems/maximum-sum-of-distinct-subarrays-with-length-k/description/) - O(n) & O(1)
+- Question: Find the maximum sum of any contiguous subarray of length k where all elements in the subarray are distinct
+- Solution: 1. Sliding Window 2. Nested loops - O(n^2) & O(1)
+- Use a sliding window approach with a frequency map to track the counts of elements in the current window.
+- Expand the window by adding elements to the right.
+- If adding an element causes duplicates, move the left pointer to the right until all elements in the window are unique.
+- Once the window's size is exactly k and all elements are unique, calculate the sum and update the maximum sum if necessary.
+```
+class Solution {
+    public long maximumSubarraySum(int[] nums, int k) {
+        int n = nums.length;
+        if (n < k) {
+            return 0;
+        }
+        
+        HashMap<Integer, Integer> freq = new HashMap<>();
+        long currentSum = 0;
+        long maxSum = 0;
+        int left = 0;
+        
+        for (int right = 0; right < n; right++) {
+            int num = nums[right];
+            currentSum += num;
+            freq.put(num, freq.getOrDefault(num, 0) + 1);
+            
+            // Ensure the window has exactly k elements and all are unique
+            while (right - left + 1 > k || freq.get(num) > 1) {
+                int leftNum = nums[left];
+                currentSum -= leftNum;
+                freq.put(leftNum, freq.get(leftNum) - 1);
+                if (freq.get(leftNum) == 0) {
+                    freq.remove(leftNum);
+                }
+                left++;
+            }
+            
+            // Check if the current window is of size k and all elements are unique
+            if (right - left + 1 == k && freq.size() == k) {
+                maxSum = Math.max(maxSum, currentSum);
+            }
+        }
+        
+        return maxSum;
+    }
+}
+```
+3. [Longest Substring Without Repeating Characters](https://leetcode.com/problems/longest-substring-without-repeating-characters/description/) - O(n) & O(min(m,n)) m is the size of the character set (e.g., ASCII)
 - Solution: 1. Dynamic Sliding Window with Two Pointers and HashMap / Freq array (Less number of char and only lower case, array size 128) 2. Sliding Window with Two Pointers and HashSet
 - Sliding window usually involves two pointers, left and right. The right pointer expands the window as we iterate through the string, and the left pointer adjusts when a duplicate is found
 - Initialize a hash map to store the last index of each character.
