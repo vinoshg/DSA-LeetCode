@@ -46,10 +46,28 @@
 3. Number of Subarrays whose sum is k
 - Solution: 1. PrefixSum with HashMap for if map.containsKey(prefixSum-k) after map.put(prefixSum, map.getOrDefault(prefixSum,0) + 1)          2. Nested loops
 
-## Kadane's Algorithm - O(n)
-1. Maximum Subarray - Array has -ve elemnets as well
-- Solution: 1. for loop currentSum=Math.max(currentSum, currentSum+num) and compare with maxSum 2. Nested loop
-
+## Kadane's Algorithm - O(n) & O(1)
+1. [Maximum Subarray](https://leetcode.com/problems/maximum-subarray/description/) - O(n) & O(1) 
+- Question: Finding the maximum subarray sum in an array of integers (Array has -ve elements as well)
+- Solution: 1. Kadane's Algorithm 2. Nested loop
+- So, the algorithm works by iterating through the array. At each step, we decide whether to add the current element to the existing subarray or start a new subarray from the current element. We take the maximum of these two choices. Then, we compare this with the overall maximum sum found so far.
+```
+class Solution {
+    public int maxSubArray(int[] nums) {
+        int currentSum = nums[0];
+        int maxSum = nums[0];
+        
+        for (int i = 1; i < nums.length; i++) {
+            currentSum = Math.max(nums[i], currentSum + nums[i]);
+            if (currentSum > maxSum) {
+                maxSum = currentSum;
+            }
+        }
+        
+        return maxSum;
+    }
+}
+```
 ## Top K elements - O(nlogk) and O(k)
 - Question: K largest/smallest, K most/least frequent, Top k elements
 1. Top K largest elements
@@ -103,24 +121,105 @@ class Solution {
 }
 ```
 ## Two Pointers - O(n) and O(1) 
-- Question: Applicable to Linear Data Structure Arrays, String, LinkedList - Converging pointers | Parallel pointers | Trigger based pointers (Usually Apply for Sorted Array/LL) | Expand Around Center
-1. Converging pointers - Two pointers start at 0th and array.length-1 and converging together
-- Question: 1. Palindrome (Applicable for both Subarray/Substrings)
-2. Parallel pointers
-- Question: 1. The right pointer is used to get new info and the left is used to track. Both start from 0/1
-3. Trigger based pointers
-- Question: 1. left pointer move only after right pointer reaches particular position
-4. Move all zeros to the end of the array
-- Solution: 1. Trigger-based pointers (left, right) - for right=0 to array.length if(array[right]!=0) then swap, left++ 2. Take result array fill with 0 and traverse the array, add non-zero element to it
-5. Container with most water - Array of vertical lines, find two lines that can trap most water
-- Solution: 1. left=0,right=array.length-1 while(left<=right) area=width*minHeight; if(array[left]<array[right]) left++ else right--         2. Nested loops with find all possible area - i=0 to array.length and j=i+1 to array.length with area
-6. Remove Duplicates from Sorted Array - Trigger based pointers
-- Question: Remove duplicates from Sorted array and return unique elemenets
-- Solution: 1. Two pointers - k=1 for i=1 to array.length if(array[i]!=array[i-1]) swap array[k]=array[i] k++ after loop return k. If both elements are same continue 2. HashSet and New Array
-7. Two Sum II - Input Array Is Sorted (Keep in mind array declaration with two elements - return new int[]{left+1,right+1})
-- Question: Given an array return the two indices (start from 1,2,3), sum of two numbers = target
-- Solution: 1. Two pointers(Converging pointers) left=0,right=array.length-1 while(left<right) sum=array[left]+array[right] if(sum==target) return new int[]{left+1,right+1} else if(sum<target) left++ else right--; after while retrun new int[]{-1,-1} 2. Nested loops i=0 to array.length; j=i+1 to array.length
-8. [Longest Palindromic Substring](https://leetcode.com/problems/longest-palindromic-substring/description/) - O(n^2) & O(1)
+- Question: Applicable to Linear Data Structure Arrays, String, LinkedList - Converging pointers (Two pointers start at 0th and array.length-1 and converge together) | Parallel pointers (Right pointer is used to get new info and the left is used to track. Both start from 0/1) | Trigger based pointers (left pointer move only after right pointer reaches particular position) | Expand Around Center
+1. Palindrome (Applicable for both Subarray/Substrings)
+2. [Move Zeroes](https://leetcode.com/problems/move-zeroes/description/) - O(n) & O(1)
+- Question: Moving all zeros to the end of an array while maintaining the order of non-zero elements
+- Solution: 1. Trigger-based pointers  2. Take result array fill with 0 and traverse the array, add non-zero element to it - O(n) & O(n)
+- Initialize a variable, say 'insertPos' to 0. This will track where the next non-zero should be placed.
+- Loop through each element in the array:
+a. If the current element is not zero, swap it with the element at 'insertPos' and increment 'insertPos'.
+```
+class Solution {
+    public void moveZeroes(int[] nums) {
+        int insertPos = 0;
+        for (int num : nums) {
+            if (num != 0) {
+                nums[insertPos++] = num;
+            }
+        }
+        while (insertPos < nums.length) {
+            nums[insertPos++] = 0;
+        }
+    }
+}
+```
+3. [Container With Most Water](https://leetcode.com/problems/container-with-most-water/description/) - O(n) & O(1)
+- Question: Finding the maximum area of water that can be contained between two vertical lines in an array
+- Solution: 1. Two-pointer technique 2. Nested loops with find all possible area (i=0 to array.length and j=i+1 to array.length with area) - O(n^2)
+- The idea is to start with the widest possible container, which is from the first and last elements. Then, move the pointers inward to try and find a taller line that could result in a larger area.
+- Initialize left pointer at 0 and right pointer at the end of the array. Calculate the area and keep track of the maximum. Then, compare the heights at the two pointers. Move the pointer with the shorter height towards the center. Repeat until the pointers meet.
+- Wait, why move the shorter one? Because the area is limited by the shorter height. If we move the taller one inward, the width decreases, and the height might not increase, so it's better to move the shorter one in hopes of finding a taller line that could give a larger area.
+```
+class Solution {
+    public int maxArea(int[] height) {
+        int left = 0;
+        int right = height.length - 1;
+        int maxArea = 0;
+        
+        while (left < right) {
+            int currentHeight = Math.min(height[left], height[right]);
+            int currentWidth = right - left;
+            maxArea = Math.max(maxArea, currentHeight * currentWidth);
+            
+            if (height[left] < height[right]) {
+                left++;
+            } else {
+                right--;
+            }
+        }
+        
+        return maxArea;
+    }
+}
+```
+4. [Remove Duplicates from Sorted Array](https://leetcode.com/problems/remove-duplicates-from-sorted-array/description/) - O(n) & O(1)
+- Question: Removing duplicates from a sorted array in-place and returning the new length
+- Solution: 1. Trigger based two pointers - One pointer to keep track of the position where the next unique element should be placed, and another to traverse the array.
+- Let's say I have a variable called 'k' that starts at 1. Because the first element is always unique.
+- Then, I loop through the array starting from the second element (index 1). For each element, I compare it with the previous one.
+- If they are different, that means it's a new unique element. So I place it at nums[k] and increment k. This way, 'k' will always point to the next position where a unique element should be placed.
+```
+class Solution {
+    public int removeDuplicates(int[] nums) {
+        if (nums.length == 0) return 0;
+        int k = 1;
+        for (int i = 1; i < nums.length; i++) {
+            if (nums[i] != nums[k - 1]) {
+                nums[k] = nums[i];
+                k++;
+            }
+        }
+        return k;
+    }
+}
+```
+5. [Two Sum II - Input Array Is Sorted](https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/description/) - O(n) & O(1)
+- Question: Finding two numbers in a sorted array that add up to a specific target
+- Solution: 1. Two pointers(Converging pointers) and two-pointer approach works well with sorted arrays.
+- If I have a left pointer starting at the beginning (index 0) and a right pointer at the end (index numbers.length - 1), then I can check the sum of the values at these two pointers. - If the sum is equal to the target, then I found the answer. If the sum is less than the target, I need a larger sum, so I move the left pointer to the right.
+- If the sum is larger, then I move the right pointer to the left. That makes sense because moving the left pointer increases the sum, and moving the right decreases it.
+- Wait, but the problem requires 1-based indices for the return. So whatever indices I find, I need to add 1 to each before returning. Oh right, the problem statement says the indices are 1-based. So if left is i and right is j in 0-based, then the answer is [i+1, j+1].
+```
+class Solution {
+    public int[] twoSum(int[] numbers, int target) {
+        int left = 0;
+        int right = numbers.length - 1;
+        while (left < right) {
+            int sum = numbers[left] + numbers[right];
+            if (sum == target) {
+                return new int[]{left + 1, right + 1};
+            } else if (sum < target) {
+                left++;
+            } else {
+                right--;
+            }
+        }
+        return new int[]{-1, -1}; // As per problem statement, this line is unreachable
+    }
+}
+```
+6. [Longest Palindromic Substring](https://leetcode.com/problems/longest-palindromic-substring/description/) - O(n^2) & O(1)
 - Solution: 1. Expand Around Center Approach 2. The longest one could be of any length, so I have to check all possible substrings. But checking every possible substring would be O(n^3)  
 - Initialize variables to keep track of the start and end indices of the longest palindrome found so far.
 - Iterate through each character in the string.
