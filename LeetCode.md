@@ -85,10 +85,44 @@ class Solution {
 2. Given a list of daily temperatures, determine how many days you've to wait for the next warmer day
 - Solution: 1. Like Next greater element - result[index]=i - index
 
-## Sliding Window - O(n)
-- Question: 1. Fixed Sliding window (Find Subarray/Substring of a fixed length) 2. Dynamic Sliding window (Longest/Shortest Subarray or Substring that satisfies the condition) - (e.g., max sum, longest substring with unique characters)
-1. Find the Maximum Subarray of length k / Max avg sum of Subarray (avg=max/array.length) - Fixed Sliding window
-- Solution: 1. windowSum += array[i] - array[i-k] 2. Nested loops
+## Sliding Window - O(n) & O(1)
+- Fixed Sliding window (Find Subarray/Substring of a fixed length) 2. Dynamic Sliding window (Longest/Shortest Subarray or Substring that satisfies the condition) - (e.g., max sum, longest substring with unique characters)
+1. [Maximum Sum of Distinct Subarrays With Length K](https://leetcode.com/problems/maximum-sum-of-distinct-subarrays-with-length-k/description/) - O(n) & O(1)
+- Question: Find the maximum sum of any contiguous subarray of length k / Max avg sum of Subarray (avg=max/array.length) - Fixed Sliding window
+- Solution: 1. Sliding Window 2. Nested loops - O(n^2) & O(1)
+- Compute the initial sum of the first k elements.
+- Then slide the window:
+- Initialize max_sum to this initial sum.
+- Then for each i in k to n-1:
+- sum = sum - nums[i -k] + nums[i]
+- if sum > max_sum, update max_sum.
+- At the end, return max_sum.
+```
+class Solution {
+    public long maximumSubarraySum(int[] nums, int k) {
+        int n = nums.length;
+        if (n < k) {
+            return 0;
+        }
+        
+        long currentSum = 0;
+        for (int i = 0; i < k; i++) {
+            currentSum += nums[i];
+        }
+        
+        long maxSum = currentSum;
+        
+        for (int i = k; i < n; i++) {
+            currentSum += nums[i] - nums[i - k];
+            if (currentSum > maxSum) {
+                maxSum = currentSum;
+            }
+        }
+        
+        return maxSum;
+    }
+}
+```
 2. [Longest Substring Without Repeating Characters](https://leetcode.com/problems/longest-substring-without-repeating-characters/description/) - O(n) & O(min(m,n)) m is the size of the character set (e.g., ASCII)
 - Solution: 1. Dynamic Sliding Window with Two Pointers and HashMap / Freq array (Less number of char and only lower case, array size 128) 2. Sliding Window with Two Pointers and HashSet
 - Sliding window usually involves two pointers, left and right. The right pointer expands the window as we iterate through the string, and the left pointer adjusts when a duplicate is found
