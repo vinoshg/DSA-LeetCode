@@ -158,12 +158,44 @@ class Solution {
 - 0/1 Knapsack(Subset selection with constraints) | Unbounded Knapsack(Unlimited item usage) | LCS(String alignment problems)
 1. Longest Common Subsequence - O(mn)
 - Solution: 1. dp[m+1][n+1] Nested loops i,j=1 if (text1.charAt(i - 1) == text2.charAt(j - 1)) dp[i][j] = dp[i - 1][j - 1] + 1; else dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]); after return dp[m][n];
-2. Target Sum - O(n*S) & O(S) [0/1 Knapsack] - Subsets problem
+2. [Target Sum](https://leetcode.com/problems/target-sum/description/) - O(n*S) & O(S) S is the required subset sum 
 - Question: Finding the number of ways to assign '+' and '-' signs to elements of an array such that their sum equals a given target
-- Solution: 1. 0/1 Knapsack - if ((totalSum + target) % 2 != 0 || (totalSum + target) < 0) return 0 (S1 is even and non-negetive, if not return 0 - target > totalSum return 0); S1 = (totalSum + target) / 2; dp[S1+1] and dp[0]=1; for( j=S1 to num j>=num, j--) dp[j]+=dp[j-num];  after loop return return dp[S1]; 2. Recursion (p,up)
+- Solution: 1. Dynamic programming - 0/1 Knapsack (Subsets problem)  2. Recursion (p,up)
+- Similar to partitioning the array into two subsets where the difference between their sums is equal to the target. Because if I have a subset with sum S1 and another with sum S2, then S1 - S2 = target. But since S1 + S2 is the total sum of the array. Let totalSum be the sum of all elements. Then S1 - (totalSum - S1) = target. That simplifies to 2*S1 = target + totalSum. So S1 = (target + totalSum)/2. Therefore, the problem reduces to finding the number of subsets that sum up to S1, where S1 is (target + totalSum)/2. But wait, this makes sense only if target + totalSum is even and non-negative. Otherwise, there's no solution. So first, I need to check if (target + totalSum) is even and that (target + totalSum) >= 0. If not, return 0.
+- Calculate the total sum of the array.
+- Check if (target + totalSum) is even and non-negative. If not, return 0.
+- Compute S1 = (target + totalSum)/2.
+- Find the number of subsets of nums that add up to S1. This is a classic subset sum problem which can be solved using dynamic programming.
+```
+class Solution {
+    public int findTargetSumWays(int[] nums, int target) {
+        int totalSum = 0;
+        for (int num : nums) {
+            totalSum += num;
+        }
+        
+        // Check if the target is achievable
+        if ((totalSum + target) % 2 != 0 || (totalSum + target) < 0) {
+            return 0;
+        }
+        
+        int requiredSum = (totalSum + target) / 2;
+        int[] dp = new int[requiredSum + 1];
+        dp[0] = 1; // Base case: one way to get sum 0 (using no elements)
+        
+        for (int num : nums) {
+            for (int j = requiredSum; j >= num; j--) {
+                dp[j] += dp[j - num];
+            }
+        }
+        
+        return dp[requiredSum];
+    }
+}
+```
 3. [Coin Change - Unbounded Knapsack](https://leetcode.com/problems/coin-change/description/) - O(n * amount) & O(amount)
 - Question: Finding the minimum number of coins (having infinite coins) needed to make up a given amount
-- Solution: 1. Dynamic programming - Knapsack  2. Recursion
+- Solution: 1. Dynamic programming - Unbounded Knapsack(similar to loop through each coin and then through the amounts)  2. Recursion
 - Initialize a DP array of size amount+1, filled with a value larger than the maximum possible (like amount+1), except dp[0] = 0.
 - For each amount from 1 to amount:
 a. For each coin in coins:
@@ -180,13 +212,13 @@ class Solution {
         
         for (int i = 1; i <= amount; i++) {
             for (int coin : coins) {
-                if (coin <= i) {
-                    dp[i] = Math.min(dp[i], dp[i - coin] + 1);
+                if (coin <= i) { 
+                    dp[i] = Math.min(dp[i], dp[i - coin] + 1); //i is amount and comparing with previous amount by - coin
                 }
             }
         }
         
-        return dp[amount] > amount ? -1 : dp[amount];
+        return dp[amount] > amount ? -1 : dp[amount]; //coins [2], amount 1. Then dp[1] remains 2, which is larger than 1. So return -1.
     }
 }
 ```
