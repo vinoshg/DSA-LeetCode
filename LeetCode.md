@@ -23,13 +23,13 @@
 11. Split Array Largest Sum / Book allocation / Capacity To Ship Packages Within D Days
 - Solution: 1. Binary search by taking start=max element, end=sum of all elements and sum=0,pieces=1 if sum+num > mid then sum=num,pieces++ else sum+=num after loop pieces>m - start=mid+1 else end=mid-1. After while loop return start instead of -1 (while loop inside another for loop)
 
-## Cyclic Sort - O(n) and O(n)
+## Cyclic Sort - O(n) and O(1)
 1. Cyclic Sort 
 - Question: Range (0,n) or (1,n) - Find the target element in an unsorted array
 - Solution: 1. while loop i<array.length index=array[i]-1, if array[i]!=array[index] then swap else i++
 2. Sort an Array - Sorting Algorithm - O(n*n) and O(1)
 - Solution: 1. Bubble Sort - Nested loops i=0 to array.length and j=0 to array.length-i, if array[j]>array[j+1] swap and end ith loop flag break; 2. Insertion Sort - Nested loops i=0 to array.length and j=i+1;j>0;j--, if array[j]<array[j-1] swap else break; 3. Selection Sort - For loop i=0 to array.length last=array.length-i-1 getMaxIndex= range(0, last) swap(last,maxIndex)
-3. Missing Number / Find all numbers disappeared in an array
+3. [Missing Number / Find all numbers disappeared in an array](https://leetcode.com/problems/missing-number/description/) - O(n) & O(1)
 - Solution: 1. Apply Cyclic Sort and then For loop if array[i]!=i+1 got and(i+1)
 4. Find the Duplicate Number / Find all Duplicates in an array
 - Solution: 1. Apply Cyclic Sort and then For loop if array[i]!=i+1 got ans(array[i])
@@ -37,6 +37,25 @@
 - Solution: 1. Apply Cyclic Sort and then For loop if array[i]!=i+1 got ans(array[i], i+1)
 6. First missing Positive
 - Solution: 1. Apply Cyclic Sort and then For loop if array[i]!=i+1 got ans(i+1) if not found return array.length-1
+
+## Bitwise 
+1. [Missing Number](https://leetcode.com/problems/missing-number/description/) - O(n) & O(1)
+- Question: Determine the missing number in an array containing distinct integers in the range [0, n], where n is the length of the array.
+- Solution: 1. XOR Approach  2. Sum formula (Sum of the first n numbers is n*(n+1)/2. Wait, but here the numbers are from 0 to n. So the sum should be (n*(n+1))/2. Then subtract the sum of the array from that, and the result is the missing number) - O(n) & O(1) 3. Cyclic Sort
+- Because XOR of a number with itself cancels out. So if we XOR all numbers from 0 to n, and then XOR with all elements in the array, the result will be the missing number.
+- XOR of a number with itself is 0.
+- XOR of a number with 0 is the number itself.
+```
+class Solution {
+    public int missingNumber(int[] nums) {
+        int missing = nums.length;
+        for (int i = 0; i < nums.length; i++) {
+            missing ^= i ^ nums[i];
+        }
+        return missing;
+    }
+}
+```
 
 ## Prefix Sum - O(n)
 1. Prefix Sum Array
@@ -239,7 +258,7 @@ class Solution {
     }
 }
 ```
-3. [Move Zeroes](https://leetcode.com/problems/move-zeroes/description/) - O(n) & O(1)
+2. [Move Zeroes](https://leetcode.com/problems/move-zeroes/description/) - O(n) & O(1)
 - Question: Moving all zeros to the end of an array while maintaining the order of non-zero elements
 - Solution: 1. Trigger-based pointers  2. Take result array fill with 0 and traverse the array, add non-zero element to it - O(n) & O(n)
 - Initialize a variable, say 'insertPos' to 0. This will track where the next non-zero should be placed.
@@ -381,6 +400,7 @@ class Solution {
 a. Expand around i as the center (odd length palindromes).
 b. Expand around i and i+1 as the center (even length palindromes).
 - For each expansion, check if the left and right characters are equal. If yes, increment count and move left and right pointers outward.
+- Return the total count.
 ```
 class Solution {
     public int countSubstrings(String s) {
@@ -403,7 +423,61 @@ class Solution {
     }
 }
 ```
-4. Return the total count.
+8. [3Sum](https://leetcode.com/problems/3sum/description/) - O(n^2) & O(1)
+- Question: Find all unique triplets in an array that sum up to zero
+- Solution: 1. Two-Pointer Technique 2. Brute force approach would check every possible triplet, but that's O(n^3) time
+- Wait, maybe I can sort the array first. Sorting helps in handling duplicates and makes it easier to use two pointers for two-sum like problems. Right. Because once the array is sorted, I can fix one element and then find pairs in the remaining elements that sum to the negative of the fixed element. That way, their sum would be zero.
+- So the plan is: sort the array. Then iterate through each element as the first element of the triplet. For each element, use two pointers (left and right) to find pairs in the remaining part of the array that sum to -nums[i]. But also need to avoid duplicates.
+- Wait, but how to avoid duplicates. Like, if there are multiple same elements, how do I skip over them once I've processed the first occurrence.
+- So during the iteration, for each i, if nums[i] == nums[i-1], we skip i. But wait, only when i > 0, to avoid index out of bounds. That way, the first occurrence is processed, and duplicates are skipped.
+- Then, for the two pointers part: after fixing i, we set left to i+1, right to end of array. Then calculate the sum. If the sum is less than target (which is -nums[i]), then we need to increase left. If sum is greater, decrease right. If equal, add to the result.
+- Once a valid triplet is found, we add it to the list. Then, we need to skip all duplicates for left and right. So, after adding, we increment left until nums[left] != nums[left+1] and left < right. Or perhaps, while left < right and nums[left] == nums[left+1], we move left. Similarly for right. But perhaps a better way is, once we have a triplet, we move left to the next unique value and right to the previous unique value.
+- left starts at i+1, right at end.
+- When sum is zero:
+- add [nums[i], nums[left], nums[right]] to the result.
+- then, increment left until nums[left] is different than current left value (so, while left < right and nums[left] == nums[left+1], left++)
+- then, decrement right until nums[right] is different than current right (while left < right and nums[right] == nums[right-1], right--)
+- then, move left once more (left++) and right once more (right--), because the current left and right were part of the triplet just added.
+- Wait, but after that, the next iteration will check the new left and right.
+- So the steps when sum == target:
+a. add the triplet.
+b. skip duplicates for left: while left < right and nums[left] == nums[left+1], left++. Then left++ once to move to the next new value.
+c. skip duplicates for right: while left < right and nums[right] == nums[right-1], right--. Then right-- once.
+```
+class Solution {
+    public List<List<Integer>> threeSum(int[] nums) {
+        List<List<Integer>> res = new ArrayList<>();
+        if (nums == null || nums.length < 3) return res;
+        Arrays.sort(nums);
+        int n = nums.length;
+        
+        for (int i = 0; i < n - 2; i++) {
+            if (i > 0 && nums[i] == nums[i - 1]) continue; // Skip duplicate elements for i
+            
+            int target = -nums[i];
+            int left = i + 1;
+            int right = n - 1;
+            
+            while (left < right) {
+                int sum = nums[left] + nums[right];
+                if (sum < target) {
+                    left++;
+                } else if (sum > target) {
+                    right--;
+                } else {
+                    List<Integer> triplet = Arrays.asList(nums[i], nums[left], nums[right]);
+                    res.add(triplet);
+                    // Skip duplicates for left
+                    while (left < right && nums[left] == triplet.get(1)) left++;
+                    // Skip duplicates for right
+                    while (left < right && nums[right] == triplet.get(2)) right--;
+                }
+            }
+        }
+        return res;
+    }
+}
+```
 ## Overlapping Intervals - O(nlogn) & O(n)
 - Question: Overlapping intervals, scheduling conflicts - Approach: Sort intervals and merge overlapping ones
 1. [Merge Intervals](https://leetcode.com/problems/merge-intervals/description/) - O(nlogn) & O(n)
@@ -666,9 +740,38 @@ class Solution {
 ```
 ## Linked List
 - Fast and Slow pointers - O(n) & O(1) | Reversal of Linked List using Three pointers - O(n) & O(1)
-1. Linked List Cycle
-- Solution: 1. Fast and Slow pointers while(fast != null && fast.next != null) if(fast == slow) return true after while return false;     
-     2. HashSet - while(current != null) if(set.contains(current)) return true; set.add(current) current=current.next; - O(n) & O(n)
+1. [Linked List Cycle](https://leetcode.com/problems/linked-list-cycle/description/) - O(n) & O(1)
+- Question: Determine if a linked list has a cycle
+- Solution: 1. Two-pointer method, also known as Floyd's Tortoise and Hare algorithm (Slow and Fast pointers) 2. HashSet - while(current != null) if(set.contains(current)) return true; set.add(current) current=current.next; - O(n) & O(n)
+- The idea is to have a slow pointer and a fast pointer. If there's a cycle, the fast pointer will eventually catch up to the slow one. If there's no cycle, the fast pointer will reach the end of the list.
+- Wait, how do I implement that? Let's see. Start both pointers at the head. Then, in each iteration, the slow pointer moves one step, and the fast pointer moves two steps. If they ever meet, there's a cycle. If the fast pointer hits null, then there's no cycle.
+- Initialize both slow and fast pointers to head.
+- While fast is not null and fast.next is not null:
+a. Move slow by one.
+b. Move fast by two.
+c. If slow and fast are the same node, return true (cycle exists).
+- If the loop exits without returning true, return false.
+```
+public class Solution {
+    public boolean hasCycle(ListNode head) {
+        if (head == null) return false;
+        
+        ListNode slow = head;
+        ListNode fast = head;
+        
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+            
+            if (slow == fast) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+}
+```
 2. Middle of the Linked List
 - Solution: 1. Fast and Slow pointers, return slow; - Single parse 2. Find the length of the LL count=0 and Apply For loop again i=0 to count/2, return current - Two times for loop - O(n) & O(1)
 3. Happy Number
@@ -677,7 +780,154 @@ class Solution {
   2. HashSet - while(n>0) findSquare and check in the if set.contains(square) return true otherwise set.add(squre)  after while return false
 4. Reverse a Linked List
 - Solution: 1. Three-pointers - prev=null,current=head while(current!=null) next=current.next, current.next=prev, prev=current, current=next after while loop return prev 2. Copy all the elements to an array and reverse it. Update LL according to the array - O(n) & O(n)
-    
+5. [Reorder List](https://leetcode.com/problems/reorder-list/description/) -O(n) & (1)
+- Question: Reorder a linked list such that the nodes are arranged in a specific way: the first node is followed by the last node, then the second node is followed by the second last, and so on
+- Solution: 1. Splitting the list into two halves, reversing the second half, and then merging the two halves alternately. 2. Copy to the new array, modify and update the list
+- Find the middle of the linked list. The middle can be found using the slow and fast pointers. Once the fast pointer reaches the end, the slow pointer is at the middle.
+- Split the list into two halves. So after finding the middle, we need to split. Let's say the middle is at slow. Then the second half starts at slow.next. But wait, we need to break the link between the first and second halves. So after finding the middle, the first half's end (slow) should have its next set to null. Then the second half is slow.next, which is the head of the second part.
+- Reverse the second half. How to reverse a linked list? We can do that iteratively. Initialize prev as null, current as the head of the second half. Then for each step, save the next node, set current.next to prev, then move prev and current forward. Once done, prev is the new head of the reversed list.
+- Merge the two lists alternately. So take one node from the first half, then one from the reversed second half, and so on.
+- Find the middle node using slow and fast pointers.
+- Split the list into two halves.
+- Reverse the second half.
+- Merge the two halves by alternating nodes.
+```
+class Solution {
+    public void reorderList(ListNode head) {
+        if(head == null || head.next == null) {
+            return;
+        }
+
+        ListNode mid = middleNode(head);
+        ListNode headSecond = reverseList(mid);
+        ListNode headFirst = head;
+
+        while(headFirst != null && headSecond != null) {
+            ListNode temp = headFirst.next;
+            headFirst.next = headSecond;
+            headFirst = temp;
+
+            temp = headSecond.next;
+            headSecond.next = headFirst;
+            headSecond = temp;
+        }
+
+        if(headFirst != null) { // Pointing tail to null
+            headFirst.next = null;
+        }
+    }
+
+    public ListNode middleNode(ListNode head) {
+        ListNode fast = head;
+        ListNode slow = head;
+
+        while(fast != null && fast.next != null) {
+            fast = fast.next.next;
+            slow = slow.next;
+        }
+        return slow;
+    }
+
+    public ListNode reverseList(ListNode head) {
+        if(head == null) {
+            return head;
+        }
+        ListNode prev = null;
+        ListNode present = head;
+        ListNode next = present.next;
+
+        while(present != null) {
+            present.next = prev;
+
+            prev = present;
+            present = next;
+            if(next != null) {
+                next = next.next;
+            }
+        }
+        return prev;
+    }
+}
+
+```
+6. [Remove Nth Node From End of List](https://leetcode.com/problems/remove-nth-node-from-end-of-list/description/) - O(n) & O(1)
+- Question: Remove the nth node from the end of a linked list
+- Solution: 1. Fast and Slow pointers 2. Find the length of the list. Then compute the position to delete, which is (length - n) - Iterate through the list to find the length. Then compute the position, then traverse again to that position and delete.
+- The idea is to have a fast pointer that is n steps ahead of the slow pointer. When the fast pointer reaches the end, the slow pointer will be at the node before the one to delete.
+- Let's say we have a dummy node pointing to the head. Then, we have two pointers, slow and fast. We move fast n steps ahead. Then, we move both until fast.next is null. Then, slow.next is the node to delete.
+- Create a dummy node pointing to head. This helps handle cases where the head needs to be deleted(We're using slow to remove the node)
+- Initialize slow and fast pointers at dummy.
+- Move fast n steps ahead. So after that, fast is at node n steps ahead.
+- Then, move both slow and fast until fast reaches the last node (fast.next is null). At this point, slow is pointing to the node before the one to be deleted.
+- Then, set slow.next = slow.next.next.
+```
+class Solution {
+    public ListNode removeNthFromEnd(ListNode head, int n) {
+        ListNode dummy = new ListNode(0); //Create a dummy node that points to the head of the list. This helps handle edge cases, such as removing the head node.
+        dummy.next = head;
+        ListNode slow = dummy;
+        ListNode fast = dummy;
+        
+        // Move fast pointer n steps ahead
+        for (int i = 0; i < n; i++) {
+            fast = fast.next;
+        }
+        
+        // Move both pointers until fast reaches the last node
+        while (fast.next != null) {
+            slow = slow.next;
+            fast = fast.next;
+        }
+        
+        // Remove the nth node from the end
+        slow.next = slow.next.next;
+        
+        return dummy.next;
+    }
+}
+```
+
+## Stack
+1. [Valid Parentheses](https://leetcode.com/problems/valid-parentheses/description/) - O(n) & O(n)
+- Question: Determine if a string of parentheses is valid
+- Solution: 1. Stack data structures
+- Every time I encounter an opening bracket, I push it onto the stack. And when I find a closing bracket, I check if the top of the stack is the corresponding opening bracket. If not, it's invalid.
+- Initialize a stack.
+- Iterate through each character in the string.
+- If the character is an opening bracket (like '(', '{', '['), push it onto the stack.
+- If it's a closing bracket, check if the stack is empty. If it is, return false because there's nothing to match with.
+- Pop the top element from the stack and check if it's the matching opening bracket. If not, return false.
+- At the end, if the stack is empty, return true; else, return false (because there are unmatched opening brackets left).
+- But wait, how to map the closing brackets to their corresponding opening ones? Maybe use a hashmap or a simple switch case. Like, when we see a ')', we check if the last opened was '('.
+- Alternatively, we can use a map where the key is the closing bracket and the value is the corresponding opening bracket. That way, when we get a closing bracket, we can check if the popped element matches the value.
+- Let me think about the data structures. So, for Java, I can use a Stack<Character> or maybe Deque as a stack.
+```
+class Solution {
+    public boolean isValid(String s) {
+        Deque<Character> stack = new ArrayDeque<>();
+        Map<Character, Character> bracketMap = new HashMap<>();
+        bracketMap.put(')', '(');
+        bracketMap.put('}', '{');
+        bracketMap.put(']', '[');
+        
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if (bracketMap.containsKey(c)) {
+                // Closing bracket
+                if (stack.isEmpty() || stack.pop() != bracketMap.get(c)) {
+                    return false;
+                }
+            } else {
+                // Opening bracket
+                stack.push(c);
+            }
+        }
+        
+        return stack.isEmpty();
+    }
+}
+```
+  
 ## Trie - O(L) and O(N*L)
 1. Implement Trie (Prefix Tree) - insert, search, startsWithPrefix
 - Node[] children; boolean eow;
