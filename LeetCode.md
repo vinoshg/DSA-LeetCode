@@ -133,7 +133,7 @@ class Solution {
 ## Overlapping Intervals - O(nlogn) & O(n)
 - Question: Overlapping intervals, scheduling conflicts - Approach: Sort intervals and merge overlapping ones
 1. [Merge Intervals](https://leetcode.com/problems/merge-intervals/description/) - O(nlogn) & O(n)
-- Question: intervals[][] (2D Array)
+- Question: Merging overlapping intervals - intervals[][] (2D Array)
 - Solution: 1. Overlapping Intervals - Dealing with intervals, a common approach is to sort them
 - Check if the intervals array is empty. If yes, return empty.
 - Sort the intervals based on the start time (the first element of each interval).
