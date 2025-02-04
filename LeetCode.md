@@ -688,3 +688,79 @@ class Solution {
     }
 }
 ```
+14. [Clone Graph](https://leetcode.com/problems/clone-graph/description/) - O(n) & O(n)
+- Solution: 1. Breadth-First Search (Queue) with HashMap (Visited Node) 2. DFS(Recusrion / Stack) with HashMap
+- If the input node is null, return null.
+- Create a hash map to track original nodes to their clones.
+- Use BFS or DFS to traverse the original graph.
+- For each node, create a clone if not already present.
+- For each neighbor of the current node, clone them and add to the clone's neighbors list.
+- Let me outline the BFS approach: Check if the input node is null. If yes, return null.
+- Initialize the hash map. Let's call it visited.
+- Create the clone of the input node. Add it to visited with original node as key. Create a queue and add the original node to it.
+- While the queue is not empty: Dequeue a node (current). Iterate over all neighbors of current. For each neighbor: If neighbor is not in visited: Create a clone of neighbor and Add to visited.
+- Enqueue the neighbor (original) to the queue. Add the clone of the neighbor (from visited) to the cloned current node's neighbors list.
+- Return the clone of the input node.
+```
+//BFS
+class Solution {
+    public Node cloneGraph(Node node) {
+        if (node == null) {
+            return null;
+        }
+        
+        Map<Node, Node> visited = new HashMap<>();
+        Queue<Node> queue = new LinkedList<>();
+        
+        Node clonedNode = new Node(node.val);
+        visited.put(node, clonedNode);
+        queue.add(node);
+        
+        while (!queue.isEmpty()) {
+            Node current = queue.poll();
+            
+            for (Node neighbor : current.neighbors) {
+                if (!visited.containsKey(neighbor)) {
+                    visited.put(neighbor, new Node(neighbor.val));
+                    queue.add(neighbor);
+                }
+                visited.get(current).neighbors.add(visited.get(neighbor));
+            }
+        }
+        
+        return clonedNode;
+    }
+}
+//DFS
+public Node cloneGraph(Node node) {
+
+    if (node == null) return null;
+
+    Map < Node, Node > map = new HashMap < > ();
+
+    return dfs(node, map);
+
+}
+
+private Node dfs(Node node, Map < Node, Node > map) {
+
+    if (map.containsKey(node)) {
+
+        return map.get(node);
+
+    }
+
+    Node clone = new Node(node.val);
+
+    map.put(node, clone);
+
+    for (Node neighbor: node.neighbors) {
+
+        clone.neighbors.add(dfs(neighbor, map));
+
+    }
+
+    return clone;
+
+}
+```
