@@ -93,7 +93,7 @@
 - Question: Given an array return the two indices (start from 1,2,3), sum of two numbers = target
 - Solution: 1. Two pointers(Converging pointers) left=0,right=array.length-1 while(left<right) sum=array[left]+array[right] if(sum==target) return new int[]{left+1,right+1} else if(sum<target) left++ else right--; after while retrun new int[]{-1,-1} 2. Nested loops i=0 to array.length; j=i+1 to array.length
 8. [Longest Palindromic Substring](https://leetcode.com/problems/longest-palindromic-substring/description/) - O(n^2) & O(1)
-- 1.Expand Around Center Approach 2. The longest one could be of any length, so I have to check all possible substrings. But checking every possible substring would be O(n^3)  
+- Solution: 1. Expand Around Center Approach 2. The longest one could be of any length, so I have to check all possible substrings. But checking every possible substring would be O(n^3)  
 - Initialize variables to keep track of the start and end indices of the longest palindrome found so far.
 - Iterate through each character in the string.
 - For each character, expand around it assuming it's the center of an odd-length palindrome.
