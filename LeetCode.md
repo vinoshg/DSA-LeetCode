@@ -93,12 +93,14 @@
 - Question: Given an array return the two indices (start from 1,2,3), sum of two numbers = target
 - Solution: 1. Two pointers(Converging pointers) left=0,right=array.length-1 while(left<right) sum=array[left]+array[right] if(sum==target) return new int[]{left+1,right+1} else if(sum<target) left++ else right--; after while retrun new int[]{-1,-1} 2. Nested loops i=0 to array.length; j=i+1 to array.length
 8. Longest Palindromic Substring - O(n^2) & O(1)
+- Expand Around Center Approach  
 - Initialize variables to keep track of the start and end indices of the longest palindrome found so far.
 - Iterate through each character in the string.
 - For each character, expand around it assuming it's the center of an odd-length palindrome.
 - Also, expand around the current character and the next one for even-length palindromes.
 - After each expansion, check if the current palindrome is longer than the previous longest. If yes, update the start and end indices.
 - At the end, return the substring from start to end+1.
+- Wait, but how do I handle the expansion? Let's think of a helper function that takes left and right indices and expands as long as the characters at those indices are equal. It will return the length of the palindrome found. 
 ```
 class Solution {
     public String longestPalindrome(String s) {
@@ -128,6 +130,7 @@ class Solution {
     }
 }
 ```
+- The longest one could be of any length, so I have to check all possible substrings. But checking every possible substring would be O(n^3) 
 ## Overlapping Intervals - O(nlogn) & O(n)
 - Question: Overlapping intervals, scheduling conflicts - Approach: Sort intervals and merge overlapping ones
 1. Merge Intervals
