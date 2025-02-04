@@ -75,7 +75,7 @@
 - Solution: 1. Two pointers with HashMap - left=0,maxLength=0 for right=0 to str.length() if(map.containsKey(ch) && map.get(ch) >= left) left=map.get(ch)+1 after map.put(ch, right) maxLength=Math.max(maxLength, right-left+1) 2. Two pointers with HashSet with left=0 and for right=0 to array.length while(set.contains(str.charAt(right)) set.remove(str.charAt(left)) left++ after while loop set.add(str.charAt(right)) sum=Math.max(sum, right-left+1) / Freq array with sliding window (Less number of char and only lower case, array size 128)
 
 ## Two Pointers - O(n) and O(1) 
-- Question: Applicable to Linear Data Structure Arrays, String, LinkedList - Converging pointers | Parallel pointers | Trigger based pointers (Usually Apply for Sorted Array/LL)
+- Question: Applicable to Linear Data Structure Arrays, String, LinkedList - Converging pointers | Parallel pointers | Trigger based pointers (Usually Apply for Sorted Array/LL) | Expand Around Center
 1. Converging pointers - Two pointers start at 0th and array.length-1 and converging together
 - Question: 1. Palindrome (Applicable for both Subarray/Substrings)
 2. Parallel pointers
@@ -92,7 +92,42 @@
 7. Two Sum II - Input Array Is Sorted (Keep in mind array declaration with two elements - return new int[]{left+1,right+1})
 - Question: Given an array return the two indices (start from 1,2,3), sum of two numbers = target
 - Solution: 1. Two pointers(Converging pointers) left=0,right=array.length-1 while(left<right) sum=array[left]+array[right] if(sum==target) return new int[]{left+1,right+1} else if(sum<target) left++ else right--; after while retrun new int[]{-1,-1} 2. Nested loops i=0 to array.length; j=i+1 to array.length
+8. Longest Palindromic Substring - O(n^2) & O(1)
+- Initialize variables to keep track of the start and end indices of the longest palindrome found so far.
+- Iterate through each character in the string.
+- For each character, expand around it assuming it's the center of an odd-length palindrome.
+- Also, expand around the current character and the next one for even-length palindromes.
+- After each expansion, check if the current palindrome is longer than the previous longest. If yes, update the start and end indices.
+- At the end, return the substring from start to end+1.
+```
+class Solution {
+    public String longestPalindrome(String s) {
+        if (s == null || s.length() < 1) return "";
+        int start = 0, end = 0;
+        for (int i = 0; i < s.length(); i++) {
+            int[] len1 = expandAroundCenter(s, i, i);    // Odd length
+            int[] len2 = expandAroundCenter(s, i, i + 1); // Even length
+            if (len1[1] - len1[0] > end - start) {
+                start = len1[0];
+                end = len1[1];
+            }
+            if (len2[1] - len2[0] > end - start) {
+                start = len2[0];
+                end = len2[1];
+            }
+        }
+        return s.substring(start, end + 1);
+    }
 
+    private int[] expandAroundCenter(String s, int left, int right) {
+        while (left >= 0 && right < s.length() && s.charAt(left) == s.charAt(right)) {
+            left--;
+            right++;
+        }
+        return new int[]{left + 1, right - 1};
+    }
+}
+```
 ## Overlapping Intervals - O(nlogn) & O(n)
 - Question: Overlapping intervals, scheduling conflicts - Approach: Sort intervals and merge overlapping ones
 1. Merge Intervals
