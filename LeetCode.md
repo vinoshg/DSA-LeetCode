@@ -166,7 +166,26 @@ class Solution {
 - Solution: 1. Knapsack - dp[amount + 1],Arrays.fill(dp, amount + 1) dp[0] = 0 for i=1 to amount for coin - if(coin <= i) dp[i] = Math.min(dp[i], dp[i - coin] + 1); after loops return dp[amount] > amount ? -1 : dp[amount]; 2. Recursion
 4. Climbing Stairs - O(n) & O(1)
 - Question: Finding the number of distinct ways to climb n stairs where you can take 1 or 2 steps at a time (Fibonacci sequence pattern)
-- Solution: 1. if(n==1 || n==2) return n; first=1,second=2 for i=3 to n update third, first and second after loop return second; 
+- Solution: 1. Dynamic programming problem similar to the Fibonacci sequence.
+- If n is 1, return 1.
+- If n is 2, return 2.
+- For n > 2, iterate up to n, calculating each step as the sum of the two previous steps.
+```
+class Solution {
+    public int climbStairs(int n) {
+        if (n == 1) return 1;
+        if (n == 2) return 2;
+        
+        int first = 1, second = 2;
+        for (int i = 3; i <= n; i++) {
+            int third = first + second;
+            first = second;
+            second = third;
+        }
+        return second;
+    }
+}
+```
 5. [Longest Increasing Subsequence](https://leetcode.com/problems/longest-increasing-subsequence/description/) - O(nlogn) & O(n)
 - Question: Find the length of the longest subsequence in an array that is strictly increasing. A subsequence means the elements don't have to be consecutive, but they have to be in order.
 - Solution: 1. Dynamic programming approach combined with binary search 2. Dynamic programming approach For each element, the idea is to check all previous elements and see if the current element can extend their subsequences. But that would be O(n^2) 
