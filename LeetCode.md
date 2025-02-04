@@ -132,22 +132,91 @@ class Solution {
 ```
 ## Overlapping Intervals - O(nlogn) & O(n)
 - Question: Overlapping intervals, scheduling conflicts - Approach: Sort intervals and merge overlapping ones
-1. Merge Intervals
+1. [Merge Intervals](https://leetcode.com/problems/merge-intervals/description/) - O(nlogn) & O(n)
 - Question: intervals[][] (2D Array)
-- Solution: 1. Sort an array based on start of the interval: Arrays.sort(array, (a,b) -> Integer.comapre(a[0],b[0]) / Arrays.sort(array, (a,b) -> a[0] - b[0]); Take a list and add 0th element. for i=1 to array.length if(current[0] <= last[1]) last[1] = Math.max(last[1], current[1]) else list.add(array[i]); after loop return list.toArray(new int[list.size()][])
-2. Insert Interval - O(n) if array's sorted & O(n)
-- Solution: 1. Sort an array with three cases a) For intervals that come before the new interval and don't overlap, I can add them directly
-  b) Merging Overlapping Intervals and Inserting the Merged Interval c) Add the remaining intervals that don't overlap after the merged part
-  Initialize newStart=newInterval[0],newEnd=newInterval[1],i=0,n=intervals.length
-  
-  a) while(i<n && intervals[i][1] < newStart) result.add(intervals[i]) i++; All intervals with end < newInterval's start
-  
-  b) while(i<n && intervals[i][0] <= newEnd) newStart=Min(two start),newEnd=Max(two end); After while result.add(new int[]{newStart,newEnd})
-     interval start <= new/merged interval end along with comply(auto) by interval end >= new/merged interval start
-  
-  c) while(i<n) / while(i<n && intervals[i][0] > newEnd) result.add(intervals[i]) i++; add all intervals that come after the merged 
-     interval (start > merged interval's end)
-
+- Solution: 1. Overlapping Intervals - Dealing with intervals, a common approach is to sort them
+- Check if the intervals array is empty. If yes, return empty.
+- Sort the intervals based on the start time (the first element of each interval).
+- Initialize a list (or something) to hold the merged intervals. Start by adding the first interval.
+- Iterate from the second interval to the end:
+a. Get the last merged interval from the list.
+b. Compare current interval's start with the end of the last merged interval.
+c. If current interval's start <= last merged interval's end: they overlap. Merge them by updating the end of the last merged interval to the max of both ends.
+d. If not, add the current interval to the merged list.
+- Convert the merged list to an array and return.
+- But how to sort the intervals in Java? Since each interval is an int[2], we can sort the array using a custom comparator. In Java, for a 2D array, Arrays.sort can take a Comparator. So for example, using Arrays.sort(intervals, (a, b) -> a[0] - b[0]). This sorts the intervals based on the start time.
+```
+class Solution {
+    public int[][] merge(int[][] intervals) {
+        if (intervals.length == 0) {
+            return new int[0][];
+        }
+        
+        // Sort intervals based on their start times
+        Arrays.sort(intervals, (a, b) -> Integer.compare(a[0], b[0]));
+        
+        List<int[]> merged = new ArrayList<>();
+        merged.add(intervals[0]);
+        
+        for (int i = 1; i < intervals.length; i++) {
+            int[] current = intervals[i];
+            int[] last = merged.get(merged.size() - 1);
+            
+            if (current[0] <= last[1]) {
+                // Merge the intervals by updating the end of the last interval
+                last[1] = Math.max(last[1], current[1]);
+            } else {
+                // Add the current interval as it doesn't overlap
+                merged.add(current);
+            }
+        }
+        
+        return merged.toArray(new int[merged.size()][]);
+    }
+}
+```
+2. [Insert Interval](https://leetcode.com/problems/insert-interval/) - O(n) if array's sorted & O(n)
+- Solution: 1. Overlapping Intervals
+- When dealing with intervals, sorting is often a good first step. 1. Find where the new interval starts in relation to the existing intervals 2. Merge any overlapping intervals with the new one 3. Add the remaining intervals that don't overlap after the merged part.
+- Create a list to collect the result.
+- Iterate through each interval in intervals:
+a. If the current interval ends before the newInterval starts, add to result.
+b. Else if the current interval starts after the newInterval ends, add the newInterval (if not added), then add current and remaining intervals.
+c. Else, merge the current interval into the newInterval by updating newInterval's start and end.
+- After processing all intervals, add the newInterval if it hasn't been added yet.
+```
+class Solution {
+    public int[][] insert(int[][] intervals, int[] newInterval) {
+        List<int[]> result = new ArrayList<>();
+        int i = 0;
+        int n = intervals.length;
+        
+        // Add all intervals ending before newInterval starts
+        while (i < n && intervals[i][1] < newInterval[0]) {
+            result.add(intervals[i]);
+            i++;
+        }
+        
+        // Merge overlapping intervals
+        int newStart = newInterval[0];
+        int newEnd = newInterval[1];
+        while (i < n && intervals[i][0] <= newEnd) {
+            newStart = Math.min(newStart, intervals[i][0]);
+            newEnd = Math.max(newEnd, intervals[i][1]);
+            i++;
+        }
+        result.add(new int[]{newStart, newEnd});
+        
+        // Add remaining intervals
+        while (i < n) { //while(i<n && intervals[i][0] > newEnd) 
+            result.add(intervals[i]);
+            i++;
+        }
+        
+        return result.toArray(new int[result.size()][]);
+    }
+}
+```
 ## Greedy Algorithm
 1. Longest Consecutive Sequence
 - Solution: 1. HashSet fill with array element. For num if (!set.contains(num - 1)) currentNum=num while (set.contains(currentNum + 1)
@@ -330,5 +399,49 @@ class Solution {
 - Ancestor: Node A, discovered before the current node in DFS, is the ancestor of the curr. To track the ancestor we're using discovery time dt and lowest dt array
 - Solution: 1. a) Starting node with parent=-1 & disconnected children's > 1 b) u-v then v is unvisited i.e it's not ancestor (No Back edge) then u is ap or u is the starting point of the cycle => a) par=-1 & children>1 b) par!=-1 & dt[curr] < low[neigh]
 Here are 3 cases of current node neighbor 1. Parent (Ignore) 2. Visited (Ancestor) - low[curr] = Math.min(low[curr], dt[neigh]) 3.Not Visited (Child) - low[curr] = Math.min(low[curr], low[neigh]) 2. Naive approach - O(V.(V+E)) - More
-13. Number of Islands - O(nm) and O(nm)
-- Solution: 1. Nested loops with DFS on all four directions making it grid[i][j] = 0 when I found the island 2. BFS
+13. [Number of Islands](https://leetcode.com/problems/number-of-islands/description/) - O(nm) and O(nm)
+- Solution: 1. Depth-First Search (DFS) approach 2. BFS
+- The idea is to traverse each cell in the grid and, when encountering a land cell ('1'), explore all connected land cells horizontally and vertically, marking them as visited to avoid counting them again.
+- Iterate through each cell in the grid.
+- When a cell with '1' is found, increment the island count.
+- Perform DFS to mark all connected '1's as visited, so they aren't counted again.
+- But how do I mark them as visited? Since modifying the input grid is allowed, I can change visited '1's to '0's to avoid revisiting. That way, no extra space is needed for a visited matrix.
+```
+class Solution {
+    public int numIslands(char[][] grid) {
+        if (grid == null || grid.length == 0) {
+            return 0;
+        }
+        
+        int numIslands = 0;
+        int rows = grid.length;
+        int cols = grid[0].length;
+        
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                if (grid[i][j] == '1') {
+                    numIslands++;
+                    dfs(grid, i, j);
+                }
+            }
+        }
+        
+        return numIslands;
+    }
+    
+    private void dfs(char[][] grid, int i, int j) {
+        int rows = grid.length;
+        int cols = grid[0].length;
+        
+        if (i < 0 || j < 0 || i >= rows || j >= cols || grid[i][j] == '0') {
+            return;
+        }
+        
+        grid[i][j] = '0'; // Mark as visited
+        dfs(grid, i + 1, j); // Down
+        dfs(grid, i - 1, j); // Up
+        dfs(grid, i, j + 1); // Right
+        dfs(grid, i, j - 1); // Left
+    }
+}
+```
