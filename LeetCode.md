@@ -126,7 +126,7 @@ class Solution {
             left--;
             right++;
         }
-        return new int[]{left + 1, right - 1};
+        return new int[]{left + 1, right - 1}; //Last char not matched, exit the loop +1 and -1 to the pointers
     }
 }
 ```
