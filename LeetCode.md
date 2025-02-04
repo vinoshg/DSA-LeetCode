@@ -22,6 +22,38 @@
 10. Rotation Count in Rotated Sorted Array =  (Pivot + 1)
 11. Split Array Largest Sum / Book allocation / Capacity To Ship Packages Within D Days
 - Solution: 1. Binary search by taking start=max element, end=sum of all elements and sum=0,pieces=1 if sum+num > mid then sum=num,pieces++ else sum+=num after loop pieces>m - start=mid+1 else end=mid-1. After while loop return start instead of -1 (while loop inside another for loop)
+12. [Find Minimum in Rotated Sorted Array](https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/description/) - O(long) & O(1)
+- Solution: 1. Binary search approach 2. Linear search would work but that's O(n)
+- Wait, the array is sorted but rotated. So the array has two parts, both sorted, and the minimum is the point where the second part starts
+- So the plan is to find the pivot point where the rotation happened. Once I find that, the element at that index is the minimum.
+- So during binary search, I can compare the middle element with the rightmost element. Because in a sorted and rotated array, the right half will be the part that's smaller if there's a rotation.
+- Initialize left = 0, right = nums.length - 1.
+- While left < right:
+- Calculate mid = left + (right - left) / 2.
+- Compare nums[mid] with nums[right].
+- If nums[mid] > nums[right], the minimum must be in the right half, so set left = mid + 1.
+- Else, the minimum is in the left half (including mid), so set right = mid.
+- Once the loop ends, left == right, which is the index of the minimum.
+```
+class Solution {
+    public int findMin(int[] nums) {
+        int left = 0;
+        int right = nums.length - 1;
+        
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+            
+            if (nums[mid] > nums[right]) { //That's where minimum element located, if array's rotated [3,4,5,1,2]
+                left = mid + 1;
+            } else {
+                right = mid; //Else, the minimum is in the left half (including mid), so set right = mid
+            }
+        }
+        
+        return nums[left];
+    }
+}
+```
 
 ## Cyclic Sort - O(n) and O(1)
 1. Cyclic Sort 
@@ -738,6 +770,43 @@ class Solution {
     }
 }
 ```
+7. [Maximum Product Subarray](https://leetcode.com/problems/maximum-product-subarray/description/) - O(n) & O(1)
+- Question: Finding the subarray with the largest product in an integer array
+- Solution: 1. Dynamic programming similar to the maximum subarray sum
+- So the idea is to keep track of both the maximum and minimum products at each step. For each number in the array, calculate the new possible max and min by considering the current number multiplied by the previous max or min, or just the current number itself (in case the previous products are zero or the current number is better on its own).
+- Initialize variables to keep track of current max and min products. Also, a variable to track the overall maximum product found so far.
+- Iterate through each number in the array.
+- For each number, calculate the temp_max (since the current max will be updated before min, but min depends on the previous max, so we need a temporary variable to store the old max).
+- The new current max is the maximum of (temp_max * current number, current min * current number, current number).
+- Similarly, the new current min is the minimum of (temp_max * current number, current min * current number, current number).
+- Update the overall max with the current max if it's larger.
+- Wait, why do we need to consider all three possibilities (prev max * current, prev min * current, current)? Because the current number could be negative, and multiplying a negative (prev min) by a negative could give a larger product. Also, if the current number is higher than any product, like if previous product was zero and current is positive, we start fresh.
+```
+class Solution {
+    public int maxProduct(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+        
+        int currentMax = nums[0];
+        int currentMin = nums[0];
+        int overallMax = nums[0];
+        
+        for (int i = 1; i < nums.length; i++) {
+            int tempMax = currentMax * nums[i];
+            int tempMin = currentMin * nums[i];
+            
+            currentMax = Math.max(Math.max(tempMax, tempMin), nums[i]);
+            currentMin = Math.min(Math.min(tempMax, tempMin), nums[i]);
+            
+            overallMax = Math.max(overallMax, currentMax);
+        }
+        
+        return overallMax;
+    }
+}
+```
+
 ## Linked List
 - Fast and Slow pointers - O(n) & O(1) | Reversal of Linked List using Three pointers - O(n) & O(1)
 1. [Linked List Cycle](https://leetcode.com/problems/linked-list-cycle/description/) - O(n) & O(1)
@@ -881,6 +950,84 @@ class Solution {
         
         // Remove the nth node from the end
         slow.next = slow.next.next;
+        
+        return dummy.next;
+    }
+}
+```
+7. [Merge Two Sorted Lists](https://leetcode.com/problems/merge-two-sorted-lists/description/) - O(n+m) & O(1)
+- Solution: 1. Two-pointer approach along with a dummy node to simplify the merging process.
+- First, I remember that when merging two sorted lists, you typically compare the current nodes of each list and choose the smaller one to add to the merged list. So, maybe I can use a dummy node to simplify the process. The dummy node will help avoid dealing with edge cases where the merged list is empty initially.
+- Initialize a dummy node and a current pointer pointing to the dummy.
+- While both list1 and list2 are not null:
+a. Compare the values of list1 and list2.
+b. Attach the smaller node to current.next.
+c. Move the current pointer and the selected list's pointer forward.
+- Once one list is exhausted, attach the remaining nodes from the other list.
+- Return dummy.next as the merged list.
+```
+class Solution {
+    public ListNode mergeTwoLists(ListNode list1, ListNode list2) {
+        ListNode dummy = new ListNode();
+        ListNode current = dummy;
+        
+        while (list1 != null && list2 != null) {
+            if (list1.val < list2.val) {
+                current.next = list1;
+                list1 = list1.next;
+            } else {
+                current.next = list2;
+                list2 = list2.next;
+            }
+            current = current.next;
+        }
+        
+        // Attach the remaining elements of list1 or list2
+        current.next = (list1 != null) ? list1 : list2;
+        
+        return dummy.next;
+    }
+}
+```
+8. [Merge k Sorted Lists](https://leetcode.com/problems/merge-k-sorted-lists/description/) O(nlogk) & O(k) heap stores at most k nodes and each heap operation takes O(logk) time
+- Solution: 1. Use a priority queue (heap) 2. Merging two sorted lists can be done efficiently using a two-pointer approach. But when there are k lists, doing this pairwise might not be the most efficient. If I merge two lists at a time, like merging the first two, then merging the result with the third, and so on, that could work. But the time complexity might be high. For example, if each merge is O(n), and there are k lists, then the total time could be O(kN)
+- The idea would be to take the smallest element from each of the k lists and add them to the heap. Then, extract the smallest element from the heap, add it to the merged list, and then add the next element from the list that the extracted node came from. This way, we always pick the next smallest element available across all lists.
+- Create a priority queue that orders nodes by their value.
+- Add all the non-null head nodes from the lists array into the priority queue.
+- Create a dummy node to serve as the starting point of the merged list.
+- Use a pointer to build the merged list by repeatedly extracting the smallest node from the queue.
+- After extracting a node, add the next node from its original list to the queue (if it exists).
+- Continue until the queue is empty.
+- Return the next of the dummy node as the merged list.
+- But wait, in Java, the PriorityQueue requires a Comparator. Since ListNode doesn't implement Comparable, I need to provide a comparator that compares the values of the nodes. So, the comparator would be something like (a, b) -> a.val - b.val. But I need to handle nulls? No, because we are only adding non-null nodes to the queue.
+```
+class Solution {
+    public ListNode mergeKLists(ListNode[] lists) {
+        if (lists == null || lists.length == 0) {
+            return null;
+        }
+        
+        PriorityQueue<ListNode> heap = new PriorityQueue<>((a,b) -> a.val - b.val);
+        
+        
+        for (ListNode list : lists) {
+            if (list != null) {
+                heap.offer(list);
+            }
+        }
+        
+        ListNode dummy = new ListNode(0);
+        ListNode current = dummy;
+        
+        while (!heap.isEmpty()) {
+            ListNode node = heap.poll();
+            current.next = node;
+            current = current.next;
+            
+            if (node.next != null) {
+                heap.offer(node.next);
+            }
+        }
         
         return dummy.next;
     }
