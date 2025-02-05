@@ -651,6 +651,51 @@ class Solution {
 1. Longest Consecutive Sequence
 - Solution: 1. HashSet fill with array element. For num if (!set.contains(num - 1)) currentNum=num while (set.contains(currentNum + 1)
 
+## Backtracking
+1. [Combination Sum](https://leetcode.com/problems/combination-sum/description/) - O(N^(T/M + 1)) & O(T/M)  N is the number of candidates, T is the target, and M is the minimum value among the candidates. Space complexity due to the recursion stack depth
+- Question: Find all unique combinations in a given list of distinct integers where the numbers sum up to a specified target. Each number in the list can be used multiple times.
+- Solution: 1. Backtracking
+- Hmm, so how do I approach this? Well, this feels like a backtracking problem. Because we need to explore all possible combinations and backtrack when a path doesn't lead to a solution.
+- Wait, for example, if the candidates are sorted, and the current number is larger than the remaining target, then adding it would exceed, so we can break out of the loop. That's a possible optimization.
+- So to avoid duplicates, once we choose to move to the next candidate (say index i+1), we can't go back to candidates at index i. So for example, if we have candidates sorted, and in the current combination, we have started using candidate at index i, then the next step can only consider candidates from index i onwards. That way, we avoid permutations of the same numbers.
+- So the backtrack function will have parameters: start index, current combination, remaining target. The steps would be:
+- Sort the candidates array (to allow pruning when candidates[i] > remaining target).
+- Initialize a list to hold the result.
+- Define a backtrack function that takes start index, current combination, remaining target.
+- For each candidate from start index to end:
+a. If the candidate's value is greater than the remaining target, break the loop (since sorted, no further candidates can be used).
+b. Add the candidate to the current combination.
+c. Subtract candidate's value from remaining target.
+d. If remaining target is zero, add the current combination to the result.
+e. Else, recursively call the backtrack function with the same start index (since we can reuse), and the new remaining target.
+f. Remove the last candidate from the current combination (backtrack).
+```
+class Solution {
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+        List<List<Integer>> result = new ArrayList<>();
+        Arrays.sort(candidates); // Sort the candidates to enable pruning
+        backtrack(candidates, target, 0, new ArrayList<>(), result);
+        return result;
+    }
+    
+    private void backtrack(int[] candidates, int remaining, int start, List<Integer> current, List<List<Integer>> result) {
+        if (remaining == 0) {
+            result.add(new ArrayList<>(current)); // Add a copy of the current combination to the result
+            return;
+        }
+        
+        for (int i = start; i < candidates.length; i++) {
+            if (candidates[i] > remaining) {
+                break; // Prune the remaining candidates as they are larger than the remaining target
+            }
+            current.add(candidates[i]); // Include the current candidate
+            backtrack(candidates, remaining - candidates[i], i, current, result); // Recur with the same start index to allow reuse
+            current.remove(current.size() - 1); // Backtrack by removing the last added candidate - When it's break. So backtrack, remove last one's candidate > target.
+        }
+    }
+}
+```
+
 ## Dynamic Programming - Iteration(Two variable & dp[] array) and Memoization(Recursion)
 - Maximise/Minimise/Fewest of certain value or number of ways
 - Question: Optimize recursive problems with overlapping subproblems - 0/1 Knapsack | Unbounded Knapsack | Longest Common Subsequence (LCS) | Fibonacci sequence pattern
@@ -1124,7 +1169,51 @@ class Solution {
     }
 }
 ```
-  
+
+## Heap (Priority Queue)
+1. [Find Median from Data Stream](https://leetcode.com/problems/find-median-from-data-stream/description/) - O(log n) & O(n)
+- Question: Find the median from a data stream. Hmm, the median is the middle value when the numbers are ordered. If there's an odd number of elements, it's the middle one. If even, the average of the two middle ones.
+- Solution: 1. Using two heaps 2. If I just keep a list and add numbers, then when finding the median, I have to sort it every time. But that would be O(n log n) for each insertion
+- I remember that using two heaps can help here. Oh right! One max-heap to store the lower half of the numbers and a min-heap for the upper half. That way, the top of the max-heap is the largest of the lower half, and the top of the min-heap is the smallest of the upper half. The median would depend on the sizes of the heaps.
+- Let me think. The max-heap (let's call it 'low') will hold the first half, and the min-heap ('high') the second. When the total count is even, both heaps have the same size, and the median is the average of their tops. If odd, the low heap has one more element, so its top is the median.
+- So when adding a number, I need to balance the heaps. Let's see. When adding a new number, first add it to the low heap. Then, to make sure that the max of low is <= the min of high, I should move the max of low to high. Wait, but maybe it's better to first add to one heap and then balance. Wait, here's the standard approach:
+- Maintain that the size of 'low' is either equal to or one more than 'high'.
+- When inserting a new number:
+a. Add it to the 'low' heap (max-heap), then pop the max and add it to the 'high' heap. This ensures that the 'high' gets the larger elements.
+b. Then, if the 'high' heap has more elements than 'low', move the smallest from 'high' to 'low'. This balances the sizes.
+- All numbers in 'low' are <= all numbers in 'high'. So whenever a new number comes in, we can add it to the appropriate heap and then rebalance.
+- Add the number to the max-heap (low). Then, take the max from low and add it to the min-heap (high). Now, if high has more elements than low, take the min from high and add back to low. This way, low can be equal or one larger than high.
+- Add to max-heap (low)
+- Pop the max from low, add to min-heap (high)
+- If high's size is larger than low's, pop the min from high and add to low.
+```
+class MedianFinder {
+    private PriorityQueue<Integer> low;  // Max-heap for the lower half
+    private PriorityQueue<Integer> high; // Min-heap for the upper half
+
+    public MedianFinder() {
+        low = new PriorityQueue<>(Collections.reverseOrder());
+        high = new PriorityQueue<>();
+    }
+    
+    public void addNum(int num) {
+        low.offer(num);
+        high.offer(low.poll());
+        if (high.size() > low.size()) {
+            low.offer(high.poll());
+        }
+    }
+    
+    public double findMedian() {
+        if (low.size() > high.size()) { //odd
+            return low.peek();
+        } else {
+            return (low.peek() + high.peek()) / 2.0;
+        }
+    }
+}
+```
+
 ## Trie - O(L) and O(N*L)
 1. Implement Trie (Prefix Tree) - insert, search, startsWithPrefix
 - Node[] children; boolean eow;
@@ -1135,6 +1224,10 @@ class Solution {
 - Solution: 1. HashSet with Nested loops to get a substring 2. Trie insert and count nodes
 4. Longest word with all prefixes / Longest Word in Dictionary
 - Solution: 1. HashSet contains its prefix of (length - 1) 2. Trie inserts and builds a string with it's all prefixes present in the dictionary along with recursion and backtracking
+
+## Tree
+1. [Serialize and Deserialize Binary Tree](https://leetcode.com/problems/serialize-and-deserialize-binary-tree/description/) - O(n) & O(n)
+- 
 
 ## Graph - Time:O(V+E) Space:O(V)
 1. Connected and Disconnected Graph - BFS (Using Queue) and DFS (Using Recursion) along with the visited boolean array
