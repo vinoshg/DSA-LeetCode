@@ -187,7 +187,7 @@ class Solution {
 - Solution: 1. Like Next greater element - result[index]=i - index
 
 ## Sliding Window - O(n) & O(1)
-- Fixed Sliding window (Find Subarray/Substring of a fixed length) 2. Dynamic Sliding window (Longest/Shortest Subarray or Substring that satisfies the condition) - (e.g., max sum, longest substring with unique characters)
+- Fixed Sliding window (Find Subarray/Substring of a fixed length) 2. Dynamic Sliding window (Longest/Shortest Subarray or Substring that satisfies the condition) - (e.g., max sum, longest substring with unique characters) - I remember that sliding window techniques are useful for substring problems. 
 1. [Maximum Sum of Subarrays With Length K / Maximum sum of a subarray of size k](https://leetcode.com/problems/maximum-average-subarray-i/description/) - O(n) & O(1)
 - Question: Find the maximum sum of any contiguous subarray of length k / Max avg sum of Subarray (avg=max/array.length) - Fixed Sliding window
 - Solution: 1. Sliding Window 2. Nested loops - O(n^2) & O(1)
@@ -301,6 +301,51 @@ class Solution {
     }
 }
 ```
+4. [Longest Repeating Character Replacement](https://leetcode.com/problems/longest-repeating-character-replacement/description/) - O(n) & O(1)
+- Question: Given a string s and an integer k, I can choose any k characters in the string and replace them with any other uppercase English letter. My goal is to find the length of the longest substring containing all repeating letters after performing those replacements.
+- Solution: 1. Sliding Window
+- I remember that sliding window techniques are useful for substring problems.
+- The key idea is to find the longest window where the number of characters that need to be replaced is <=k. Because if in a window, the maximum frequency of a single character is maxFreq, then the number of replacements needed is window length - maxFreq. So as long as this value is <=k, the window is valid.
+- So, the plan is to maintain a sliding window with left and right pointers. Expand the window by moving the right pointer, keep track of the maximum frequency of any character in the current window. If the window length minus the max frequency exceeds k, we need to move the left pointer to shrink the window until it's valid again.
+- Wait, but how do we track the max frequency efficiently? Because every time the window changes, the frequencies might change. So maybe we can use a frequency array or hashmap to count the occurrences of each character in the current window. Then, as we expand the window, we update the counts and check if the current window is valid.
+- Let's outline the steps:
+- Initialize a frequency array (size 26 for uppercase letters) to count the characters in the current window.
+- Use left and right pointers to represent the current window. Both start at 0.
+- maxCount keeps track of the maximum frequency of any character in the current window.
+- The result is the maximum window size found during the process.
+- As we iterate with the right pointer:
+- Increment the count of s.charAt(right)
+- Update maxCount if the current character's count is higher than previous max
+- Check if (window length - maxCount) >k. If yes, we need to move left forward, decrementing the count of the character at left, and increment left.
+- Update the result with the maximum window size (right - left +1)
+```
+class Solution {
+    public int characterReplacement(String s, int k) {
+        int[] count = new int[26]; // Frequency count of each character in the current window
+        int left = 0; // Left pointer of the sliding window
+        int maxCount = 0; // Maximum frequency of a single character in the current window
+        int maxLength = 0; // Result to store the maximum valid window length
+        
+        for (int right = 0; right < s.length(); right++) {
+            char c = s.charAt(right);
+            count[c - 'A']++;
+            maxCount = Math.max(maxCount, count[c - 'A']); // Update max frequency
+            
+            // If the current window size minus the max frequency exceeds k, shrink the window
+            while (right - left + 1 - maxCount > k) {
+                count[s.charAt(left) - 'A']--; // Decrement the count of the leftmost character
+                left++; // Move the left pointer to the right
+            }
+            
+            // Update the maximum valid window length
+            maxLength = Math.max(maxLength, right - left + 1);
+        }
+        
+        return maxLength;
+    }
+}
+```
+
 ## Two Pointers - O(n) and O(1) 
 - Applicable to Linear Data Structure Arrays, String, LinkedList - Converging pointers (Two pointers start at 0th and array.length-1 and converge together) | Parallel pointers (Right pointer is used to get new info and the left is used to track. Both start from 0/1) | Trigger based pointers (left pointer move only after right pointer reaches particular position) | Expand Around Center
 1. [Valid Palindrome](https://leetcode.com/problems/valid-palindrome/description/) - O(n) & O(1)
@@ -1183,9 +1228,11 @@ a. Add it to the 'low' heap (max-heap), then pop the max and add it to the 'high
 b. Then, if the 'high' heap has more elements than 'low', move the smallest from 'high' to 'low'. This balances the sizes.
 - All numbers in 'low' are <= all numbers in 'high'. So whenever a new number comes in, we can add it to the appropriate heap and then rebalance.
 - Add the number to the max-heap (low). Then, take the max from low and add it to the min-heap (high). Now, if high has more elements than low, take the min from high and add back to low. This way, low can be equal or one larger than high.
+- Steps are :
 - Add to max-heap (low)
 - Pop the max from low, add to min-heap (high)
 - If high's size is larger than low's, pop the min from high and add to low.
+- When the total count is even, both heaps have the same size, and the median is the average of their tops. If odd, the low heap has one more element, so its top is the median.
 ```
 class MedianFinder {
     private PriorityQueue<Integer> low;  // Max-heap for the lower half
@@ -1227,7 +1274,63 @@ class MedianFinder {
 
 ## Tree
 1. [Serialize and Deserialize Binary Tree](https://leetcode.com/problems/serialize-and-deserialize-binary-tree/description/) - O(n) & O(n)
-- 
+- Solution: 1. Traversal like pre-order
+- So maybe I can do a pre-order traversal, and when I encounter a null, I add something like "N" to the string. Each node's value is separated by a delimiter, like a comma. That way, when deserializing, I can split the string into a list of values and reconstruct the tree.
+- So for serialize function, start with the root. If the node is null, append "N" and return. Otherwise, append the node's value, then recursively serialize the left and right children. That should build the string in pre-order.
+- Now for deserializing, I need to take the string, split it into an array or queue of values. Then, using the same pre-order approach, take the first element. If it's "N", return null. Otherwise, create a node with that value, then recursively deserialize the left and right children, in that order.
+- For serialize method takes a TreeNode root. If root is null, maybe return "N". Otherwise, pre-order traversal. Using a helper function that builds a string, maybe via a StringBuilder for efficiency.
+- For deserialize, split the string by commas into a list. Then use a helper function that takes a list (as a queue) and builds the tree. Each time, pop the first element, if it's "N", return null. Else create node, then recursively build left and right.
+```
+public class Codec {
+
+    // Encodes a tree to a single string.
+    public String serialize(TreeNode root) {
+        StringBuilder sb = new StringBuilder();
+        serializeHelper(root, sb);
+        if (sb.length() > 0) {
+            sb.setLength(sb.length() - 1); // Remove trailing comma
+        }
+        return sb.toString();
+    }
+
+    private void serializeHelper(TreeNode node, StringBuilder sb) {
+        if (node == null) {
+            sb.append("N,");
+        } else {
+            sb.append(node.val).append(",");
+            serializeHelper(node.left, sb);
+            serializeHelper(node.right, sb);
+        }
+    }
+
+    // Decodes your encoded data to tree.
+    public TreeNode deserialize(String data) {
+        if (data.isEmpty()) {
+            return null;
+        }
+        Queue<String> nodes = new LinkedList<>(Arrays.asList(data.split(",")));
+        return deserializeHelper(nodes);
+    }
+
+    private TreeNode deserializeHelper(Queue<String> nodes) {
+        String val = nodes.poll();
+        if (val.equals("N")) {
+            return null;
+        }
+        TreeNode node = new TreeNode(Integer.parseInt(val));
+        node.left = deserializeHelper(nodes);
+        node.right = deserializeHelper(nodes);
+        return node;
+    }
+}
+
+class TreeNode {
+    int val;
+    TreeNode left;
+    TreeNode right;
+    TreeNode(int x) { val = x; }
+}
+```
 
 ## Graph - Time:O(V+E) Space:O(V)
 1. Connected and Disconnected Graph - BFS (Using Queue) and DFS (Using Recursion) along with the visited boolean array
