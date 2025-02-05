@@ -17,8 +17,58 @@
 8. Find the Pivot element in the Rotated Sorted Array
 - Solution: 1. Binary search with 4 cases - 1. mid < end && arr[mid] > arr[mid + 1] = mid 2. mid > start && arr[mid - 1] > arr[mid] = mid-1 
                                             3. arr[mid] <= arr[start] - end=mid-1 else start=mid+1 after while loop return -1
-9. Search in Rotated Sorted Array
-- Solution: 1. Get Pivot element, target==pivot and apply Binary search 2 times (0, pivot-1) and (pivot+1, array.length-1)
+9. [Search in Rotated Sorted Array](https://leetcode.com/problems/search-in-rotated-sorted-array/description/) - O(long) & O(1)
+- Solution: 1. Modified binary search approach 2. Get Pivot element, target==pivot and apply Binary search 2 times (0, pivot-1) and (pivot+1, array.length-1)
+- The usual approach for rotated arrays is binary search. But how exactly do I adjust binary search here? Because the array isn't fully sorted, but it has two sorted parts.
+- Let me outline the steps. The idea is to determine which half of the array is sorted and then check if the target is within that sorted half. If not, look in the other half.
+- Find the mid element.
+- Compare the start and mid elements to see which half is sorted.
+- If nums[start] <= nums[mid], then the left half is sorted.
+- Else, the right half is sorted.
+- Once I know which half is sorted, check if the target is within that sorted half's range.
+- If it is, adjust the search to that half.
+- If not, adjust to the other half.
+- Wait, let me think. For example, if the left half is sorted (nums[start] <= nums[mid]), then the target must be between nums[start] and nums[mid] for it to be in the left half. Otherwise, it's in the right half. Similarly, if the right half is sorted, check if the target is between mid and end.
+- But wait, the array is rotated, so one of the two halves is guaranteed to be sorted. So each step, we can eliminate half of the possibilities based on where the target might lie.
+```
+class Solution {
+    public int search(int[] nums, int target) {
+        int left = 0;
+        int right = nums.length - 1;
+        
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+            
+            if (nums[mid] == target) {
+                return mid;
+            }
+            
+            // Check if the left half is sorted
+            if (nums[left] <= nums[mid]) {
+                // Left half is sorted
+                if (target >= nums[left] && target < nums[mid]) {
+                    // Target is in the left half
+                    right = mid - 1;
+                } else {
+                    // Target is in the right half
+                    left = mid + 1;
+                }
+            } else {
+                // Right half is sorted
+                if (target > nums[mid] && target <= nums[right]) {
+                    // Target is in the right half
+                    left = mid + 1;
+                } else {
+                    // Target is in the left half
+                    right = mid - 1;
+                }
+            }
+        }
+        
+        return -1;
+    }
+}
+```
 10. Rotation Count in Rotated Sorted Array =  (Pivot + 1)
 11. Split Array Largest Sum / Book allocation / Capacity To Ship Packages Within D Days
 - Solution: 1. Binary search by taking start=max element, end=sum of all elements and sum=0,pieces=1 if sum+num > mid then sum=num,pieces++ else sum+=num after loop pieces>m - start=mid+1 else end=mid-1. After while loop return start instead of -1 (while loop inside another for loop)
@@ -1244,5 +1294,105 @@ private Node dfs(Node node, Map < Node, Node > map) {
 
     return clone;
 
+}
+```
+15. [Pacific Atlantic Water Flow](https://leetcode.com/problems/pacific-atlantic-water-flow/description/) - O(nm) & O(nm)
+- Question: Determine which cells in a given grid can allow rainwater to flow to both the Pacific and Atlantic oceans. The Pacific Ocean is located to the top and left of the grid, while the Atlantic Ocean is located to the bottom and right. Water can flow from a cell to adjacent cells with equal or lower height.
+- Solution: 1. BFS 2. DFS
+- Hmm. So the approach here is probably to find all cells that can reach the Pacific and all cells that can reach the Atlantic, then find the intersection of those cells. But how do I efficiently find which cells can reach each ocean?
+- Let me think. For the Pacific, the starting points are the top and left edges. Similarly, for the Atlantic, the starting points are the bottom and right edges. But instead of starting from each cell and seeing if it can reach an ocean, which would be O(n^2*m^2) time if done naively, which is not feasible for large grids, maybe we can reverse the flow. Because water flows from higher to lower, so maybe we can start from the ocean edges and see which cells can be reached by flowing upwards (i.e., cells that are higher or equal). That way, we can perform a BFS or DFS from all the edge cells and mark the reachable cells for each ocean. Then, the cells that are reachable from both oceans are the answer.
+- For Pacific: start from all cells in the first row and first column. Do a BFS/DFS to find all cells that can reach the Pacific by moving to higher or equal height cells.
+- For Atlantic: start from all cells in the last row and last column. Do the same to find cells that can reach the Atlantic.
+- The intersection of these two sets is the answer. So the algorithm steps are:
+- Create two matrices, pacific and atlantic, initialized to false.
+- For each cell in the first row and first column (Pacific edge), perform BFS/DFS to mark all cells that can be reached from there by moving to higher or equal cells.
+- For each cell in the last row and last column (Atlantic edge), do the same.
+- Iterate through all cells and collect those that are marked in both matrices.
+- Now, how to implement BFS/DFS. Let's think of BFS. For each cell in the initial positions, add them to a queue. Then, for each cell in the queue, check all four directions. If the neighboring cell is within bounds, and hasn't been visited yet, and its height is >= current cell's height, then mark it as reachable and add to the queue.
+- Initialize a queue with all edge cells (for Pacific, first row and first column; for Atlantic, last row and last column).
+- Mark those cells as reachable.
+- For each cell in the queue, check all four directions. For each neighbor:
+- If neighbor is in bounds.
+- If neighbor hasn't been marked yet.
+- If neighbor's height >= current cell's height.
+- If so, mark the neighbor as reachable and add to the queue.
+- This way, all cells that can reach the ocean (via flowing downhill) are marked. Because the BFS is in reverse, starting from the ocean and moving uphill.
+```
+class Solution {
+    public List<List<Integer>> pacificAtlantic(int[][] heights) {
+        List<List<Integer>> result = new ArrayList<>();
+        if (heights == null || heights.length == 0 || heights[0].length == 0) {
+            return result;
+        }
+        
+        int m = heights.length;
+        int n = heights[0].length;
+        
+        boolean[][] pacific = new boolean[m][n];
+        boolean[][] atlantic = new boolean[m][n];
+        
+        Queue<int[]> pQueue = new LinkedList<>();
+        Queue<int[]> aQueue = new LinkedList<>();
+        
+        // Initialize Pacific queue with top and left edges
+        for (int j = 0; j < n; j++) {
+            pacific[0][j] = true;
+            pQueue.offer(new int[]{0, j});
+        }
+        for (int i = 0; i < m; i++) {
+            if (!pacific[i][0]) {
+                pacific[i][0] = true;
+                pQueue.offer(new int[]{i, 0});
+            }
+        }
+        
+        // Initialize Atlantic queue with bottom and right edges
+        for (int j = 0; j < n; j++) {
+            atlantic[m-1][j] = true;
+            aQueue.offer(new int[]{m-1, j});
+        }
+        for (int i = 0; i < m; i++) {
+            if (!atlantic[i][n-1]) {
+                atlantic[i][n-1] = true;
+                aQueue.offer(new int[]{i, n-1});
+            }
+        }
+        
+        // Perform BFS for both oceans
+        bfs(heights, pQueue, pacific);
+        bfs(heights, aQueue, atlantic);
+        
+        // Collect cells that can reach both oceans
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (pacific[i][j] && atlantic[i][j]) {
+                    result.add(Arrays.asList(i, j));
+                }
+            }
+        }
+        
+        return result;
+    }
+    
+    private void bfs(int[][] heights, Queue<int[]> queue, boolean[][] visited) {
+        int[][] dirs = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+        int m = heights.length;
+        int n = heights[0].length;
+        
+        while (!queue.isEmpty()) {
+            int[] cell = queue.poll();
+            int i = cell[0];
+            int j = cell[1];
+            for (int[] dir : dirs) {
+                int ni = i + dir[0];
+                int nj = j + dir[1];
+                // Check if the new cell is within bounds, not visited, and has sufficient height
+                if (ni >= 0 && ni < m && nj >= 0 && nj < n && !visited[ni][nj] && heights[ni][nj] >= heights[i][j]) {
+                    visited[ni][nj] = true;
+                    queue.offer(new int[]{ni, nj});
+                }
+            }
+        }
+    }
 }
 ```
