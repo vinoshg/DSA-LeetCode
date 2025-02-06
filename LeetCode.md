@@ -138,6 +138,63 @@ class Solution {
     }
 }
 ```
+2. [Reverse Bits](https://leetcode.com/problems/reverse-bits/description/) - O(1) & O(1)
+- Question: Reverse the bits of a given 32-bit unsigned integer.
+- Solution: 1. Take each bit from the input integer, starting from the least significant bit (LSB), and place it in the reversed position in the resulting integer.
+- Let me think. So the idea is to take each bit from the input, starting from the least significant bit (rightmost), and place it in the reversed position in the result.
+- For example, the first bit we take from the input (n & 1) will be the least significant bit of the result. But wait, no. Wait, when we reverse, the least significant bit becomes the most significant bit. So the first bit we extract (LSB of n) should be shifted to the 31st position (since Java's int is 32 bits, the leftmost bit is position 31).
+- So here's the plan: Initialize a result variable as 0. Then, for each of the 32 bits:
+- Shift the result to the left by 1 bit to make room for the next bit.
+- Add the least significant bit of n to the result.
+- Shift n to the right by 1 bit to process the next bit.
+- Wait, but since Java uses signed right shifts for integers, shifting a negative number (n) to the right would fill with 1s. But since we need to treat n as unsigned, according to the problem statement. Oh right, the comment says "treat n as an unsigned value". So when we shift n, we should do an unsigned right shift.
+- Wait, but in Java, the operator for unsigned right shift is >>>. So for each bit, we need to take the last bit of n and then shift n using >>> to ensure that the sign bit doesn't cause filling with 1s.
+- Wait, but if we are shifting n to the right each time, then after 32 shifts, it'll become zero. So maybe we can loop 32 times, each time taking the least significant bit and appending it to the result, but shifting the result left each time.
+- Let me outline the steps:
+- Initialize result to 0.
+- Loop i from 0 to 31:
+- Shift result left by 1 (so that the next bit can be added to the least significant position)
+- If the current least significant bit of n is 1, add 1 to result. Otherwise, add 0.
+- Shift n right by 1 bit (using unsigned shift, so that even if the original n is negative, it's treated as unsigned, so new bits added on the left are 0s).
+- Wait, but how do I get the least significant bit of n each time? Well, (n & 1) will give that. Then, after extracting, we shift n right by 1, but using >>> because we want to treat n as unsigned. So n = n >>> 1.
+```
+public class Solution {
+    // you need treat n as an unsigned value
+    public int reverseBits(int n) {
+        int result = 0;
+        for (int i = 0; i < 32; i++) {
+            result = (result << 1) | (n & 1);
+            n = n >>> 1;
+        }
+        return result;
+    }
+}
+```
+3. [Number of 1 Bits](https://leetcode.com/problems/number-of-1-bits/description/) - O(k) & O(1) k is the number of 1 bits in the binary representation
+- Question: Count the number of '1' bits in the binary representation of a given integer. This is known as the Hamming weight.
+- Solution: 1. Two's complement form
+- Let me think. One approach is to check each bit one by one. Like, iterate 32 times (since int is 32 bits in Java), and for each bit position, check if that bit is set. Then add to the count if it is.
+- Alternatively, there's a trick using n & (n-1) to turn off the rightmost 1 bit. So every time you do n = n & (n-1), you remove the rightmost 1. Then you can count how many times you can do this until n becomes zero. That might be more efficient if there are fewer 1s.
+- Which method is better? Well, for a 32-bit number, the first method always loops 32 times, but the second method loops as many times as the number of 1s. So the second is probably better in average cases, but for Java, maybe even 32 loops are acceptable.
+- So let's think about both approaches.
+- First approach: loop 32 times, check each bit.
+- Initialize count to 0.
+- For i from 0 to 31:
+- if (n & (1 << i)) != 0, then increment count.
+- But wait, in Java, shifting 1 to the left by 31 positions would give a negative number, because 1 << 31 is 2^31 which is larger than Integer.MAX_VALUE (which is 2^31 -1). So when you shift left, the sign bit (the 32nd bit) becomes 1, which makes it a negative number. So when you do a bitwise AND with n (which could be negative), how does that work?
+- Alternatively, maybe we can use a mask and shift the bits of n instead. Like, check the least significant bit each time and then shift right. But shifting right in Java for integers is signed, so if n is negative, shifting right would fill with 1s. Wait, so if I do a right shift, but use a logical shift (unsigned) instead of arithmetic shift (signed), then maybe that's better. But Java's '>>' is arithmetic shift for signed integers. There's also '>>>' which is the logical right shift, filling with zeros regardless of the sign.
+```
+public class Solution {
+    public int hammingWeight(int n) {
+        int count = 0;
+        while (n != 0) {
+            n &= (n - 1);
+            count++;
+        }
+        return count;
+    }
+}
+```
 
 ## Prefix Sum - O(n)
 1. Prefix Sum Array
@@ -692,9 +749,41 @@ class Solution {
     }
 }
 ```
-## Greedy Algorithm
-1. Longest Consecutive Sequence
-- Solution: 1. HashSet fill with array element. For num if (!set.contains(num - 1)) currentNum=num while (set.contains(currentNum + 1)
+3. [Non-overlapping Intervals](https://leetcode.com/problems/non-overlapping-intervals/description/) -  O(nlogn) & O(1)
+- Question: Determine the minimum number of intervals to remove so that the remaining intervals do not overlap.
+- Solution: 1. Greedy algorithm approach
+- So the problem is similar to scheduling intervals without overlaps, right? Like, we want as many intervals as possible that don't overlap, and the minimum to remove would be the total minus that maximum number. So the key is to find the maximum number of non-overlapping intervals. Then subtract that from the total number to get the answer.
+- Wait, right. So the problem reduces to finding the largest possible set of non-overlapping intervals, which is the same as the interval scheduling problem. The classic greedy algorithm for that is to sort the intervals based on their end times and then pick the earliest ending one each time, ensuring the next one starts after the previous ends.
+- Let me recall. For example, if we sort intervals by end, then select the first interval. Then select the next one whose start is >= the end of the previous. Repeat until all are processed. That should give the maximum possible non-overlapping intervals.
+- So the steps would be:
+- Sort the intervals based on their end times.
+- Initialize a count of 1 (since we select the first interval), and set the current end to the end of the first interval.
+- Iterate through the sorted intervals:
+a. If the current interval's start is >= current end, increment count and update current end to this interval's end.
+b. Else, skip it (as it overlaps).
+- The answer is total intervals minus the count.
+- Wait, but how to handle the sorting when the input is an array of arrays in Java? Oh right, we can sort using a custom comparator. For example, in Java, we can use Arrays.sort with a comparator that compares the end times.
+```
+class Solution {
+    public int eraseOverlapIntervals(int[][] intervals) {
+        if (intervals.length == 0) return 0;
+        
+        Arrays.sort(intervals, (a, b) -> Integer.compare(a[1], b[1]));
+        
+        int count = 1;
+        int currentEnd = intervals[0][1];
+        
+        for (int i = 1; i < intervals.length; i++) {
+            if (intervals[i][0] >= currentEnd) {
+                count++;
+                currentEnd = intervals[i][1];
+            }
+        }
+        
+        return intervals.length - count;
+    }
+}
+```
 
 ## Backtracking
 1. [Combination Sum](https://leetcode.com/problems/combination-sum/description/) - O(N^(T/M + 1)) & O(T/M)  N is the number of candidates, T is the target, and M is the minimum value among the candidates. Space complexity due to the recursion stack depth
@@ -943,6 +1032,238 @@ class Solution {
         }
         
         return overallMax;
+    }
+}
+```
+8. [Unique Paths](https://leetcode.com/problems/unique-paths/description/) - O(mn) & O(n)
+- Determine the number of unique paths a robot can take from the top-left corner to the bottom-right corner of an m x n grid, where the robot can only move right or down.
+- Solution: 1. Dynamic programming 2. Combination of (m+n-2) choose (m-1) or (n-1), since combinations are symmetric.
+- In this case, the robot has to make a total of (m-1) down moves and (n-1) right moves. Because to go from top-left to bottom-right, you need to go down (m-1) times and right (n-1) times. The total steps are (m-1 + n-1) = m+n-2 steps. The number of unique paths would be the number of ways to choose which of these steps are down (or right), right?
+- So the general solution is to compute (m+n-2) choose min(m-1, n-1). Because combinations can be calculated using factorials, but directly computing factorials for large numbers might be computationally expensive and could lead to integer overflow issues. But maybe for the problem constraints, it's manageable.
+- Wait, but what are the constraints? The problem says m and n can be up to 100. So m+n-2 could be up to 198, and choosing 99. The value of C(198,99) is a huge number. But in Java, using integers might not work because the numbers could exceed the maximum integer value. So perhaps we need to use a dynamic programming approach instead of combinatorial math to avoid big numbers.
+- Alternatively, maybe the problem expects the DP approach. Let's think about that. For a grid, the number of unique paths to a cell (i,j) is the sum of the paths to the cell above it (i-1,j) and the cell to the left (i,j-1). The base case is the first row and first column, which have only 1 path each.
+- So for a DP table, we can create a 2D array where dp[i][j] represents the number of paths to reach (i,j). Then, dp[i][j] = dp[i-1][j] + dp[i][j-1]. The base case is dp[0][j] = 1 for all j and dp[i][0] =1 for all i.
+- But since m and n can be up to 100, the 2D array approach would have a time and space complexity of O(m*n), which should be manageable. But maybe we can optimize space, since each row only depends on the previous row or the current row.
+- Alternatively, since each cell only needs the value from the top and left, we can use a 1D array. Let's say we have a dp array of size n, where dp[j] represents the number of paths to reach the current row's jth column. For each row, starting from the first, we update the dp array. For the first row, all dp[j] are 1. For subsequent rows, for each column j >0, dp[j] += dp[j-1]. Wait, maybe that's possible.
+- So the algorithm would be:
+- Initialize dp array of size n, filled with 1s.
+- Then, for each row from 1 to m-1:
+- for each column from 1 to n-1:
+- dp[j] = dp[j] + dp[j-1]
+- At the end, dp[n-1] is the answer.
+- Yes, that makes sense. Because for each new row, the first column is always 1 (since you can only come from above, which is 1 way). Then each subsequent column adds the current dp[j] (which is the value from the previous row, i.e., above) and dp[j-1] (which is the value from the left in the current row).
+```
+class Solution {
+    public int uniquePaths(int m, int n) {
+        int[] dp = new int[n];
+        // Initialize the dp array with 1s for the first row
+        for (int j = 0; j < n; j++) {
+            dp[j] = 1;
+        }
+        // Process each subsequent row
+        for (int i = 1; i < m; i++) {
+            for (int j = 1; j < n; j++) {
+                dp[j] += dp[j - 1];
+            }
+        }
+        return dp[n - 1];
+    }
+}
+```
+9. [House Robber](https://leetcode.com/problems/house-robber/description/) - O(n) & O(1)
+- Question: Determine the maximum amount of money a robber can steal from houses arranged in a line without alerting the police by robbing two adjacent houses.
+- Solution: 1. DP with 2 variables 2. DP with 1D array
+- The key insight is that for each house, the robber has two choices: either rob the current house and add its value to the maximum amount obtained from houses two steps back, or skip the current house and retain the maximum amount obtained from the previous house. By iteratively updating two variables that track the maximum amounts from the previous house and the house two steps back, we can efficiently compute the solution without using additional space for an array.
+```
+public class Solution {
+    public int rob(int[] nums) {
+        int prev = 0, curr = 0;
+        for (int num : nums) {
+            int temp = curr;
+            curr = Math.max(curr, prev + num); //skip or rob
+            prev = temp;
+        }
+        return curr;
+    }
+}
+```
+
+## Ad-hoc 
+- Problems that don’t fit into a standard category and require a unique approach like Swapping, Sorting, HashMap, Manipulation
+1. [Rotate Image](https://leetcode.com/problems/rotate-image/description/) - O(n^2) & O(1)
+- Question: Rotating an n x n matrix by 90 degrees clockwise in-place
+- Solution: 1. Two-step approach that involves transposing the matrix and then reversing each row.
+-  So for a 90-degree clockwise rotation, we can transpose the matrix and then reverse each row. That's a neat trick. So the steps would be:
+- Transpose the matrix (swap matrix[i][j] with matrix[j][i] for all i < j)
+- Reverse each row of the transposed matrix.
+```
+class Solution {
+    public void rotate(int[][] matrix) {
+        int n = matrix.length;
+        
+        // Step 1: Transpose the matrix
+        for (int i = 0; i < n; i++) {
+            for (int j = i + 1; j < n; j++) { //[0][1] = [1][0]
+                // Swap elements at (i, j) and (j, i)
+                int temp = matrix[i][j];
+                matrix[i][j] = matrix[j][i];
+                matrix[j][i] = temp;
+            }
+        }
+        
+        // Step 2: Reverse each row
+        for (int i = 0; i < n; i++) {
+            int left = 0;
+            int right = n - 1;
+            while (left < right) {
+                // Swap elements in row i from left and right ends
+                int temp = matrix[i][left];
+                matrix[i][left] = matrix[i][right];
+                matrix[i][right] = temp;
+                left++;
+                right--;
+            }
+        }
+    }
+}
+```
+2. [Group Anagrams](https://leetcode.com/problems/group-anagrams/description/) - O(n * klogk) & O(n * k) n is the number of strings and k is the maximum length of a string
+- Question: Need to group anagrams from a given list of strings. So anagrams are words that have the same characters but in different orders. For example, "eat" and "tea" are anagrams. The goal is to group all such anagrams together in a list.
+- Solution: 1. Using a hash map where the keys are sorted versions of the strings, and the values are lists of original strings that are anagrams of each other. 2. Alternatively, maybe count the frequency of each character in the string and use that as a key. For example, for "aab", the key could be something like "a2b1". That way, we avoid sorting. But building the frequency count might take O(k) time per string, and then converting it into a string key. Comparing the two approaches: sorting vs. frequency count.
+- Hmm, how do I determine if two strings are anagrams? One way is to sort the characters in each string. If two sorted strings are equal, they are anagrams. For example, sorting "eat" gives "aet", and sorting "tea" also gives "aet". So using the sorted version as a key in a hash map makes sense.
+- Right, so the plan is:
+- Iterate through each string in the input array.
+- For each string, sort its characters to create a key.
+- Use a hash map where the key is the sorted string, and the value is a list of original strings that are anagrams.
+- After processing all strings, collect all the values from the hash map into the result list.
+- Let's outline the steps:
+- Create a hash map (maybe a HashMap in Java) where the key is the sorted string, and the value is a list of strings that are anagrams.
+- For each string in strs:
+- Convert it to a char array.
+- Sort the char array.
+- Convert it back to a string to use as the key.
+- Add the original string to the corresponding list in the map.
+- Finally, collect all the values of the map into the result list.
+```
+class Solution {
+    public List<List<String>> groupAnagrams(String[] strs) {
+        Map<String, List<String>> map = new HashMap<>();
+        for (String s : strs) {
+            char[] chars = s.toCharArray();
+            Arrays.sort(chars);
+            String key = new String(chars);
+            if (!map.containsKey(key)) {
+                map.put(key, new ArrayList<>());
+            }
+            map.get(key).add(s);
+        }
+        return new ArrayList<>(map.values());
+    }
+}
+```
+3. [Spiral Matrix](https://leetcode.com/problems/spiral-matrix/description/) - O(nm) & O(1)
+- Question: Traverse a matrix in spiral order, starting from the top-left corner and moving right, then down, then left, and then up, repeating this process while shrinking the boundaries of the matrix until all elements are covered.
+- Solution: 1. Spiral order traversal of a matrix - Four pointers top, bottom, left and right
+- Hmm, how does the spiral order work? Like, you go right, then down, then left, then up, and repeat, but each time the boundaries shrink.
+- So maybe I need to keep track of the current boundaries: top row, bottom row, left column, right column. Then loop through the layers, moving in each direction and adding elements to the result list. But how to handle the layers and directions properly?
+- Let me think. For example, for a 3x3 matrix, the spiral order would start at top left, move right to the end, then down, then left, then up. Then the next layer is the center element. But how to manage when there's only one row or column left.
+- First, I need to initialize the boundaries. Let's say top starts at 0, bottom at matrix.length-1, left at 0, right at matrix[0].length-1. Then, while top <= bottom and left <= right, we process the current layer.
+- For each layer:
+- Traverse from left to right along the top row. Then increment top.
+- Traverse from top to bottom along the right column. Then decrement right.
+- If top <= bottom (to handle cases where there's a single row), traverse from right to left along the bottom row. Then decrement bottom.
+- If left <= right (to handle single column), traverse from bottom to top along the left column. Then increment left.
+- So, the algorithm steps would be:
+- Initialize top=0, bottom=matrix.length-1, left=0, right=matrix[0].length-1.
+- Create a result list.
+- While top <= bottom and left <= right:
+- For i from left to right: add matrix[top][i] to result. Then top++.
+- For i from top to bottom: add matrix[i][right] to result. Then right--.
+- Check if top <= bottom. If yes, loop i from right to left: add matrix[bottom][i]. Then bottom--.
+- Check if left <= right. If yes, loop i from bottom to top: add matrix[i][left]. Then left++.
+- Yes. So the steps are:
+- Go right along the top row, then increment top.
+- Go down the right column, then decrement right.
+- If top <= bottom, go left along the bottom row, then decrement bottom.
+- If left <= right, go up along the left column, then increment left.
+- Repeat until the top > bottom or left > right.
+```
+class Solution {
+    public List<Integer> spiralOrder(int[][] matrix) {
+        List<Integer> res = new ArrayList<>();
+        if (matrix == null || matrix.length == 0) return res;
+
+        int top = 0;
+        int bottom = matrix.length - 1;
+        int left = 0;
+        int right = matrix[0].length - 1;
+
+        while (top <= bottom && left <= right) {
+            // Traverse from left to right on the top row
+            for (int i = left; i <= right; i++) {
+                res.add(matrix[top][i]);
+            }
+            top++;
+
+            // Traverse from top to bottom on the right column
+            for (int i = top; i <= bottom; i++) {
+                res.add(matrix[i][right]);
+            }
+            right--;
+
+            // Traverse from right to left on the bottom row, if there are rows left
+            if (top <= bottom) {
+                for (int i = right; i >= left; i--) {
+                    res.add(matrix[bottom][i]);
+                }
+                bottom--;
+            }
+
+            // Traverse from bottom to top on the left column, if there are columns left
+            if (left <= right) {
+                for (int i = bottom; i >= top; i--) {
+                    res.add(matrix[i][left]);
+                }
+                left++;
+            }
+        }
+
+        return res;
+    }
+}
+```
+
+## Greedy Algorithm
+1. Longest Consecutive Sequence
+- Solution: 1. HashSet fill with array element. For num if (!set.contains(num - 1)) currentNum=num while (set.contains(currentNum + 1)
+
+2. [Jump Game](https://leetcode.com/problems/jump-game/description/) - O(n) & O(1)
+- Question: Determine if we can jump from the start of an array to its end. The array elements represent the maximum jump length from that position.
+- Solution: 1. Greedy Algorithm 2. Brute force approach would be to check all possible jumps, but that's going to be O(2^n) time
+- Wait, maybe a greedy approach. Because I don't need to track the exact path, just whether it's possible. So perhaps I can keep track of the farthest position I can reach. Let's see: starting from the first index, the maximum reach is 0 + nums[0]. Then for each subsequent index, if I can reach that index (i.e., it's within the current maximum reach), then I update the maximum reach to be the max of current max and i + nums[i]. If at any point the max reach is >= last index, return true. If I finish the loop and the max reach didn't reach the end, return false.
+- So the steps are:
+- Initialize max_reach to 0.
+- Iterate through each index i from 0 to n-1:
+a. If i > max_reach, return false (can't reach this index)
+b. Update max_reach to max(max_reach, i + nums[i])
+c. If max_reach >= last index (n-1), return true early.
+- After loop, check if max_reach >= last index. If yes, return true, else false.
+- Wait, but in step 2a, why check if i > max_reach? Because if the current index is beyond the maximum we can reach, then we can't proceed further. 
+```
+public class Solution {
+    public boolean canJump(int[] nums) {
+        int maxReach = 0;
+        int n = nums.length;
+        for (int i = 0; i < n; i++) {
+            if (i > maxReach) { //maxReach < i can't reach
+                return false;
+            }
+            maxReach = Math.max(maxReach, i + nums[i]);
+            if (maxReach >= n - 1) { //return early. we can skip this step as well
+                return true;
+            }
+        }
+        return maxReach >= n - 1; //return true; able to reach the end
     }
 }
 ```
@@ -1323,12 +1644,32 @@ public class Codec {
         return node;
     }
 }
-
-class TreeNode {
-    int val;
-    TreeNode left;
-    TreeNode right;
-    TreeNode(int x) { val = x; }
+```
+2. [Subtree of Another Tree](https://leetcode.com/problems/subtree-of-another-tree/description/) - O(nm) & O(n+m)
+- Question: Determine if a given binary tree (subRoot) is a subtree of another binary tree (root). A subtree is defined as a tree that starts at some node in the main tree and has exactly the same structure and node values as the given subtree.
+- Solution: 1. DFS Pre order traversal
+- First, I remember that a subtree means that the structure and node values must match exactly starting from some node in the main tree. So, the main idea is to check every node in the root tree to see if any of them is the start of a subtree that exactly matches subRoot.
+- Wait, right. So the steps probably are: For each node in the root tree, check if the subtree starting at that node is identical to subRoot. If any of them is, return true. Otherwise, false.
+- But how do I traverse the root tree and check each node's subtree? Oh right, a helper function to check if two trees are identical. And then in the main function, traverse the root tree, and for each node, call the helper to check if the subtree matches.
+- So the helper function would be something like isSameTree(TreeNode a, TreeNode b). If both are null, return true. If one is null and the other isn't, return false. Then check if the values are equal, and recursively check left and right subtrees.
+- Then, in the isSubtree function, we need to traverse the root tree. So maybe a recursive approach here as well. Like, check if the current node's subtree matches subRoot. If not, check the left and right children recursively. So the base case would be if root is null, then return false (since subRoot can't be a subtree of an empty tree unless subRoot is also null, but maybe we need to handle that edge case).
+```
+class Solution {
+    public boolean isSubtree(TreeNode root, TreeNode subRoot) {
+        if (root == null) {
+            return subRoot == null; //If both are null, return true. If one is null and the other isn't, return false.
+        }
+        if (isSameTree(root, subRoot)) {
+            return true;
+        }
+        return isSubtree(root.left, subRoot) || isSubtree(root.right, subRoot);
+    }
+    
+    private boolean isSameTree(TreeNode a, TreeNode b) {
+        if (a == null && b == null) return true;
+        if (a == null || b == null) return false;
+        return a.val == b.val && isSameTree(a.left, b.left) && isSameTree(a.right, b.right);
+    }
 }
 ```
 
