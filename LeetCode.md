@@ -402,6 +402,75 @@ class Solution {
     }
 }
 ```
+5. [Minimum Window Substring](https://leetcode.com/problems/minimum-window-substring/description/) - O(n) & O(1)
+- Question: Find the smallest substring in a given string s that contains all the characters of another string t, including their frequencies.
+- Solution: 1. Sliding window technique with two pointers and an array to track character counts.
+- First, I remember that this is a sliding window problem. The sliding window technique is useful here because we're dealing with a substring and need to efficiently check if all characters in t are included with the right frequencies.
+- Let me outline the steps.
+- **Count the characters in t**: I need to know how many of each character are required. For example, if t is "AABC", then we need two A's, one B, and one C. So a frequency map for t's characters is necessary.
+- **Sliding window approach**: Use two pointers, left and right, to represent the current window in s. Expand the window by moving the right pointer, and when all required characters are included (with sufficient counts), try to contract the window from the left to find the minimum length.
+- **Keep track of required characters**: As we move the right pointer, decrement the count of characters from the frequency map. When a character's count in the map reaches zero, it means we've met the required count for that character. Keep a counter to track how many characters from t have been fully included in the window. When this counter equals the number of unique characters in t, the window is valid.
+- **Contract the window**: Once a valid window is found, move the left pointer to see if we can minimize the window size while still maintaining validity. Each time the left pointer moves, increment the count in the frequency map again. If a character's count goes above zero, decrement the valid counter, indicating that the window is no longer valid, and we need to expand again.
+- Wait, how do I manage the frequency counts? Let's see. For example, if t has two A's, and the window has three A's, then even if we remove one A (by moving left), the count would still be two, which is sufficient. So the frequency count can go negative, which indicates that we have more than enough of that character. Only when the count is exactly zero do we increment the valid counter.
+- So the steps would be:
+- Create a frequency map for t.
+- Initialize left and right pointers at 0, and variables to track the minimum window start and length.
+- Use a counter (required) which is the number of unique characters in t. When this counter reaches zero, all required characters are included in the window.
+- Expand the window by moving right. For each character at right, if it's in the frequency map, decrement its count. If after decrementing, the count is zero, decrement the required counter.
+- When required counter is zero, start moving left to try to minimize the window. For each character at left, if it's in the frequency map, increment its count. If the count becomes positive, increment the required counter, and break the contraction. Update the minimum window if the current window is smaller.
+- Repeat until right reaches the end of s.
+- Let me think about edge cases. For example, s is shorter than t. Then return empty. Also, characters in s that are not in t can be skipped. Also, multiple valid windows, need to track the smallest.
+```
+public class Solution {
+    public String minWindow(String s, String t) {
+        if (s == null || t == null || s.length() == 0 || t.length() == 0) {
+            return "";
+        }
+        
+        int[] map = new int[128]; //size array for ASCII characters
+        for (char c : t.toCharArray()) {
+            map[c]++;
+        }
+        
+        int required = 0;
+        for (int i = 0; i < map.length; i++) {
+            if (map[i] > 0) required++;
+        }
+        
+        int left = 0, right = 0, minLen = Integer.MAX_VALUE, start = 0;
+        int count = 0;
+        int[] current = new int[128];
+        
+        while (right < s.length()) {
+            char c = s.charAt(right);
+            if (map[c] > 0) {
+                current[c]++;
+                if (current[c] == map[c]) {
+                    count++;
+                }
+            }
+            right++;
+            
+            while (count == required) { //Minimize the window by moving left
+                if (right - left < minLen) {
+                    minLen = right - left;
+                    start = left;
+                }
+                char leftChar = s.charAt(left);
+                if (map[leftChar] > 0) { //Checking for minimizing the window
+                    current[leftChar]--; //Doing left--
+                    if (current[leftChar] < map[leftChar]) {
+                        count--;
+                    }
+                }
+                left++;
+            }
+        }
+        
+        return minLen == Integer.MAX_VALUE ? "" : s.substring(start, start + minLen);
+    }
+}
+```
 
 ## Two Pointers - O(n) and O(1) 
 - Applicable to Linear Data Structure Arrays, String, LinkedList - Converging pointers (Two pointers start at 0th and array.length-1 and converge together) | Parallel pointers (Right pointer is used to get new info and the left is used to track. Both start from 0/1) | Trigger based pointers (left pointer move only after right pointer reaches particular position) | Expand Around Center
@@ -1232,6 +1301,83 @@ class Solution {
     }
 }
 ```
+4. [Set Matrix Zeroes](https://leetcode.com/problems/set-matrix-zeroes/description/) - O(mn) & O(1)
+- Question: Need to set the entire row and column of a matrix to zero if any element in that row or column is zero.
+- Solution: 1. In-Place Marking
+- The key idea is to use the first row and first column of the matrix itself to mark which rows and columns need to be zeroed. This avoids using additional space for storing flags. Here are the steps:
+- Check for Zeros in First Row and Column: Determine if the first row or column originally contains any zeros and store this information.
+- Mark Zeros Using First Row and Column: Iterate through the matrix starting from the second row and column. If an element is zero, mark its corresponding position in the first row and column.
+- Set Rows and Columns to Zero: Use the marks in the first row and column to set the appropriate rows and columns to zero, excluding the first row and column initially.
+- Handle First Row and Column: Finally, zero out the first row and/or column if they originally contained any zeros.
+```
+public class Solution {
+    public void setZeroes(int[][] matrix) {
+        boolean firstRowZero = false;
+        boolean firstColZero = false;
+        int m = matrix.length;
+        if (m == 0) return;
+        int n = matrix[0].length;
+        
+        // Check if first row has zero
+        for (int j = 0; j < n; j++) {
+            if (matrix[0][j] == 0) {
+                firstRowZero = true;
+                break;
+            }
+        }
+        
+        // Check if first column has zero
+        for (int i = 0; i < m; i++) {
+            if (matrix[i][0] == 0) {
+                firstColZero = true;
+                break;
+            }
+        }
+        
+        // Mark zeros using first row and column
+        for (int i = 1; i < m; i++) {
+            for (int j = 1; j < n; j++) {
+                if (matrix[i][j] == 0) {
+                    matrix[i][0] = 0;
+                    matrix[0][j] = 0;
+                }
+            }
+        }
+        
+        // Set rows to zero based on first column
+        for (int i = 1; i < m; i++) {
+            if (matrix[i][0] == 0) {
+                for (int j = 1; j < n; j++) {
+                    matrix[i][j] = 0;
+                }
+            }
+        }
+        
+        // Set columns to zero based on first row
+        for (int j = 1; j < n; j++) {
+            if (matrix[0][j] == 0) {
+                for (int i = 1; i < m; i++) {
+                    matrix[i][j] = 0;
+                }
+            }
+        }
+        
+        // Handle first row
+        if (firstRowZero) {
+            for (int j = 0; j < n; j++) {
+                matrix[0][j] = 0;
+            }
+        }
+        
+        // Handle first column
+        if (firstColZero) {
+            for (int i = 0; i < m; i++) {
+                matrix[i][0] = 0;
+            }
+        }
+    }
+}
+```
 
 ## Greedy Algorithm
 1. Longest Consecutive Sequence
@@ -1308,7 +1454,8 @@ public class Solution {
 - Question: Given num 14 = 1^2+4^2 = 17 ... If it ends with '1' it means Happy, else the loop again 17 is not a happy number
 - Solution: 1. Fast and Slow pointers - slow=n,fast=getNext(n) while(fast!=1 && slow != fast) slow,fast increment after while return fast==1
   2. HashSet - while(n>0) findSquare and check in the if set.contains(square) return true otherwise set.add(squre)  after while return false
-4. Reverse a Linked List
+4. [Reverse Linked List](https://leetcode.com/problems/reverse-linked-list/description/) - O(n) & O(1)
+- Question: 
 - Solution: 1. Three-pointers - prev=null,current=head while(current!=null) next=current.next, current.next=prev, prev=current, current=next after while loop return prev 2. Copy all the elements to an array and reverse it. Update LL according to the array - O(n) & O(n)
 5. [Reorder List](https://leetcode.com/problems/reorder-list/description/) -O(n) & (1)
 - Question: Reorder a linked list such that the nodes are arranged in a specific way: the first node is followed by the last node, then the second node is followed by the second last, and so on
