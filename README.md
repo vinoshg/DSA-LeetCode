@@ -195,6 +195,29 @@ public class Solution {
     }
 }
 ```
+4. [Counting Bits](https://leetcode.com/problems/counting-bits/description/) -
+- Question: Count the number of 1 bits in the binary representation of every number from 0 to a given integer n.
+- Solution: 1. Dynamic programming (For each number i, the number of 1 bits can be derived from previously computed results.)
+- First, the straightforward way is to iterate through each number from 0 to n, and for each number, count the number of 1s in their binary representation. But wait, that might be inefficient, especially if n is large. Because for each number, counting bits could take O(number of bits) time. Like for numbers up to n, that's O(n log n) time. Is there a better way?
+- I remember that there's a dynamic programming approach for this problem. Let me think. The idea is to use previously computed results to build the current one. For example, if I know the count for a number divided by two, maybe I can use that. Because when you divide a number by two (right shift), you're removing the last bit. So the count of 1s for the current number is the count for the shifted number plus the least significant bit. Like, for even numbers, the last bit is 0, so the count is same as i/2. For odd numbers, it's count of i/2 plus 1. Wait, but how do I check if the current number is even or odd? Well, the parity can be determined by checking if i is even or odd. So for any i, bits[i] = bits[i >> 1] + (i & 1). Because i & 1 gives 0 if even, 1 if odd. That could work.
+- So the steps would be:
+- Initialize an array of size n+1.
+- Set bits[0] = 0.
+- For each i from 1 to n, compute bits[i] as bits[i >> 1] + (i & 1).
+- Return the array.
+- Wait, but how about another approach? Like, using the fact that the number of set bits in i is equal to the number of set bits in i with the last set bit removed, plus 1. For example, for i=5 (101), the last set bit is at position 0. So i & (i-1) gives 4 (100), and bits[5] = bits[4] +1. So another recurrence is bits[i] = bits[i & (i-1)] +1. Because i & (i-1) removes the last set bit.
+```
+class Solution {
+    public int[] countBits(int n) {
+        int[] result = new int[n + 1];
+        result[0] = 0;
+        for (int i = 1; i <= n; i++) {
+            result[i] = result[i >> 1] + (i & 1); // result[i/2] + 0 or 1 (even or odd i)
+        }
+        return result;
+    }
+}
+```
 
 ## Prefix Sum - O(n)
 1. Prefix Sum Array
@@ -230,8 +253,75 @@ class Solution {
 - Question: K largest/smallest, K most/least frequent, Top k elements
 1. Top K largest elements
 - Solution: 1. Min heap(Priority Queue) add at max k elements and remaining poll 2. Sort Array and take elements - O(nlogn)
-2. K most frequent elements i.e. large in frequency- O(nlogk) & O(n+k)
-- Solution: 1. Min heap having HashMap - PriorityQueue<Map.Entry<Integer, Integer>> minHeap = new PriorityQueue<>((a,b) -> a.getValue() - b.getValue())
+2. [Top K Frequent Elements](https://leetcode.com/problems/top-k-frequent-elements/description/) - O(nlogk) & O(n+k)
+- Question: Find the top k frequent elements in an integer array.
+- Solution: 1. Min heap having HashMap 2. Sort
+- So first, I need to think about how to count the frequency of each element. Oh right, I can use a hash map for that. Like, iterate through the array, and for each number, increment its count in the map. That part seems straightforward.
+- Once I have the frequencies, I need to find the top k elements with the highest counts. The challenge here is how to efficiently get the k most frequent elements. Sorting all the elements by their frequency would take O(n log n) time, but maybe there's a better way, especially since the problem could have constraints where k is much smaller than the number of unique elements.
+- Wait, what about using a priority queue (heap)? Like, a min-heap that keeps track of the k most frequent elements. That way, when we process all elements, the heap will contain the top k. The advantage is that inserting into a heap of size k takes O(log k) time, which is better than sorting everything if k is small.
+- So the steps would be:
+- Count the frequency of each number using a hash map.
+- Create a min-heap based on the frequency. The idea is to keep the heap size at k. For each entry in the hash map, we add it to the heap. If the heap size exceeds k, we remove the smallest element (the one with the least frequency in the heap). That way, the heap always contains the k largest elements.
+- Once all elements are processed, extract the elements from the heap. Since it's a min-heap, the elements are not in order, but the order doesn't matter as the problem states any order is acceptable.
+- But wait, how do I implement the heap in Java? Oh right, the PriorityQueue. But the PriorityQueue in Java is a min-heap by default. So when adding elements, the smallest (according to their natural ordering) is at the front. So to implement a min-heap based on frequency, I need to compare the frequencies of the elements.
+- So for the priority queue, the comparator should order elements by their frequency in ascending order. That way, the element with the smallest frequency in the heap is at the top, and when we add a new element that has a higher frequency than the smallest, we remove the top and add the new one, keeping the heap size at k.
+- But how to store the elements in the heap? Since we need to track both the number and its frequency, maybe we can have a helper class or use a Map.Entry. But in Java, it's easier to create a list of entries from the frequency map and then process them. Alternatively, the priority queue can hold the entries and compare based on their values (frequency).
+- So the code steps:
+- Create the frequency map:
+Map<Integer, Integer> frequencyMap = new HashMap<>();
+- for each num in nums:
+frequencyMap.put(num, frequencyMap.getOrDefault(num, 0) + 1);
+- Then, create a priority queue that compares entries by their value (frequency). The priority queue will have a size of k. For each entry in the frequency map, add to the queue. If the size exceeds k, remove the head (smallest frequency entry).
+- But wait, the priority queue should be a min-heap of size k. So when adding entries, if the queue's size is less than k, we add. Otherwise, if the current entry's frequency is larger than the smallest in the heap (which is the head), then we remove the head and add the current entry.
+- So the comparator for the priority queue should order entries by their frequency in ascending order. So the priority queue will be initialized with a comparator that compares the Entry's values.
+- But in Java, when using a priority queue of Map.Entry, how to do that? Because the entries are from the hash map. So perhaps we can create a priority queue that uses a comparator comparing the entries by their value.
+- So the priority queue can be initialized like this:
+PriorityQueue<Map.Entry<Integer, Integer>> heap =
+new PriorityQueue<>((a, b) -> a.getValue() - b.getValue());
+- This comparator will order entries with lower frequencies first. So the head of the queue is the entry with the smallest frequency in the heap.
+- Then, for each entry in the frequency map's entry set, we add it to the heap. If the heap's size exceeds k, we poll the head (the smallest frequency entry). So after processing all entries, the heap will contain the k entries with the highest frequencies.
+- Once we have the heap, we can extract the elements. The order doesn't matter, so we just need to collect the keys from the entries in the heap.
+- So the result array will be of size k. Iterate through the heap, extract each entry's key and add to the result array.
+- Putting it all together:
+- Create frequency map.
+- Initialize the priority queue with a comparator that sorts entries by frequency in ascending order.
+- Iterate over each entry in the frequency map:
+a. Add entry to the heap.
+b. If the heap size exceeds k, remove the head.
+- Once all entries are processed, the heap contains the top k entries. Extract the keys into an array.
+```
+class Solution {
+    public int[] topKFrequent(int[] nums, int k) {
+        // Create a frequency map to count occurrences of each number
+        Map<Integer, Integer> frequencyMap = new HashMap<>();
+        for (int num : nums) {
+            frequencyMap.put(num, frequencyMap.getOrDefault(num, 0) + 1);
+        }
+        
+        // Create a min-heap based on the frequency of the elements
+        PriorityQueue<Map.Entry<Integer, Integer>> heap = new PriorityQueue<>(
+            (a, b) -> a.getValue() - b.getValue()
+        );
+        
+        // Add entries to the heap, maintaining the size at k
+        for (Map.Entry<Integer, Integer> entry : frequencyMap.entrySet()) {
+            heap.offer(entry);
+            if (heap.size() > k) {
+                heap.poll();
+            }
+        }
+        
+        // Extract the top k frequent elements from the heap
+        int[] result = new int[k];
+        int index = 0;
+        while (!heap.isEmpty()) {
+            result[index++] = heap.poll().getKey();
+        }
+        
+        return result;
+    }
+}
+```
 3. K closest points to the origin
 - Solution: 1. Max heap - PriorityQueue<int[]> maxHeap = new PriorityQueue<>((a,b) -> getDistance(b) - getDistance(a)) and getDistance is point[0]^2+point[1]^2
 
@@ -1156,6 +1246,81 @@ public class Solution {
     }
 }
 ```
+10. [House Robber II](https://leetcode.com/problems/house-robber-ii/description/) - O(n) & O(1)
+- Question: Determine the maximum amount of money that can be robbed from houses arranged in a circle without triggering the security system. The key challenge is that the first and last houses are adjacent, meaning they cannot both be robbed on the same night.
+- Solution: 1. DP
+- Wait, how did the original problem work? Oh right, for each house, you decide to rob it or not. If you rob it, you add its value to the previous non-adjacent one. So the dynamic programming approach was to keep track of two variables: the max if you rob the previous house and the max if you don't. Or maybe it's better to track the maximum up to each house considering whether you took the previous or not.
+- But in this circular case, the first and last are connected. So the problem reduces to two scenarios: either you rob the first house (and can't rob the last) or you don't rob the first (and can rob the last). Then, the solution is the maximum of these two scenarios.
+- So the plan is: split the problem into two separate cases. One where we exclude the first house and calculate the max for the rest, and another where we exclude the last house. Then take the maximum of these two results. But wait, how do I handle those cases?
+- For example, if the array is nums = [2,3,2], then the max is 3. Because if you take the first and last, they are adjacent, so you can't. So you take the middle one.
+- So the approach would be to compute the regular house robber problem on two subarrays: one from 0 to n-2 (excluding the last) and another from 1 to n-1 (excluding the first). Then take the maximum of those two results.
+- But wait, what if the array has only one element? Then the answer is that element. Also, if there are two elements, the answer is the max of the two.
+- So first, handle edge cases. If nums is empty, return 0. If length 1, return nums[0]. If length 2, return max(nums[0], nums[1]).
+- Otherwise, for the general case:
+- max_amount = max(rob_linear(nums, 0, n-2), rob_linear(nums, 1, n-1))
+- Where rob_linear is the helper function that computes the maximum for a straight line of houses from start to end indices.
+- So how to implement rob_linear? Let's think. The helper function would take the nums array, a start index, and an end index. Then compute the maximum you can rob from houses start to end, with adjacent houses being a problem.
+- The original DP approach for the linear case uses variables like prevMax and currMax. Let's see:
+- In the linear case, you can either take the current house plus the max from two steps back, or not take it and keep the max from the previous step.
+- So for the helper function, we can loop from start to end, and compute the max.
+```
+class Solution {
+    public int rob(int[] nums) {
+        if (nums.length == 0) return 0;
+        if (nums.length == 1) return nums[0];
+        return Math.max(robLinear(nums, 0, nums.length - 2), robLinear(nums, 1, nums.length - 1));
+    }
+    
+    private int robLinear(int[] nums, int start, int end) {
+        int prev = 0, curr = 0;                    //prev and curr, to keep track of the maximum money robbed up to the previous and current house
+        for (int i = start; i <= end; i++) {
+            int temp = curr;
+            curr = Math.max(curr, prev + nums[i]); // max upto previous house not considering current house, max of two step back+current house
+            prev = temp;
+        }
+        return curr;
+    }
+}
+```
+11. [Decode Ways](https://leetcode.com/problems/decode-ways/description/) - O(n) & O(n)
+- Question: Determine the number of ways to decode a given string of digits into valid letters, where each letter corresponds to a number from 1 to 26.
+- Solution: 1. DP
+- First, I remember that this is a dynamic programming problem. Because each position's result depends on previous choices. Like, if the current digit is valid by itself, or combined with the previous digit.
+- Wait, what are the possible cases? For each step, the current digit can be a single number (if it's not zero), or combined with the previous digit (if between 10 and 26). So the total ways for the i-th position is the sum of the ways from the previous position (if current is valid) plus the ways from two positions back (if the combination is valid).
+- But there are edge cases. For example, if the string starts with '0', then there's no way to decode it. So the answer is zero. Also, if two consecutive digits form a number larger than 26, then they can't be combined. Like '27' can only be split into 2 and 7, not 27.
+- So, the plan is to use a DP array where dp[i] represents the number of ways to decode the first i characters. Let's see.
+- Let's initialize dp[0] as 1. Because an empty string has one way to decode (doing nothing). Then, for each position from 1 to n:
+- Check if the current digit is not zero. If yes, add dp[i-1] to dp[i].
+- Check if the previous two digits form a number between 10 and 26. If yes, add dp[i-2] to dp[i].
+- But wait, how to handle the initial steps. Like, for i=1, we need to check the first character. For i=2, check if the first two form a valid number.
+- Also, need to handle cases where the string is of length 1. For example, '0' returns 0, '1' returns 1, etc.
+```
+class Solution {
+    public int numDecodings(String s) {
+        if (s == null || s.length() == 0) {
+            return 0;
+        }
+        int n = s.length();
+        int[] dp = new int[n + 1];
+        dp[0] = 1;
+        dp[1] = s.charAt(0) == '0' ? 0 : 1; //Handle string length 1
+        for (int i = 2; i <= n; i++) {
+            int first = s.charAt(i - 2) - '0';
+            int second = s.charAt(i - 1) - '0';
+            int twoDigit = first * 10 + second;
+            // Check single digit
+            if (second >= 1 && second <= 9) {
+                dp[i] += dp[i - 1];
+            }
+            // Check two digits
+            if (twoDigit >= 10 && twoDigit <= 26) {
+                dp[i] += dp[i - 2];
+            }
+        }
+        return dp[n];
+    }
+}
+```
 
 ## Ad-hoc 
 - Problems that don’t fit into a standard category and require a unique approach like Swapping, Sorting, HashMap, Manipulation
@@ -1378,6 +1543,30 @@ public class Solution {
     }
 }
 ```
+5. [Contains Duplicate](https://leetcode.com/problems/contains-duplicate/description/) - O(n) & O(n)
+- Question: Determine if an array contains any duplicate elements. If any value appears at least twice, we return true; otherwise, we return false.
+- Solution: 1. HashSet 2. Sort the array first. Because if there are duplicates, after sorting, they would be next to each other. So then I can just iterate through the sorted array and check if any two consecutive elements are the same - O(n log n) 3. Brute force O(n^2) approach where you check every pair.
+- Idea is to use a hash set. For each element in the array, we check if it's already in the set. If it is, return true. Otherwise, add it to the set. If we finish all elements without finding duplicates, return false. The time complexity here is O(n) on average, since hash set operations are O(1). But the space complexity is O(n) because of the set.
+- The steps would be:
+- Initialize a HashSet.
+- Loop through each number in nums:
+a. If the number is already in the set, return true.
+b. Add the number to the set.
+- After processing all elements, return false.
+```
+class Solution {
+    public boolean containsDuplicate(int[] nums) {
+        Set<Integer> seen = new HashSet<>();
+        for (int num : nums) {
+            if (!seen.add(num)) { // if(seen.conatins(num); seen.add(num) return false if num exists in a set
+                return true;
+            }
+            // seen.add(num);
+        }
+        return false;
+    }
+}
+```
 
 ## Greedy Algorithm
 1. Longest Consecutive Sequence
@@ -1455,8 +1644,33 @@ public class Solution {
 - Solution: 1. Fast and Slow pointers - slow=n,fast=getNext(n) while(fast!=1 && slow != fast) slow,fast increment after while return fast==1
   2. HashSet - while(n>0) findSquare and check in the if set.contains(square) return true otherwise set.add(squre)  after while return false
 4. [Reverse Linked List](https://leetcode.com/problems/reverse-linked-list/description/) - O(n) & O(1)
-- Question: 
-- Solution: 1. Three-pointers - prev=null,current=head while(current!=null) next=current.next, current.next=prev, prev=current, current=next after while loop return prev 2. Copy all the elements to an array and reverse it. Update LL according to the array - O(n) & O(n)
+- Question: Need to reverse a singly linked list. The goal is to reverse the direction of the pointers such that the last node becomes the first node, and each node points to its previous node instead of the next one.
+- Solution: 1. Three-pointers (previous, current, and next) 2. Copy all the elements to an array and reverse it. Update LL according to the array - O(n) & O(n)
+- Hmm, I remember that there's an iterative way to reverse a linked list. Let me recall. Oh right, you can use three pointers: previous, current, and next. You iterate through the list, changing the current node's next pointer to point to the previous node, then move all pointers forward.
+- Wait, let me break it down step by step. Starting with the head, which is the first node. The idea is to reverse each link as you go through the list.
+- Let's see. Initially, previous is null, current is head. Then, while current is not null, save the next node (next = current.next), then set current.next to previous. Then, move previous to current, current to next. Repeat until current is null. The new head is previous.
+- Yes, that makes sense. So the steps would be:
+- Initialize previous as null, current as head.
+- Loop while current is not null:
+a. Save next node (next = current.next)
+b. Reverse the link (current.next = previous)
+c. Move previous and current forward (previous = current, current = next)
+- Return previous as the new head.
+```
+public class Solution {
+    public ListNode reverseList(ListNode head) {
+        ListNode prev = null;
+        ListNode current = head;
+        while (current != null) {
+            ListNode nextTemp = current.next;
+            current.next = prev;
+            prev = current;
+            current = nextTemp;
+        }
+        return prev;
+    }
+}
+```
 5. [Reorder List](https://leetcode.com/problems/reorder-list/description/) -O(n) & (1)
 - Question: Reorder a linked list such that the nodes are arranged in a specific way: the first node is followed by the last node, then the second node is followed by the second last, and so on
 - Solution: 1. Splitting the list into two halves, reversing the second half, and then merging the two halves alternately. 2. Copy to the new array, modify and update the list
@@ -1730,8 +1944,72 @@ class MedianFinder {
 ```
 
 ## Trie - O(L) and O(N*L)
-1. Implement Trie (Prefix Tree) - insert, search, startsWithPrefix
-- Node[] children; boolean eow;
+1. [Implement Trie - Prefix Tree](https://leetcode.com/problems/implement-trie-prefix-tree/description/) - Insert : O(n) & O(n), Search and Prefix check : O(n) & O(1)
+- Question: insert, search, startsWithPrefix
+- Solution: Trie has Node[] children; boolean eow;
+```
+class Trie {
+
+    class Node {
+        Node[] children;
+        boolean eow;
+
+        public Node() {
+            children = new Node[26];
+            eow = false;
+        }
+    }
+
+    Node root; 
+
+    public Trie() {
+        root = new Node();
+    }
+    
+    public void insert(String word) {
+        Node current = root;
+        for(int i=0; i<word.length(); i++) {
+            int index = (int) (word.charAt(i) - 'a');
+            if(current.children[index] == null) {
+                Node node = new Node();
+                current.children[index] = node;
+            }
+            current = current.children[index];
+        }
+        current.eow = true;
+    }
+    
+    public boolean search(String word) {
+        Node current = root;
+        for(int i=0; i<word.length(); i++) {
+            int index = (int) (word.charAt(i) - 'a');
+            if(current.children[index] == null) {
+                return false;
+            }
+            if((i == word.length() - 1) && current.children[index].eow == false) {
+                return false;
+            }
+            current = current.children[index];
+        }
+        return true;
+    }
+    
+    public boolean startsWith(String prefix) {
+        Node current = root;
+        for(int i=0; i<prefix.length(); i++) {
+            int index = (int) (prefix.charAt(i) - 'a');
+            if(current.children[index] == null) {
+                return false;
+            }
+            // if((i == word.length() - 1) && current.children[index].eow == false) {
+            //     return false;
+            // }
+            current = current.children[index];
+        }
+        return true;
+    }
+}
+```
 2. Word Break 
 - Question: Break the word into multiple parts and check whether all parts are present in the dictionary
 - Solution: 1. Reverse DP with dp[i] = dp[i + w.length()] 2. Trie insert, search and recursion helper for dividing string 
@@ -1739,6 +2017,197 @@ class MedianFinder {
 - Solution: 1. HashSet with Nested loops to get a substring 2. Trie insert and count nodes
 4. Longest word with all prefixes / Longest Word in Dictionary
 - Solution: 1. HashSet contains its prefix of (length - 1) 2. Trie inserts and builds a string with it's all prefixes present in the dictionary along with recursion and backtracking
+5. [Design Add and Search Words Data Structure](https://leetcode.com/problems/design-add-and-search-words-data-structure/description/) - addWord : O(L) & O(L), searchWord : O(26^L) & O(L) L is the length of the word.
+- Question: Design a data structure that allows adding words and searching for words efficiently, even when the search includes wildcard characters ('.') that can match any single character. 
+- Solution: 1.  Trie (prefix tree)
+- First, the addWord function. That's straightforward. Like a normal trie insertion. Each node has children for each character. So when adding a word, we go through each character and create nodes as needed.
+- The tricky part is the search function. Especially when there's a '.', because that can match any character. For example, if the word is ".ad", then the first character can be any letter, and then 'a' and 'd' must follow. So during the search, whenever we encounter a '.', we need to check all possible children of the current node for the remaining part of the word.
+- So maybe the trie structure is the way to go here. Let's think about the trie node structure. Each node will have a map or array of children, and a flag indicating if it's the end of a word.
+- Wait, since the characters are lowercase letters, we can use an array of 26 elements (for each letter a-z). So each node has an array of 26 children, and a boolean isEnd.
+- So for addWord, we iterate through each character in the word, and for each step, check if the child exists. If not, create a new node. Then move to that child. At the end, set isEnd to true.
+- For search, we need a recursive approach, especially when there's a wildcard. Because when we hit a '.', we need to check all possible children. So the search function could be implemented with a helper that takes the current node and the current index in the word.
+- For example, the helper function could look like this: boolean searchInNode(String word, int index, TrieNode node). For each character starting at index, if the character is '.', then we loop through all possible children (non-null ones) and recursively check if the rest of the word can be matched. If any of them return true, then return true. If the character is a letter, check if the child exists, and proceed recursively.
+- So the main search function would call this helper starting from the root node and index 0.
+- Let me outline this.
+- The TrieNode structure:
+class TrieNode {
+
+TrieNode[] children = new TrieNode[26];
+
+boolean isEnd = false;
+
+}
+
+- The WordDictionary class will have a root TrieNode.
+- In the constructor, initialize the root.
+- AddWord: start from root, iterate through each character in the word. For each char, calculate the index (c - 'a'). If the child at that index is null, create a new node. Move to the child. At the end, mark isEnd.
+- Search: For the given word, start at the root. For each character in the word:
+- If the character is '.', we need to check all existing children. For each child that is not null, recursively check if the remaining substring (from next index) matches. If any of them returns true, return true. Otherwise, false.
+- If it's a normal character, check if the child exists. If not, return false. Otherwise, proceed to the next character.
+- So the base case is when the index reaches the end of the word. We check if the current node's isEnd is true.
+- Now, implementing this in Java.
+- Potential edge cases: adding empty string? But probably the problem says words are non-empty? The problem statement says "addWord adds word to the data structure", but the constraints may not specify. So need to handle words of length zero? Probably not, but perhaps in the problem constraints.
+- Another edge case: searching with a word that's longer than any added word, but has wildcards. But the trie structure would naturally handle that by checking the depth.
+```
+class WordDictionary {
+
+    private class TrieNode {
+        TrieNode[] children = new TrieNode[26];
+        boolean isEnd = false;
+    }
+
+    private TrieNode root;
+
+    public WordDictionary() {
+        root = new TrieNode();
+    }
+    
+    public void addWord(String word) {
+        TrieNode node = root;
+        for (char c : word.toCharArray()) {
+            int index = c - 'a';
+            if (node.children[index] == null) {
+                node.children[index] = new TrieNode();
+            }
+            node = node.children[index];
+        }
+        node.isEnd = true;
+    }
+    
+    public boolean search(String word) {
+        return searchHelper(word, 0, root); //For recursion call
+    }
+
+    private boolean searchHelper(String word, int index, TrieNode node) {
+        if (index == word.length()) {
+            return node.isEnd;
+        }
+        char c = word.charAt(index);
+        if (c == '.') {
+            for (TrieNode child : node.children) {
+                if (child != null && searchHelper(word, index + 1, child)) {
+                    return true; //return searchHelper(word, index + 1, child);
+                }
+            }
+            return false;
+        } else {
+            int i = c - 'a';
+            if (node.children[i] == null) {
+                return false;
+            }
+            return searchHelper(word, index + 1, node.children[i]);
+        }
+    }
+}
+```
+6. [Word Search II](https://leetcode.com/problems/word-search-ii/description/) - O(W⋅L+M×N×4^L) & O(W⋅L+L) W is the number of words in words, L is the average length of each word.
+- Question: Find all words from a given list that can be formed by sequentially adjacent cells on a 2D board. Adjacent cells are those horizontally or vertically neighboring, and the same cell can't be used more than once in a word. 
+- Solution: 1. Trie (prefix tree) data structure to store the words and perform depth-first search (DFS) with backtracking to explore all possible paths on the board.
+- First, I remember that for searching words in a grid, a common approach is to use backtracking with a trie. The trie helps in efficiently checking the prefixes, so we can stop early if a prefix isn't present. That way, we don't waste time exploring paths that can't form any of the words.
+- Let me think. The steps might be:
+- Build a trie from the list of words. Each node in the trie represents a character, and paths from the root to leaves represent the words.
+- Then, for each cell in the board, perform a depth-first search (DFS) to explore all possible paths, checking if the sequence of characters forms a prefix present in the trie.
+- When a word is found (i.e., we reach a node in the trie marked as the end of a word), add it to the result list and perhaps mark that node so we don't add duplicates if the same word is found again through another path.
+- To avoid revisiting the same cell during the current DFS path, we can mark the cell as visited (maybe by temporarily changing its character to a special symbol and then restoring it after backtracking).
+- Wait, but building a trie for all the words makes sense. Then, during the DFS, we can check if the current path is a valid prefix. If not, we can backtrack immediately. That's more efficient than checking each word individually, especially if there are many words.
+- But how to handle duplicates? For example, if the same word can be found in multiple ways. The problem states that the output list should have all the words on the board, but each instance should be present once. So when a word is found, we need to add it to the result once, even if found multiple times. So perhaps once a word is found, we can remove it from the trie to prevent duplicates. Or mark it as found so we don't add it again.
+- Wait, another idea: during the trie traversal, once a word is found (i.e., a node's isEnd is true), we can add that word to the result set and then set isEnd to false to avoid adding duplicates. But we need to collect all unique words, so maybe using a set to store the results and then converting it to a list at the end would handle duplicates automatically. That might be a good approach.
+- So the plan is:
+- Build a trie from the given words.
+- Use a set to collect the found words to avoid duplicates.
+- For each cell in the board, start a DFS, tracking the current path in the trie.
+- If during DFS we reach a node where isEnd is true, add the corresponding word to the set.
+- To optimize, once a word is found, we can prune the trie node's isEnd to prevent adding the same word multiple times (but maybe it's better to just let the set handle duplicates, but pruning could save some time in further searches).
+- Wait, but building the trie for all words and then checking each possible path on the board. So the steps in code would be:
+- Create the Trie structure with nodes. Each node has children and a boolean indicating if it's the end of a word. Also, maybe each node can store the actual word, but perhaps it's better to build the word as we traverse the trie. Alternatively, when inserting a word into the trie, each node along the path can track the characters, and when we reach the end node, we have the full word. Alternatively, during the DFS traversal, we can keep track of the current string being built.
+- Wait, maybe during the insertion of words into the trie, each end node can store the word itself. That way, when we reach an end node during DFS, we can immediately get the word without having to track the characters from the root. That could be efficient.
+- So, for example, when inserting "apple", each node in the path a -> p -> p -> l -> e would have their respective children. The last node (e) would have isEnd = true and word = "apple".
+- That way, during the DFS, whenever we reach a node that isEnd, we can add node.word to the result set.
+- Now, to implement this:
+- The TrieNode class would have a map or an array of children (since there are 26 letters) and a String word to store the word at the end node.
+So, steps for the solution:
+- Insert all the words into the trie. For each word, traverse the trie, adding nodes as needed. At the end node, set isEnd (or word != null) to indicate the end of a word and store the word there.
+- Iterate over each cell in the board. For each cell, check if the character exists as a child of the trie root. If yes, start a DFS from that cell.
+- In the DFS, for the current cell (i,j) and current trie node:
+a. Check if the current cell's character matches the current trie node's child.
+b. If the current trie node has a word (isEnd), add it to the result set.
+c. Mark the current cell as visited (maybe by changing board[i][j] to a special character like '#').
+d. Explore all four directions (up, down, left, right), checking if the next cell is within bounds and not visited.
+e. For each direction, proceed to the next trie node (child of current node) if the next character exists.
+f. After backtracking, restore the cell's original character.
+- Once all cells are processed, convert the result set to a list and return.
+- But wait, the root of the trie is the starting point. For each cell, we need to check if the root has a child corresponding to the cell's character. So, for example, if the cell is 'a', check if root.children['a' - 'a'] exists. If yes, proceed with the DFS.
+- Another thing to note: the same cell cannot be used more than once in the same word. So during the DFS, we need to track visited cells. The standard approach for this is to mark the cell as visited temporarily, then unmark it when backtracking.
+```
+class Solution {
+    class TrieNode {
+        TrieNode[] children = new TrieNode[26];
+        String word;
+    }
+
+    public List<String> findWords(char[][] board, String[] words) {
+        TrieNode root = new TrieNode();
+        for (String word : words) {
+            insert(root, word);
+        }
+        
+        Set<String> result = new HashSet<>();
+        int m = board.length;
+        int n = board[0].length;
+        
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                char c = board[i][j];
+                int idx = c - 'a';
+                if (root.children[idx] != null) {
+                    dfs(board, i, j, root.children[idx], result);
+                }
+            }
+        }
+        
+        return new ArrayList<>(result);
+    }
+    
+    private void insert(TrieNode root, String word) {
+        TrieNode node = root;
+        for (char c : word.toCharArray()) {
+            int idx = c - 'a';
+            if (node.children[idx] == null) {
+                node.children[idx] = new TrieNode();
+            }
+            node = node.children[idx];
+        }
+        node.word = word;
+    }
+    
+    private void dfs(char[][] board, int i, int j, TrieNode node, Set<String> result) {
+        if (node.word != null) {
+            result.add(node.word);
+            node.word = null; // Prevent duplicate entries
+        }
+        
+        char originalChar = board[i][j];
+        board[i][j] = '#'; // Mark as visited
+        
+        int[][] directions = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+        for (int[] dir : directions) {
+            int x = i + dir[0];
+            int y = j + dir[1];
+            if (x < 0 || x >= board.length || y < 0 || y >= board[0].length) {
+                continue;
+            }
+            char nextChar = board[x][y];
+            if (nextChar == '#') continue;
+            int idx = nextChar - 'a';
+            if (node.children[idx] != null) {
+                dfs(board, x, y, node.children[idx], result);
+            }
+        }
+        
+        board[i][j] = originalChar; // Restore the original character
+    }
+}
+```
 
 ## Tree
 1. [Serialize and Deserialize Binary Tree](https://leetcode.com/problems/serialize-and-deserialize-binary-tree/description/) - O(n) & O(n)
@@ -1819,6 +2288,9 @@ class Solution {
     }
 }
 ```
+3. [Validate Binary Search Tree](https://leetcode.com/problems/validate-binary-search-tree/description/?) - O(n) & O(h) n is the number of nodes in the tree,h is the height of the tree
+- Question: Determine if a binary tree is a valid Binary Search Tree (BST), we need to ensure that for every node, all nodes in its left subtree have values less than the node's value, and all nodes in its right subtree have values greater than the node's value. This must hold true for all nodes recursively.
+- Solution: 1. 
 
 ## Graph - Time:O(V+E) Space:O(V)
 1. Connected and Disconnected Graph - BFS (Using Queue) and DFS (Using Recursion) along with the visited boolean array
@@ -2080,3 +2552,146 @@ class Solution {
     }
 }
 ```
+16. [Word Search](https://leetcode.com/problems/word-search/description/) - O(N * 3^L) & O(1) N is the number of cells and L is the length of the word.
+- Question: Determine if a given word can be constructed from letters of a 2D grid where each letter must be adjacent (horizontally or vertically) and each cell can be used only once in the construction of the word.
+- Solution: 1. Backtracking approach with depth-first search (DFS).
+- Let me think. So, the approach here is probably using backtracking. Because for each character in the word, we need to explore all possible directions on the board, and backtrack if the current path doesn't lead to a solution.
+- First, I need to iterate over each cell in the board. For each cell, if it matches the first character of the word, then start a DFS search from there. The DFS will check all four possible directions (up, down, left, right) to see if the next character is present. But we have to mark the cell as visited to avoid reusing it in the current path. Oh right, and then unmark it after backtracking so other paths can use it.
+- Wait, how do I mark a cell as visited? Maybe by changing the character to a special symbol (like '#' or something) and then reverting it back after the recursive calls. Because modifying the board directly is allowed here, as long as we restore it afterward.
+- So the steps would be:
+- Iterate through each cell in the board.
+- For each cell that matches the first character of the word, start DFS.
+- In the DFS function:
+a. Check if the current index of the word is beyond the length (base case: return true if index equals word length).
+b. Check if the current cell is out of bounds or doesn't match the current character. If so, return false.
+c. Mark the current cell as visited by changing its value.
+d. Explore all four directions recursively.
+e. Restore the cell's original value after backtracking.
+f. Return true if any of the directions lead to a successful path.
+- Edge cases to consider:
+- The board is empty.
+- The word is longer than the total number of cells.
+- The word has characters not present in the board at all.
+- Multiple cells have the first character, need to check all of them.
+```
+public class Solution {
+    public boolean exist(char[][] board, String word) {
+        if (board == null || board.length == 0 || word == null || word.length() == 0) {
+            return false;
+        }
+        
+        int m = board.length;
+        int n = board[0].length;
+        
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (board[i][j] == word.charAt(0)) {
+                    if (dfs(board, i, j, word, 0)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+    
+    private boolean dfs(char[][] board, int i, int j, String word, int index) {
+        if (index == word.length()) {
+            return true;
+        }
+        
+        if (i < 0 || i >= board.length || j < 0 || j >= board[0].length || board[i][j] != word.charAt(index)) {
+            return false;
+        }
+        
+        char temp = board[i][j];
+        board[i][j] = '#';  // Mark as visited
+        
+        boolean found = dfs(board, i + 1, j, word, index + 1)
+                     || dfs(board, i - 1, j, word, index + 1)
+                     || dfs(board, i, j + 1, word, index + 1)
+                     || dfs(board, i, j - 1, word, index + 1);
+        
+        board[i][j] = temp;  // Backtrack
+        
+        return found;
+    }
+}
+```
+17. [Course Schedule](https://leetcode.com/problems/course-schedule/description/) - O(V+E) & O(V+E) V is the number of courses and E is the number of prerequisites.
+- Question: Determine if all given courses can be completed given their prerequisites. This is equivalent to checking if the directed graph formed by the courses and their prerequisites is a Directed Acyclic Graph (DAG). If there is a cycle in the graph, it is impossible to complete all courses.
+- Solution: 1. Topological sort - Kahn's algorithm (BFS using in-degree and a queue) 2. DFS to detect cycles.
+- Let me think. The input is the number of courses and a list of prerequisite pairs. Each pair [a, b] means you have to take course b before a. So this forms a directed edge from b to a. The question is whether this graph has a topological order, which is possible only if there are no cycles.
+- So the approach here is to perform a topological sort. There are two common ways to do this: Kahn's algorithm (using in-degree and a queue) or using DFS to detect cycles.
+- Hmm. Let me consider Kahn's algorithm first. Kahn's algorithm works by repeatedly removing nodes with no incoming edges. If all nodes are removed, the graph has no cycle. Otherwise, there's a cycle.
+- So the steps would be:
+- Build an adjacency list to represent the graph.
+- Calculate the in-degree for each node.
+- Initialize a queue with all nodes having in-degree zero.
+- While the queue is not empty:
+a. Dequeue a node.
+b. Reduce the in-degree of its neighbors by one.
+c. If any neighbor's in-degree becomes zero, enqueue it.
+- If the number of processed nodes equals the total nodes, then no cycle exists.
+- Alternatively, using DFS to detect cycles. For each node, we can track visited nodes and the recursion stack. If during traversal we encounter a node that's already in the recursion stack, there's a cycle.
+- But for topological sorting, the DFS method involves visiting nodes and adding them to a stack once all their dependencies are processed. However, for cycle detection, we need to track the current path.
+- Wait, but in this problem, we just need to check if a topological sort exists, which is equivalent to checking if the graph is a DAG (Directed Acyclic Graph). So either approach works.
+- Let me think about implementing Kahn's algorithm first.
+- First, build the adjacency list. For each prerequisite [a, b], since b is a prerequisite for a, the edge is from b to a. So the adjacency list entry for b will include a. Then, the in-degree for a is incremented.
+- Once the adjacency list and in-degree array are built, we start with nodes (courses) that have zero in-degree. If there are no such nodes initially, then there's a cycle.
+- We process each node, decrementing the in-degree of its neighbors. Each time a neighbor's in-degree becomes zero, it's added to the queue. The count of processed nodes is tracked. If this count equals the total number of courses, then it's possible to finish.
+- So let's outline the steps for code:
+- Create adjacency list: a list of lists. For each course, list the courses that depend on it.
+- Create inDegree array: for each course a, inDegree[a] is the number of prerequisites.
+- Initialize a queue with all courses where inDegree is zero.
+- Initialize a counter for processed nodes.
+- While queue is not empty:
+a. Dequeue course u.
+b. Increment counter.
+c. For each neighbor v of u:
+i. Decrement inDegree[v] by 1.
+ii. If inDegree[v] becomes zero, enqueue v.
+- If counter equals numCourses, return true. Else, false.
+```
+public class Solution {
+    public boolean canFinish(int numCourses, int[][] prerequisites) {
+        List<Integer>[] adj = new ArrayList[numCourses];
+        for (int i = 0; i < numCourses; i++) {
+            adj[i] = new ArrayList<>();
+        }
+        int[] inDegree = new int[numCourses];
+        
+        for (int[] prereq : prerequisites) {
+            int course = prereq[0];
+            int prerequisite = prereq[1];
+            adj[prerequisite].add(course);
+            inDegree[course]++;
+        }
+        
+        Queue<Integer> queue = new LinkedList<>();
+        for (int i = 0; i < numCourses; i++) {
+            if (inDegree[i] == 0) { //add node those don't have incoming edges and remove then in bfs
+                queue.offer(i);
+            }
+        }
+        
+        int count = 0;
+        while (!queue.isEmpty()) {
+            int current = queue.poll();
+            count++;
+            for (int neighbor : adj[current]) { //remove neighbor don't have incoming edges by adding in the queue
+                inDegree[neighbor]--;
+                if (inDegree[neighbor] == 0) {
+                    queue.offer(neighbor);
+                }
+            }
+        }
+        
+        return count == numCourses;
+    }
+}
+```
+
+
+
+
