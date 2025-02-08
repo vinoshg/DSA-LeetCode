@@ -218,6 +218,28 @@ class Solution {
     }
 }
 ```
+5. [Sum of Two Integers](https://leetcode.com/problems/sum-of-two-integers/description/) - O(1) & O(1) since the loop runs a constant number of times (at most 32 iterations for 32-bit integers
+- Question: Find the sum of two integers without using the + or - operators.
+- Solution: 1. Bitwise operations
+- Wait, I remember that in some programming challenges, people use bitwise operations for this. Like, using XOR and AND maybe. Let me recall. Oh right, because when you add two binary numbers, the XOR gives the sum without considering the carry, and the AND gives the carry bits. Then you shift the carry left by one and add it again. But since we can't use +, we have to do this iteratively until there's no carry left.
+- So the steps would be something like:
+- Calculate the sum without carry (a XOR b)
+- Calculate the carry (a AND b) shifted left by 1.
+- Now, add these two results together, but since we can't use +, we repeat the process using these two new numbers until the carry is zero.
+- But wait, how do you handle this in a loop? Like, we need to keep doing this until the carry is zero. So maybe in each iteration, we compute the new sum and new carry, and set a and b to be the sum and carry. Then when carry becomes zero, the sum is the answer.
+```
+class Solution {
+    public int getSum(int a, int b) {
+        while (b != 0) {
+            int sum = a ^ b;
+            int carry = (a & b) << 1;
+            a = sum;
+            b = carry;
+        }
+        return a;
+    }
+}
+```
 
 ## Prefix Sum - O(n)
 1. Prefix Sum Array
@@ -993,8 +1015,40 @@ class Solution {
 - Maximise/Minimise/Fewest of certain value or number of ways
 - Question: Optimize recursive problems with overlapping subproblems - 0/1 Knapsack | Unbounded Knapsack | Longest Common Subsequence (LCS) | Fibonacci sequence pattern
 - 0/1 Knapsack(Subset selection with constraints) | Unbounded Knapsack(Unlimited item usage) | LCS(String alignment problems)
-1. Longest Common Subsequence - O(mn)
-- Solution: 1. dp[m+1][n+1] Nested loops i,j=1 if (text1.charAt(i - 1) == text2.charAt(j - 1)) dp[i][j] = dp[i - 1][j - 1] + 1; else dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]); after return dp[m][n];
+1. [Longest Common Subsequence](https://leetcode.com/problems/longest-common-subsequence/description/) - O(mn) & O(mn)
+- Question: Finding the length of the longest common subsequence (LCS) between two given strings. A subsequence is a sequence that can be derived from another sequence by deleting some elements without changing the order of the remaining elements.
+- Solution: 1. DP
+- Hmm, right. So the classic approach here is dynamic programming. I remember that. So, the idea is to create a 2D array where dp[i][j] represents the length of the longest common subsequence between the first i characters of text1 and the first j characters of text2.
+- Let me think about the base cases. If either i or j is 0, then the subsequence length is 0 because one of the strings is empty. So dp[0][j] and dp[i][0] are all zeros.
+- Now, for the recursive relation. If the current characters (text1[i-1] and text2[j-1]) are the same, then dp[i][j] = dp[i-1][j-1] + 1. Because we can take the LCS up to i-1 and j-1 and add this matching character.
+- If they are not the same, then we take the maximum of dp[i-1][j] (excluding the current character of text1) and dp[i][j-1] (excluding the current character of text2). That makes sense because the LCS could be in either of those possibilities.
+- So the steps are:
+- Initialize a DP table with (m+1) x (n+1) dimensions, where m and n are the lengths of text1 and text2.
+- Iterate through each character in text1 and text2.
+- For each pair (i,j), check if the characters match.
+- Update the DP table accordingly.
+- Wait, but the problem is about optimization. What about space? The standard DP uses O(mn) space. But maybe we can optimize it to O(n) or O(m) since we only need the previous row. But for now, maybe just implement the standard solution, since it's straightforward.
+```
+class Solution {
+    public int longestCommonSubsequence(String text1, String text2) {
+        int m = text1.length();
+        int n = text2.length();
+        int[][] dp = new int[m + 1][n + 1];
+        
+        for (int i = 1; i <= m; i++) {
+            for (int j = 1; j <= n; j++) {
+                if (text1.charAt(i - 1) == text2.charAt(j - 1)) {
+                    dp[i][j] = dp[i - 1][j - 1] + 1;
+                } else {
+                    dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
+                }
+            }
+        }
+        
+        return dp[m][n];
+    }
+}
+```
 2. [Target Sum](https://leetcode.com/problems/target-sum/description/) - O(n*S) & O(S) S is the required subset sum 
 - Question: Finding the number of ways to assign '+' and '-' signs to elements of an array such that their sum equals a given target
 - Solution: 1. Dynamic programming - 0/1 Knapsack (Subsets problem)  2. Recursion (p,up)
@@ -1567,6 +1621,75 @@ class Solution {
     }
 }
 ```
+6. [Product of Array Except Self](https://leetcode.com/problems/product-of-array-except-self/description/) - O(n) & O(1)
+- Question: Find an array that each element at index i is the product of all the numbers in the original array except nums[i]. And the catch is that I can't use division and have to do it in O(n) time.
+- Solution: 1. Left Pass: Compute the product of all elements to the left of each index and store these products in the output array. Right Pass: Compute the product of all elements to the right of each index while updating the output array by multiplying the left product with the right product.
+- So, the straightforward way would be to calculate the product of all elements and then divide by nums[i] for each position. But the problem says no division, right? So that approach is out. Plus, if there's a zero in the array, dividing would cause issues anyway. So I need another method.
+- Wait, the problem mentions that the solution must run in O(n) time. So nested loops are probably not allowed. Let me think. Maybe using prefix and suffix products. Like, for each element, the product of all elements before it (prefix) multiplied by the product of all elements after it (suffix). That makes sense.
+- For example, take nums = [1,2,3,4]. For index 2 (element 3), the prefix would be 1*2=2, the suffix would be 4, so the product is 2*4=8. Which is correct because the product except self for 3 is 1*2*4=8.
+- So, maybe I can create two arrays: left and right. The left array would store the product of all elements to the left of i, and the right array the product to the right. Then, the answer is left[i] * right[i] for each i.
+- But the problem says that the space complexity should be O(1) except for the output array. Wait, the problem might allow using the output array as part of the space. Let me check the note: "The output array does not count as extra space for space complexity analysis." So that's allowed. So maybe I can first compute the left products in the output array, then compute the right products on the fly and multiply them with the left products stored in the output array.
+- Let me outline the steps:
+- Initialize the answer array with all 1s. The same size as nums.
+- Compute the left products for each element. For the first element, there's nothing to the left, so left product is 1. Then for each i from 1 to n-1, answer[i] = answer[i-1] * nums[i-1].
+- Then compute the right products. Start from the end. We can keep a running product variable. Initialize right_product to 1. Then, for each i from n-1 down to 0, multiply the answer[i] by right_product, then update right_product by multiplying nums[i].
+```
+public class Solution {
+    public int[] productExceptSelf(int[] nums) {
+        int n = nums.length;
+        int[] answer = new int[n];
+        Arrays.fill(answer, 1);
+        
+        // Left pass: compute product of elements to the left of each index
+        for (int i = 1; i < n; i++) {
+            answer[i] = answer[i - 1] * nums[i - 1];
+        }
+        
+        int rightProduct = 1;
+        // Right pass: compute product of elements to the right and multiply with left product
+        for (int i = n - 1; i >= 0; i--) {
+            answer[i] *= rightProduct;
+            rightProduct *= nums[i];
+        }
+        
+        return answer;
+    }
+}
+```
+7. [Valid Anagram](https://leetcode.com/problems/valid-anagram/description/) - O(n) & O(1)
+- Question: Determine if two strings are anagrams, we need to check if they contain the same characters with the same frequencies.
+- Solution: 1.
+- Hmm, anagrams mean that the characters are the same in both strings but rearranged, right? So first, I should think about the approach.
+- Let's see. If the two strings are of different lengths, then they can't be anagrams. So the first check should be to compare the lengths. If they are different, return false immediately.
+- If the lengths are the same, then I need to count the frequency of each character in both strings. One way to do this is by using a hash map. Like, for each character in the first string, increment its count, and for the second string, decrement the count. Then check if all counts are zero.
+- Wait, but maybe using an array is more efficient, especially since there are only 26 lowercase letters possible? Oh, wait, the problem description says if the input strings contain unicode characters. Oh right, the original problem might have Unicode. Wait, but the problem here says s and t consist of lowercase English letters. Wait, looking back at the code, the function is isAnagram, which is a classic problem. Assuming that the problem is the standard one where s and t are anagrams if they have the same character counts.
+- So, assuming that the input is lowercase letters. So maybe using an array of size 26 is sufficient.
+- So here's the plan:
+- Check if the lengths of s and t are different. If yes, return false.
+- Create an array of 26 integers to represent the count of each character.
+- Iterate through each character in s, increment the count for that character.
+- Iterate through each character in t, decrement the count for that character.
+- After processing both strings, check if all elements in the array are zero. If any is not zero, return false. Otherwise, return true.
+```
+class Solution {
+    public boolean isAnagram(String s, String t) {
+        if (s.length() != t.length()) {
+            return false;
+        }
+        int[] counts = new int[26];
+        for (int i = 0; i < s.length(); i++) {
+            counts[s.charAt(i) - 'a']++;
+            counts[t.charAt(i) - 'a']--;
+        }
+        for (int c : counts) {
+            if (c != 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+}
+```
 
 ## Greedy Algorithm
 1. Longest Consecutive Sequence
@@ -1599,6 +1722,66 @@ public class Solution {
             }
         }
         return maxReach >= n - 1; //return true; able to reach the end
+    }
+}
+```
+3. [Best Time to Buy and Sell Stock (Single trade)](https://leetcode.com/problems/best-time-to-buy-and-sell-stock/description/) - O(n) & O(1)
+- Question: Determine the maximum profit that can be achieved by buying a stock on one day and selling it on a different day in the future. If no profit is possible, we return 0.
+- Solution: 1. Track the minimum price encountered so far as we iterate through the array of stock prices. For each day, we calculate the potential profit if we were to sell the stock on that day (current price minus the minimum price seen so far). By keeping track of the maximum profit encountered during this iteration
+- Hmm, let's think. The brute force approach would be to check every possible pair of buy and sell days. Like, for each day i as buy day, check all days j > i and calculate the profit (prices[j] - prices[i]). Then keep track of the maximum profit found. But that's O(n^2) time, which is probably not efficient enough for large arrays. Since the constraints could have up to like 1e5 elements, O(n^2) would be way too slow. So I need a better approach.
+- Wait, what's the optimal way here? Maybe track the minimum price seen so far as we iterate through the array. Then, for each day, calculate the profit if we sell on that day (current price minus the minimum so far) and keep track of the maximum profit.
+- Oh right! Because the best day to sell after a certain point is when you have the highest possible price after the lowest buying price. So if we keep track of the minimum price up to the current day, then each day's potential profit is prices[i] - min_price_so_far. Then we just take the maximum of all those.
+- So the steps would be:
+- Initialize min_price to be the first element. Or maybe start with a very high value.
+- Initialize max_profit to 0.
+- Iterate through each price in the array:
+a. If the current price is lower than min_price, update min_price.
+b. Else, calculate the profit (current price - min_price) and see if it's larger than max_profit. If yes, update max_profit.
+- After going through all elements, return max_profit.
+```
+class Solution {
+    public int maxProfit(int[] prices) {
+        if (prices == null || prices.length <= 1) {
+            return 0;
+        }
+        
+        int minPrice = prices[0];
+        int maxProfit = 0;
+        
+        for (int i = 1; i < prices.length; i++) {
+            if (prices[i] < minPrice) {
+                minPrice = prices[i];
+            } else {
+                int currentProfit = prices[i] - minPrice;
+                if (currentProfit > maxProfit) {
+                    maxProfit = currentProfit;
+                }
+            }
+        }
+        
+        return maxProfit;
+    }
+}
+```
+
+4. [Best Time to Buy and Sell Stock II (Multiple trades)](https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/description/) - O(n) & O(1)
+- Question: Determine the maximum profit that can be achieved by buying and selling stocks multiple times, given that each subsequent buy must happen after the previous sell. This problem is an extension of the classic stock trading problem where multiple transactions are allowed.
+- Solution: 1. Maximize our profit by capturing all positive price differences between consecutive days. This is because we can buy on a day and sell on the next day whenever the price increases, thereby accumulating all possible profits from these small trades.
+- For the problem where you can buy and sell multiple times, but not hold multiple stocks (i.e., you have to sell before buying again), the solution is to accumulate all the profits from consecutive increasing days. Like, for every day where price is higher than previous, add the difference to the total profit.
+- So maybe this problem is the latter case. Let me think. For example, if the prices are [7,1,5,3,6,4], then buying at 1 and selling at 5 (profit 4), buying at 3 and selling at 6 (profit 3) gives total 7.
+- In that case, the approach is to sum up all the positive differences between consecutive days. So, for each i from 1 to n-1, if prices[i] > prices[i-1], add (prices[i] - prices[i-1]) to the total.
+- So the code would be simple: initialize profit to 0, loop through the array from day 1, check if current price is higher than previous, add the difference to profit.
+- Yes, that's the solution for the problem where you can do multiple transactions.
+```
+class Solution {
+    public int maxProfit(int[] prices) {
+        int profit = 0;
+        for (int i = 1; i < prices.length; i++) {
+            if (prices[i] > prices[i - 1]) {
+                profit += prices[i] - prices[i - 1];
+            }
+        }
+        return profit;
     }
 }
 ```
@@ -2290,7 +2473,345 @@ class Solution {
 ```
 3. [Validate Binary Search Tree](https://leetcode.com/problems/validate-binary-search-tree/description/?) - O(n) & O(h) n is the number of nodes in the tree,h is the height of the tree
 - Question: Determine if a binary tree is a valid Binary Search Tree (BST), we need to ensure that for every node, all nodes in its left subtree have values less than the node's value, and all nodes in its right subtree have values greater than the node's value. This must hold true for all nodes recursively.
-- Solution: 1. 
+- Solution: 1. Using a helper function that tracks the valid range (minimum and maximum values) for each node. Starting from the root node, the valid range is between negative infinity and positive infinity.
+- Wait, right. So for example, if the root is 5, and the left child is 3, but somewhere in the left subtree there's a 6, that's invalid. So I need to make sure that all nodes in the left are less than 5, and all nodes in the right are greater than 5. And this applies recursively for every node.
+- So how to approach this? Maybe using a recursive approach where each node must lie within a certain range. Like, for each node, there's a minimum and maximum value it can have. For the root, the min could be negative infinity and max positive infinity. Then, when we go to the left child, the max becomes the root's value, and the min remains the same. Similarly, for the right child, the min is the root's value and the max remains the same.
+- Wait, that makes sense. For example, the root is 5. The left child must be <5, and all descendants must also be <5. Then, for that left child (say 3), its right subtree must be >3 but still <5. So each time, we update the allowed range for the child nodes.
+- So the idea is to carry along the current node's allowed min and max. Let's see:
+- Base case: if the node is null, return true (since an empty tree is a valid BST).
+- Otherwise, check if the current node's value is within the (min, max) range. Then, recursively check the left and right subtrees. For the left subtree, the max becomes the current node's value. For the right subtree, the min becomes the current node's value.
+- But wait, the original problem states that a valid BST has left nodes with values strictly less than the parent and right nodes strictly greater. So the range for left is (-infinity, node.val), and for right is (node.val, +infinity). So when checking the current node, it must be greater than the min and less than the max. So for the left subtree, the max is updated to current node's value. For the right, the min is updated to current node's value.
+- So in code, the helper function would take a node, a lower bound and an upper bound. Initially, for the root, the lower is -infinity and upper is +infinity.
+- Wait, but in Java, how to represent those? Since integers can be up to certain values, but the problem uses the TreeNode which has int values. Wait, no, the problem's TreeNode is defined with int val? Or is it Integer? Wait, the code given uses TreeNode which is likely the standard one where val is int. So, but if the BST can have values up to Integer.MAX_VALUE, then how to handle the initial upper and lower? For example, if a node has the value Integer.MAX_VALUE, then its right child must be greater than that, which is impossible. But according to BST rules, the right subtree must have values greater than the node. So if the node's value is Integer.MAX_VALUE, then it can't have a right child. Similarly for left child with Integer.MIN_VALUE.
+- So for the initial call, the lower can be null (meaning no lower bound) and upper can be null (meaning no upper bound). Wait, but how to handle that in Java. Because if the node's value is, say, 5, then the left must be less than 5. So we can represent lower as a Long to handle the cases where the value is Integer.MAX_VALUE. Because if we use Integer, then when the upper is Integer.MAX_VALUE, and the node's value is that, the right child would have to be greater, but that's impossible. Wait, but using Long.MIN_VALUE and Long.MAX_VALUE as the initial bounds. Because if we use Long, even if the node's value is Integer.MAX_VALUE, the upper bound for the right subtree is Long.MAX_VALUE, which is larger.
+- Alternatively, maybe using Long for the initial min and max. So for the root, the lower is Long.MIN_VALUE and upper is Long.MAX_VALUE. Then, for each node, check if its value is greater than lower and less than upper. Then, for the left subtree, upper becomes the node's value (as a long), and lower remains the same. Similarly for the right subtree, lower becomes the node's value.
+- This way, even if the node's value is Integer.MAX_VALUE, the right subtree's lower would be Integer.MAX_VALUE, and upper remains Long.MAX_VALUE. So any right child must be greater than Integer.MAX_VALUE, but since the nodes are integers, that's impossible. So the right subtree of such a node must be empty. Which is correct.
+- So in Java, the helper function could take the node, a long lower, and a long upper. Then, check if the current node's value is > lower and < upper. If not, return false. Then recursively check left and right.
+```
+class Solution {
+    public boolean isValidBST(TreeNode root) {
+        return isValid(root, Long.MIN_VALUE, Long.MAX_VALUE);
+    }
+    
+    private boolean isValid(TreeNode node, long lower, long upper) {
+        if (node == null) return true;
+        if (node.val <= lower || node.val >= upper) return false;
+        return isValid(node.left, lower, node.val) && isValid(node.right, node.val, upper);
+    }
+}
+```
+4. [Invert Binary Tree](https://leetcode.com/problems/invert-binary-tree/description/) - O(n) & O(h) In the worst case (a skewed tree), this would be O(n), but for a balanced tree, it would be O(log n).
+- Question: Invert a binary tree such that each left subtree becomes the right subtree and vice versa. 
+- Solution: 1. Post-order traversal
+- Wait, how do I approach this? Maybe a recursive approach would work. Let me see. If the root is null, then return null. Otherwise, swap the left and right children, and then invert the left and right subtrees. Wait, but do I swap first and then invert the subtrees, or invert first then swap? Let me think. Suppose I have a node with left and right children. If I swap them first, then the left becomes the right, and then I invert the new left (which was the original right). So that's correct. Because after swapping, the left and right are swapped, but their own subtrees still need to be inverted.
+- So the steps would be:
+- If the current node is null, return.
+- Swap the left and right children.
+- Recursively invert the left subtree (which is the original right).
+- Recursively invert the right subtree (which is the original left).
+- Wait, wait. Wait after swapping, the left and right are swapped. So when I call invert on left, it's actually the original right. So maybe the order of steps 3 and 4 is correct. Let's see: For example, take a root node with left child A and right child B. Swap them, so left is B, right is A. Then invert the left (B) and invert the right (A). Which makes sense.
+- Alternatively, maybe the steps are:
+- invert left subtree
+- invert right subtree
+- swap left and right
+- But does that work? Let's see. Suppose the original left and right are A and B. If I invert A (turning into A'), invert B (turning into B'), then swap left and right. So the root's left is B' and right is A'. That's correct. But that would invert the subtrees first, then swap
+```
+class Solution {
+    public TreeNode invertTree(TreeNode root) {
+        if (root == null) return null;
+        TreeNode left = invertTree(root.left);
+        TreeNode right = invertTree(root.right);
+        root.left = right;
+        root.right = left;
+        return root;
+    }
+}
+```
+5. [Same Tree](https://leetcode.com/problems/same-tree/description/) - O(n) & O(h)
+- Question: Determine if two binary trees are identical, we need to check both their structure and node values.
+- Solution: 1. Pre-order traversal
+- First, what's the definition of being the same tree? Oh right, they need to have the same structure and the same node values. So each corresponding node must have the same value, and their left and right children must also be the same.
+- So maybe a recursive approach would work here. Because for each node, we need to check if the current nodes are equal, and then check their left and right subtrees.
+- Let's think about the base cases. If both p and q are null, then they are the same, so return true. If one of them is null and the other isn't, then they are different, return false. Otherwise, check if their values are equal. If the values are not equal, return false.
+- Then, if the current nodes are equal, we need to check the left and right subtrees. So recursively call isSameTree on the left children of p and q, and on the right children. If both return true, then the trees are the same.
+- Wait, right. So the steps are:
+- Check if both nodes are null → true.
+- Check if one is null and the other isn't → false.
+- Check if the values are different → false.
+- Otherwise, check left and right subtrees recursively.
+- So putting that into code. The function will first handle the base cases. Then compare the values. Then return the logical AND of the left subtree check and the right subtree check.
+```
+class Solution {
+    public boolean isSameTree(TreeNode p, TreeNode q) {
+        if (p == null && q == null) {
+            return true;
+        }
+        if (p == null || q == null) {
+            return false;
+        }
+        if (p.val != q.val) {
+            return false;
+        }
+        return isSameTree(p.left, q.left) && isSameTree(p.right, q.right);
+    }
+}
+```
+6. [Binary Tree Level Order Traversal](https://leetcode.com/problems/binary-tree-level-order-traversal/description/) - O(n) & O(n)
+- Question: Need to perform a level order traversal of a binary tree, where each level of the tree is grouped into a sublist. The result should be a list of lists, with each sublist containing the values of nodes at the corresponding level of the tree.
+- Solution: 1. Breadth-First Search (BFS)
+- Hmm, the standard approach for level order traversal is using a BFS algorithm with a queue. Right. Because BFS naturally processes nodes level by level. So the plan is to use a queue to keep track of the nodes at each level.
+- Wait, but how do I track when one level ends and the next begins? Oh right, in the BFS, for each level, we can process all nodes that are currently in the queue (which represents the current level) and then add their children to the queue for the next level. So for each iteration, we dequeue all elements of the current level, add their values to the current sublist, and enqueue their children. Then add that sublist to the result list.
+- So here's how the steps would go:
+- Initialize a queue. If the root is not null, add it to the queue.
+- While the queue is not empty:
+- Get the number of nodes in the queue (this is the current level size).
+- Create a new list to hold the current level's values.
+- For each node in the current level (loop for size times):
+- Dequeue the node.
+- Add its value to the current list.
+- Enqueue the left and right children if they exist.
+- Add the current list to the result.
+- That makes sense. Now, how to implement this in Java.
+- Wait, in Java, the Queue is an interface, and we can use a LinkedList as the implementation. So we can do something like Queue<TreeNode> queue = new LinkedList<>();
+- But for handling each level, we need to know the size first. So for each iteration of the while loop, first get the size of the queue (which is the number of nodes in the current level). Then loop that many times, processing each node.
+```
+class Solution {
+    public List<List<Integer>> levelOrder(TreeNode root) {
+        List<List<Integer>> result = new ArrayList<>();
+        if (root == null) {
+            return result;
+        }
+        
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        
+        while (!queue.isEmpty()) {
+            int levelSize = queue.size();
+            List<Integer> currentLevel = new ArrayList<>();
+            for (int i = 0; i < levelSize; i++) {
+                TreeNode node = queue.poll();
+                currentLevel.add(node.val);
+                if (node.left != null) {
+                    queue.add(node.left);
+                }
+                if (node.right != null) {
+                    queue.add(node.right);
+                }
+            }
+            result.add(currentLevel);
+        }
+        
+        return result;
+    }
+}
+```
+7. [Kth Smallest Element in a BST](https://leetcode.com/problems/kth-smallest-element-in-a-bst/description/) - O(h+k) & O(h) = O(log n) (balanced) to O(n) (worst case, skewed tree).
+- Question: Find the kth smallest element in a Binary Search Tree (BST).
+- Solution: 1. In-order traversal with stack 2. In-order traversal with recursion
+- Hmm, how do I approach this? Let's think. Oh right, in a BST, the in-order traversal gives the elements in sorted order. So if I do an in-order traversal and collect the elements in a list, the k-1 index would be the answer. But wait, maybe I can optimize it so that I don't have to traverse the entire tree. Like, once I reach the kth element, I can stop early.
+- Right, so the idea is to perform an in-order traversal but keep track of the count. Once the count reaches k, return that element. That way, we don't have to process all nodes if k is small.
+- So how to implement this? Let's see. I can use a recursive approach for in-order traversal. But recursion might hit stack limits for very large trees. Alternatively, an iterative approach using a stack might be better. But since the problem is about a BST, and the size is probably manageable, recursion should work.
+- Wait, but with recursion, even if we find the kth element early, we have to unwind all the recursive calls. So maybe better to use an iterative approach so we can stop as soon as we find the kth element.
+- Let me outline the steps for iterative in-order traversal:
+- Initialize a stack. Start with the root node. Then, go left as much as possible, pushing nodes onto the stack. Then pop from the stack, process the node (increment count, check if it's k). Then move to the right child of the popped node and repeat.
+- But how to track the count. Let's see. Let's have a counter initialized to 0. Every time we process a node (after popping from the stack), increment the counter. When the counter equals k, return that node's value.
+- Yes. So the steps would be:
+- Initialize stack and current pointer to root.
+- Initialize count to 0.
+- Loop until stack is not empty or current is not null:
+- While current is not null, push it to stack and move to left child.
+- Pop node from stack. Increment count.
+- If count ==k, return node.val.
+- Move current to node's right.
+```
+class Solution {
+    public int kthSmallest(TreeNode root, int k) {
+        Stack<TreeNode> stack = new Stack<>();
+        TreeNode current = root;
+        int count = 0;
+        
+        while (current != null || !stack.isEmpty()) {
+            while (current != null) {
+                stack.push(current);
+                current = current.left; //left,root,right
+            }
+            current = stack.pop(); //stack has at least one element at this step
+            count++;
+            if (count == k) {
+                return current.val;
+            }
+            current = current.right;
+        }
+        return -1; // This line is theoretically unreachable as per problem constraints
+    }
+}
+```
+8. [Maximum Depth of Binary Tree](https://leetcode.com/problems/maximum-depth-of-binary-tree/description/) - O(n) & O(h) or O(log n)
+- Question: Determine the maximum depth of a binary tree. The maximum depth is defined as the number of nodes along the longest path from the root node down to the farthest leaf node.
+- Solution: 1. Post-order traversal DFS
+- Hmm, let's think. The maximum depth is the number of nodes along the longest path from the root down to the farthest leaf node. So, how do I approach this?
+- Well, maybe using recursion. Because each subtree's depth is the maximum of its left and right subtree's depth plus one. Like, for the root node, its depth is 1 plus the max of left and right children's depth. That makes sense. So the base case would be when the root is null, then the depth is 0. Otherwise, we recursively check left and right.
+- Wait, let me test that logic. For example, if the tree is just a single node, then the depth is 1. If the root has a left child with no other nodes, then the depth is 2. Because 1 (root) + 1 (left) = 2. Yeah, that works.
+- So the steps are: if the current node is null, return 0. Otherwise, return 1 + the maximum of maxDepth(left) and maxDepth(right). That seems right.
+```
+class Solution {
+    public int maxDepth(TreeNode root) {
+        if (root == null) {
+            return 0;
+        } else {
+            int leftDepth = maxDepth(root.left);
+            int rightDepth = maxDepth(root.right);
+            return Math.max(leftDepth, rightDepth) + 1;
+        }
+    }
+}
+```
+9. [Construct Binary Tree from Preorder and Inorder Traversal](https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/description/) - O(n) & O(n)
+- Question: Construct a binary tree from given preorder and inorder traversal arrays. The key insight is to use the properties of these traversals: the first element in the preorder traversal is the root of the tree, and elements to the left of this root in the inorder traversal form the left subtree, while elements to the right form the right subtree. 
+- Solution: 1. Hashmap for Inorder Indices and Pre-order traversal
+- Wait, but how do we find the root_pos efficiently? Because for each node, we need to search the inorder array between in_start and in_end to find the root's position. If we do a linear search each time, that would take O(n) time per node, leading to O(n^2) time overall. But that's not efficient. So we can optimize this by creating a hashmap that maps the values to their indices in the inorder array. That way, each lookup is O(1).
+- Yes. So first, create a hashmap/dictionary where the key is the node value, and the value is its index in the inorder array. Then, for any root value, we can find its position in O(1) time.
+- So the steps are:
+- Create a hashmap to store the value to index mapping for inorder array.
+- Initialize a global variable (or a wrapper) to track the current preIndex starting at 0.
+- Define a helper function that takes in_start and in_end as parameters.
+- In the helper function:
+a. If in_start > in_end, return null.
+b. Get the current root value from preorder[preIndex], create a node.
+c. Increment preIndex.
+d. Find the root's position in the inorder array using the hashmap.
+e. Recursively build the left subtree by calling helper(in_start, root_pos -1).
+f. Recursively build the right subtree by calling helper(root_pos +1, in_end).
+g. Return the root.
+```
+class Solution {
+    private Map<Integer, Integer> inorderMap;
+
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+        inorderMap = new HashMap<>();
+        for (int i = 0; i < inorder.length; i++) {
+            inorderMap.put(inorder[i], i);
+        }
+        int[] preIndex = new int[1]; // Using an array to track the preorder index
+        return buildTreeHelper(preorder, 0, inorder.length - 1, preIndex);
+    }
+
+    private TreeNode buildTreeHelper(int[] preorder, int inStart, int inEnd, int[] preIndex) {
+        if (inStart > inEnd) return null;
+
+        int rootVal = preorder[preIndex[0]];
+        TreeNode root = new TreeNode(rootVal);
+        preIndex[0]++;
+
+        int rootPos = inorderMap.get(rootVal);
+
+        root.left = buildTreeHelper(preorder, inStart, rootPos - 1, preIndex);
+        root.right = buildTreeHelper(preorder, rootPos + 1, inEnd, preIndex);
+
+        return root;
+    }
+}
+```
+```
+class Solution {
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+        if(preorder.length == 0) {
+            return null;
+        }
+
+        int r = preorder[0];
+        int index = 0;
+
+        for(int i = 0; i < inorder.length; i++) {
+            if(r == inorder[i]) {
+                index = i;
+            }
+        }
+
+        TreeNode node = new TreeNode(r);
+
+        node.left = buildTree(Arrays.copyOfRange(preorder, 1, index + 1), Arrays.copyOfRange(inorder, 0, index));
+        node.right = buildTree(Arrays.copyOfRange(preorder, index + 1, preorder.length), Arrays.copyOfRange(inorder, index + 1, inorder.length));
+
+        return node;
+    }
+}
+```
+10. [Lowest Common Ancestor of a Binary Search Tree (BST)](https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/description/) - O(h) & O(1) h is the height of the tree. In the worst case, this is O(n) for a skewed tree, but O(log n) for a balanced BST.
+- Question: Find the lowest common ancestor (LCA) of two given nodes in a binary search tree (BST). The LCA of two nodes p and q is the deepest node that has both p and q as descendants (where we allow a node to be a descendant of itself).
+- Solution: 1. BST
+- The key insight to solve this problem efficiently is to leverage the properties of a BST. In a BST:
+- All nodes in the left subtree of a node have values less than the node's value.
+- All nodes in the right subtree of a node have values greater than the node's value.
+- Using these properties, we can determine the LCA by comparing the values of the nodes p and q with the current node's value as we traverse the tree starting from the root:
+- If both p and q have values greater than the current node's value, their LCA must be in the right subtree.
+- If both p and q have values less than the current node's value, their LCA must be in the left subtree.
+- If one of the nodes is on one side and the other is on the other side (or one of the nodes is the current node), then the current node is their LCA.
+```
+class Solution {
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        TreeNode current = root;
+        int pVal = p.val;
+        int qVal = q.val;
+        
+        while (current != null) {
+            int currVal = current.val;
+            
+            if (pVal > currVal && qVal > currVal) {
+                current = current.right;
+            } else if (pVal < currVal && qVal < currVal) {
+                current = current.left;
+            } else {
+                return current;
+            }
+        }
+        
+        return null; // This line is theoretically unreachable given problem constraints
+    }
+}
+```
+11. [Binary Tree Maximum Path Sum](https://leetcode.com/problems/binary-tree-maximum-path-sum/description/) - O(n) & O(h)
+- Question: Find the maximum path sum in a binary tree where the path can start and end at any node in the tree. The path must contain at least one node and can traverse through the tree in any direction as long as adjacent nodes are connected by edges.
+- Solution: 1. Post-order traversal approach
+- So, the problem says a path is any sequence of nodes where each adjacent pair is connected by an edge. And the path must contain at least one node. So the maximum path sum could be a single node, or a combination of left and right paths through a root.
+- Wait, but how do I calculate this? I remember that for binary tree problems, recursion is often useful. Maybe a post-order traversal approach?
+- Let me think. For each node, the maximum path sum that includes that node could be the node's value plus the max of the left and right subtree contributions. But wait, if the left or right subtree contributions are negative, adding them would decrease the sum. So maybe for each node, the maximum possible contribution it can give to its parent is node.val plus the maximum of left or right (but not both) only if those are positive.
+- But the actual maximum path could be the node's value plus both left and right. Because that forms a path that goes through the node, using both children. So maybe, for each node, the maximum path sum considering that node as the "root" of the path (i.e., the highest node in the path) is node.val + left + right. But when passing up, the node can only contribute node.val + max(left, right), since you can't take both left and right in a path that continues upwards.
+- So the idea is to compute two things for each node:
+- The maximum path sum where the node is the highest point (the "root" of the path). This would be the sum of the node's value plus the maximum path from left and right (but if those are negative, we don't take them). Wait, no. Wait, when considering a path through the node, the path can go left then up to node then right. So that path's sum is node.val + leftMax + rightMax, where leftMax is the max path sum starting from left child (if it's positive) and same for right. So for each node, we calculate this value and compare it to the global maximum.
+- The maximum path sum that can be contributed to the parent node. This would be node.val plus the maximum of leftMax or rightMax. But again, if leftMax and rightMax are negative, then the best contribution is just the node's value.
+- So the algorithm would be:
+- Use a helper function that returns the maximum contribution of the subtree (the max path sum starting at the subtree's root, moving downwards). But while doing that, compute the maximum path sum that includes the current node as the root (using both left and right contributions) and update a global variable.
+- Wait, but Java doesn't have pass-by-reference for primitives. So maybe I need to have a mutable object to hold the maximum, or use a class variable. Alternatively, have the helper function return two values. But Java can't return multiple values. Hmm. So perhaps the helper function will return the maximum contribution (the max path sum that can be extended upwards), but during its computation, it updates a global or class variable that keeps track of the maximum path sum found so far.
+- Yes. So the helper function will:
+- For a given node:
+- If node is null, return 0 (since we can't contribute anything).
+- Recursively get the max path sum contributions from left and right. But if those are negative, we don't take them. So leftMax = max(0, helper(left)), same for rightMax.
+- The maximum path sum considering this node as the root would be node.val + leftMax + rightMax. We compute this and compare it with the global max. Update the global max if necessary.
+- The value returned by the helper function is node.val + max(leftMax, rightMax). Because the path can't split here; it has to choose either left or right to contribute to the parent path.
+```
+class Solution {
+    private int maxSum;
+    
+    public int maxPathSum(TreeNode root) {
+        maxSum = Integer.MIN_VALUE;
+        helper(root); //Need helper because to return ans
+        return maxSum;
+    }
+    
+    private int helper(TreeNode node) {
+        if (node == null) return 0;
+        
+        int leftMax = Math.max(0, helper(node.left));
+        int rightMax = Math.max(0, helper(node.right));
+        
+        int currentSum = node.val + leftMax + rightMax;
+        maxSum = Math.max(maxSum, currentSum);
+        
+        return node.val + Math.max(leftMax, rightMax);
+    }
+}
+```
 
 ## Graph - Time:O(V+E) Space:O(V)
 1. Connected and Disconnected Graph - BFS (Using Queue) and DFS (Using Recursion) along with the visited boolean array
