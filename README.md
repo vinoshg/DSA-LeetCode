@@ -1690,6 +1690,66 @@ class Solution {
     }
 }
 ```
+8. [Encode and Decode Strings](https://leetcode.com/problems/encode-and-decode-strings/description/) - O(nl) & O(nl) n is the number of strings,l is average length of the string
+- Solution: 1.
+- So, maybe the standard approach is to encode the length of each string before the string itself. Like, for each string, we write its length, then a delimiter, then the string. That way, when decoding, we can first read the length, then know exactly how many characters to take for the next string.
+- Wait, but what if the string itself contains numbers or the delimiter? For example, if the delimiter is a comma, and the string has a comma, that would mess up the decoding. So the key is to use a delimiter that's not part of the string's content, but how?
+- Alternatively, using a non-printable character as a delimiter might work, but I'm not sure if that's allowed. Or perhaps we can encode the length in a way that's unambiguous. Like, using a fixed-length prefix for the length. For example, always using 4 characters to represent the length, padded with zeros. Then, the decoder would read the first 4 characters to get the length, then take that many characters as the string. But this approach could be problematic if the strings are very long, but 4 digits (up to 9999) might be sufficient for most cases. Or maybe use 8 digits for larger lengths. But the problem might not specify constraints on string length.
+- Wait, but the problem says "encode and decode strings" in Java. So, perhaps the standard way is to prefix each string with its length followed by a delimiter. For example, "5/hello3/abc" would encode two strings: "hello" and "abc". The '/' here is the delimiter between the length and the string. Wait, but if the string contains '/', that's part of the string, so the decoder needs to know to read the exact number of characters specified after the delimiter.
+- Wait, in that example, when encoding "hello" which is 5 characters, you write "5/hello", then for "abc" it's "3/abc". Then, the entire encoded string would be "5/hello3/abc". Then, during decoding, we process the encoded string by first finding the '/', take the number before it as the length, then take the next 'length' characters as the string. Then, continue processing the remaining string.
+- But how to handle cases where the length itself contains non-digit characters? For example, if the length is prefixed but the number is not properly formed. But since we're encoding, we can ensure that the length is correctly written as a number followed by the delimiter. So during encoding, we convert the integer length to a string, add the delimiter, then add the actual string.
+- So the steps are:
+- Encode:
+- For each string in the input list, write the length of the string, followed by a delimiter (like '/'), followed by the string itself.
+- Concatenate all these together into one encoded string.
+- Decode:
+- Parse the encoded string by first reading until the delimiter to get the length, then read the next 'length' characters as the string, and repeat until the entire encoded string is processed.
+- But how to choose the delimiter? Using '/' could be a problem if the original string contains '/', but in this encoding scheme, the delimiter is only used once per string, right after the length. So during decoding, the first '/' encountered after processing the length is part of the format, not the string. So even if the string contains '/', since we read exactly 'length' characters after the delimiter, those '/'s would be part of the string.
+- Wait, yes. Let's see. For example, encoding a string like "ab/cd". The length is 5. So encoded as "5/ab/cd". Then during decoding, when we parse the length as 5, we take the next 5 characters after the '/', which are "ab/cd". So even though there's a '/' in the string, it's correctly read because we are taking exactly 5 characters. So the delimiter after the length is not part of the string, and the string can contain any characters, including the delimiter, because the decoder knows exactly how many characters to read.
+- Yes, that makes sense. So the delimiter is just a separator between the length and the string. The string can contain any characters, including the delimiter, as long as the length is correctly specified.
+- So, the encoding process would be:
+- For each string s in the input list:
+- Convert the length of s to a string.
+- Append the delimiter (e.g., '/') to the length.
+- Append the original string s.
+- Concatenate all these parts.
+- The decoding process would be:
+- Initialize a pointer at the start of the encoded string.
+- While the pointer hasn't reached the end:
+- Find the next occurrence of the delimiter '/' starting from the pointer.
+- The substring from the pointer to the delimiter is the length.
+- Convert that substring to an integer.
+- Move the pointer past the delimiter (i.e., pointer = delimiter index + 1).
+- Take the next 'length' characters starting from the pointer. Those are the original string.
+- Add this string to the result list.
+- Move the pointer forward by 'length' positions.
+```
+public class Codec {
+
+    // Encodes a list of strings to a single string.
+    public String encode(List<String> strs) {
+        StringBuilder encoded = new StringBuilder();
+        for (String s : strs) {
+            encoded.append(s.length()).append('/').append(s);
+        }
+        return encoded.toString();
+    }
+
+    // Decodes a single string to a list of strings.
+    public List<String> decode(String s) {
+        List<String> decoded = new ArrayList<>();
+        int i = 0;
+        while (i < s.length()) {
+            int slash = s.indexOf('/', i);
+            int length = Integer.parseInt(s.substring(i, slash));
+            String str = s.substring(slash + 1, slash + 1 + length);
+            decoded.add(str);
+            i = slash + 1 + length;
+        }
+        return decoded;
+    }
+}
+```
 
 ## Greedy Algorithm
 1. Longest Consecutive Sequence
@@ -3212,7 +3272,176 @@ public class Solution {
     }
 }
 ```
+18. [Graph Valid Tree](https://leetcode.com/problems/graph-valid-tree/description/) - O(n+e) & O(n+e) e is the number of edges
+- Question: Determine if a given undirected graph is a valid tree, we need to check two conditions: the graph must be connected and it must have exactly n-1 edges (where n is the number of nodes). This approach ensures the graph is acyclic and fully connected, which are the defining characteristics of a tree.
+- Solution: 1. BFS or DFS
+- First, I remember that a tree is a connected graph with no cycles. So to validate if the graph is a tree, it must satisfy two conditions:
+- It must be connected, meaning all nodes are reachable from any starting node.
+- It must have exactly n-1 edges. Because a tree with n nodes has exactly n-1 edges. If there are more than n-1 edges, there's definitely a cycle. If fewer, it's not connected.
+- Wait, but maybe even if the number of edges is exactly n-1, there could still be a cycle and disconnected components. Hmm, no. Wait, if the graph has n nodes and n-1 edges, but it's disconnected, then each component would have to be a tree. But the total number of edges would be (sum of (k_i -1) for each component with k_i nodes) which would be less than n-1 if there's more than one component. Wait, that's not possible. Let me think: suppose the graph is split into two components. Then the total edges would be (a-1) + (b-1) = a + b -2. But a + b is n, so edges are n -2. But the given edges are n-1, so that's impossible. So, if the graph has exactly n-1 edges and is acyclic, then it's connected. Wait, maybe not. Wait, if the graph has n-1 edges but is cyclic, then it's not a tree. So the two conditions are: exactly n-1 edges and connected. Or maybe the other way: connected and acyclic.
+- Alternatively, a tree is a connected acyclic graph. So the conditions are: the graph is connected and has no cycles. But how to check that?
+- So the steps could be:
+- Check if the number of edges is exactly n-1. If not, return false (since a tree must have n-1 edges).
+- Check if the graph is connected. If it is, then it's a tree.
+- But wait, suppose there are n-1 edges but the graph is disconnected. Then according to my previous thought, that's impossible. Let me see: if the graph is disconnected into two components, then each component must have at least a tree (so edges are (k-1) + (m-1) where k + m = n). So total edges are k-1 + m-1 = n -2. So if the graph has n-1 edges and is disconnected, that would require edges to be n-2, which contradicts. So, if the number of edges is exactly n-1, then the graph must be connected and acyclic. Wait, but that's not necessarily true. For example, imagine a graph with 4 nodes and 3 edges. If the edges form a cycle (like 0-1, 1-2, 2-0), but that would have 3 edges and 3 nodes, but that's a cycle. Wait, but 4 nodes and 3 edges would require another component. So maybe the initial check is that if the number of edges is not n-1, return false. Then, check if the graph is connected. If both conditions are met, then it's a tree.
+- So the approach would be:
+- First, check if edges.length != n-1, return false.
+- Then, check if the graph is connected. If yes, return true; else, false.
+- Because if there are n-1 edges and the graph is connected, then it's a tree (since connected and no cycles). Wait, but how do we ensure there are no cycles? Because if the graph is connected and has n-1 edges, then it must be a tree. Because a tree is a connected acyclic graph. So a connected graph with n nodes and n-1 edges is a tree. Because any connected graph with n nodes and n-1 edges is a tree. So cycles can't exist in such a graph. Because adding an edge to a tree creates a cycle, and removing an edge disconnects it. So the two conditions (edges ==n-1 and connected) are sufficient.
+- So, the steps are:
+- If the number of edges is not equal to n-1, return false.
+- Check if the graph is connected. If yes, return true; else, return false.
+- So now, how to check if the graph is connected. Since the graph is undirected, we can perform a BFS or DFS starting from one node and see if all nodes are visited.
+- So the plan is:
+- Check if edges.length != n-1: return false.
+- Build adjacency list.
+- Do BFS/DFS starting from node 0 (assuming nodes are 0-based), and count visited nodes.
+- If the count is n, then connected, else not.
+- Edge cases:
+- n=1: then edges must be empty. Because 0 nodes have 0 edges. Wait, n=1: nodes are [0]. So edges must be empty. So if n=1, edges must be empty. So in code, need to handle that.
+```
+class Solution {
+    public boolean validTree(int n, int[][] edges) { //n=4, edges = [[0,1],[1,2],[2,3],[3,0]]. edges.length=4 each row having only two elements
+        // Check if the number of edges is exactly n-1
+        if (edges.length != n - 1) return false;
+        
+        // Handle the case when n is 1 (only possible with 0 edges)
+        if (n == 0) return false;
+        if (n == 1) return true;
+        
+        // Build adjacency list
+        List<List<Integer>> adjList = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            adjList.add(new ArrayList<>());
+        }
+        for (int[] edge : edges) {
+            adjList.get(edge[0]).add(edge[1]);
+            adjList.get(edge[1]).add(edge[0]);
+        }
+        
+        // Check connectivity using BFS
+        boolean[] visited = new boolean[n];
+        Queue<Integer> queue = new LinkedList<>();
+        queue.offer(0);
+        visited[0] = true;
+        int count = 1;
+        
+        while (!queue.isEmpty()) {
+            int node = queue.poll();
+            for (int neighbor : adjList.get(node)) {
+                if (!visited[neighbor]) {
+                    visited[neighbor] = true;
+                    count++;
+                    queue.offer(neighbor);
+                }
+            }
+        }
+        
+        return count == n;
+    }
+}
+```
+19. [Alien Dictionary](https://leetcode.com/problems/alien-dictionary/description/) - O(nm+c) & O(c) m is the average word length, c is the total number of unique characters.
+- Question: Determine the order of characters in an alien language given a list of words sorted according to that language's rules. If the input is invalid due to conflicting orders or incorrect word structures, we should return an empty string.
+- Solution: 1. Topological Sort - BFS
+- Hmm, let me remember what the problem is about. From what I recall, the problem is that given a list of words sorted according to the alien language's dictionary order, I need to determine the order of the characters in that alien language. If the words are not in a valid order (like a conflicting order where a word is both before and after another word inconsistently), then I should return an empty string. Also, if there are multiple valid orders, return any one of them. Oh right, and if the input is invalid, like a word is followed by a shorter word that is a prefix of the longer one, that's invalid too. For example, if we have "app" followed by "apple", that's invalid because the shorter comes first but is a prefix. But if the words are ["apple", "app"], that's invalid because according to the alien dictionary, the first word is longer but the second should be considered smaller. Wait, actually, the rule is that if two words are such that the first is longer than the second and the second is a prefix of the first, then that's invalid. Because in a correct dictionary, shorter prefixes come first. So in such a case, the order is invalid, and we should return empty string.
+- So the approach here is to build a graph of characters and their dependencies, then perform a topological sort to determine the order. Let's break it down.
+- First, I need to compare each pair of consecutive words in the list. For each pair, find the first differing character between them. The character in the first word comes before the character in the second word. So, for example, if we have "wrt" and "wrf", the first differing character is 't' vs 'f', so 't' comes before 'f'. So we can create an edge from 't' to 'f' indicating that 't' must come before 'f' in the order.
+- But before doing that, I need to check if the words are in a valid order. Like, if the first word is longer than the second and the second is a prefix of the first, that's invalid. For example, "abcd" followed by "abc" is invalid. Because "abc" is a prefix of "abcd", but since it's shorter, it should come first. So in such a case, the input is invalid, return empty string.
+- So first, I need to process all consecutive word pairs and:
+- Check for the invalid case where the first word is longer than the second and the second is a prefix of the first. If any such pair exists, return empty string.
+- For valid pairs, find the first differing character between the two words. Add an edge from the character in the first word to the character in the second word. Also, make sure to collect all unique characters present in the words, in case some characters don't have any edges (they can be placed anywhere in the order, but need to be included in the result).
+- Once the graph is built, perform a topological sort. The topological order will give the correct alien dictionary order. But since there might be multiple valid orders, any of them is acceptable. However, if during the topological sort, a cycle is detected (meaning there's a contradiction in the order), then return empty string.
+- So steps in code:
+- Build the graph and in-degree map.
+- Process each consecutive word pair to add edges and check for validity.
+- Collect all unique characters.
+- Perform topological sort using Kahn's algorithm (BFS-based approach).
+- Check if the sorted order contains all characters. If yes, return the order; else, return empty string.
+- Let me think about how to implement this.
+- First, collect all unique characters. For each word in the words array, iterate through each character and add to a set. Then, the set can be used to get all unique characters.
+- But wait, some characters may not have any edges (they are not compared with others), so they can be placed anywhere in the order. However, during the topological sort, they need to be included. So, during the topological sort, after processing all dependencies, any remaining nodes with zero in-degree can be added in any order.
+- Now, processing consecutive word pairs.
+- For words[i] and words[i+1], compare each character until the first differing one. Let's say at position j, words[i][j] != words[i+1][j]. Then we add an edge from words[i][j] to words[i+1][j], and break the loop. Also, need to check if j is beyond the length of the shorter word. Wait, no. For example, if words[i] is "abc", words[i+1] is "abde". The first two characters are the same, third character is 'c' vs 'd'. So 'c' comes before 'd'. So edge from c to d. But if words[i] is "abc" and words[i+1] is "ab", then since the first two characters are the same, but words[i+1] is shorter, then it's invalid. Because "ab" should come before "abc" in a valid dictionary. So this case needs to be checked.
+- So for each pair of consecutive words, we need to compare each character up to the minimum of the two lengths. If all characters are equal up to the minimum length, and the first word is longer than the second, then it's invalid.
+```
+public class AlienDictionary {
+    public String alienOrder(String[] words) {
+        Map<Character, Set<Character>> graph = new HashMap<>();
+        Map<Character, Integer> inDegree = new HashMap<>();
+        Set<Character> uniqueChars = new HashSet<>();
 
+        // Collect all unique characters
+        for (String word : words) {
+            for (char c : word.toCharArray()) {
+                uniqueChars.add(c);
+            }
+        }
 
+        // Initialize graph and in-degree for each character
+        for (char c : uniqueChars) {
+            graph.put(c, new HashSet<>());
+            inDegree.put(c, 0);
+        }
+
+        // Build the graph and check for invalid cases
+        for (int i = 0; i < words.length - 1; i++) {
+            String word1 = words[i];
+            String word2 = words[i + 1];
+            int len1 = word1.length();
+            int len2 = word2.length();
+            int minLen = Math.min(len1, len2);
+            boolean foundDiff = false;
+            for (int j = 0; j < minLen; j++) {
+                char c1 = word1.charAt(j);
+                char c2 = word2.charAt(j);
+                if (c1 != c2) {
+                    if (!graph.get(c1).contains(c2)) {
+                        graph.get(c1).add(c2);
+                        inDegree.put(c2, inDegree.get(c2) + 1);
+                    }
+                    foundDiff = true;
+                    break;
+                }
+            }
+            // Check if the second word is a prefix of the first and shorter
+            if (!foundDiff && len1 > len2) {
+                return "";
+            }
+        }
+
+        // Kahn's algorithm for topological sort
+        Queue<Character> queue = new LinkedList<>();
+        for (char c : inDegree.keySet()) {
+            if (inDegree.get(c) == 0) {
+                queue.offer(c);
+            }
+        }
+
+        StringBuilder result = new StringBuilder();
+        while (!queue.isEmpty()) {
+            char c = queue.poll();
+            result.append(c);
+            for (char neighbor : graph.get(c)) {
+                inDegree.put(neighbor, inDegree.get(neighbor) - 1);
+                if (inDegree.get(neighbor) == 0) {
+                    queue.offer(neighbor);
+                }
+            }
+        }
+
+        // Check if all characters were included (no cycles)
+        if (result.length() != uniqueChars.size()) {
+            return "";
+        }
+
+        return result.toString();
+    }
+}
+```
+20. [Number of connected components in an undirected graph](https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/description/) - O(E * α(n)) & O(n) where α is the inverse Ackermann function, which grows very slowly
+- Question: Finding the number of connected components in an undirected graph
+- Solution: 1. Union-Find (Disjoint Set Union) algorithm
+- 
 
 
