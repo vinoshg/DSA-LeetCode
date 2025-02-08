@@ -17,6 +17,66 @@
 8. Find the Pivot element in the Rotated Sorted Array
 - Solution: 1. Binary search with 4 cases - 1. mid < end && arr[mid] > arr[mid + 1] = mid 2. mid > start && arr[mid - 1] > arr[mid] = mid-1 
                                             3. arr[mid] <= arr[start] - end=mid-1 else start=mid+1 after while loop return -1
+
+<details>
+  <summary>
+    9. [Search in Rotated Sorted Array](https://leetcode.com/problems/search-in-rotated-sorted-array/description/) - O(long) & O(1)
+  </summary>
+  <p>
+- Solution: 1. Modified binary search approach 2. Get Pivot element, target==pivot and apply Binary search 2 times (0, pivot-1) and (pivot+1, array.length-1)
+- The usual approach for rotated arrays is binary search. But how exactly do I adjust binary search here? Because the array isn't fully sorted, but it has two sorted parts.
+- Let me outline the steps. The idea is to determine which half of the array is sorted and then check if the target is within that sorted half. If not, look in the other half.
+- Find the mid element.
+- Compare the start and mid elements to see which half is sorted.
+- If nums[start] <= nums[mid], then the left half is sorted.
+- Else, the right half is sorted.
+- Once I know which half is sorted, check if the target is within that sorted half's range.
+- If it is, adjust the search to that half.
+- If not, adjust to the other half.
+- Wait, let me think. For example, if the left half is sorted (nums[start] <= nums[mid]), then the target must be between nums[start] and nums[mid] for it to be in the left half. Otherwise, it's in the right half. Similarly, if the right half is sorted, check if the target is between mid and end.
+- But wait, the array is rotated, so one of the two halves is guaranteed to be sorted. So each step, we can eliminate half of the possibilities based on where the target might lie.
+  </p>
+  <pre><code> 
+     class Solution {
+    public int search(int[] nums, int target) {
+        int left = 0;
+        int right = nums.length - 1;
+        
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+            
+            if (nums[mid] == target) {
+                return mid;
+            }
+            
+            // Check if the left half is sorted
+            if (nums[left] <= nums[mid]) {
+                // Left half is sorted
+                if (target >= nums[left] && target < nums[mid]) {
+                    // Target is in the left half
+                    right = mid - 1;
+                } else {
+                    // Target is in the right half
+                    left = mid + 1;
+                }
+            } else {
+                // Right half is sorted
+                if (target > nums[mid] && target <= nums[right]) {
+                    // Target is in the right half
+                    left = mid + 1;
+                } else {
+                    // Target is in the left half
+                    right = mid - 1;
+                }
+            }
+        }
+        
+        return -1;
+    }
+}
+  </code></pre>
+</details>
+  
 9. [Search in Rotated Sorted Array](https://leetcode.com/problems/search-in-rotated-sorted-array/description/) - O(long) & O(1)
 - Solution: 1. Modified binary search approach 2. Get Pivot element, target==pivot and apply Binary search 2 times (0, pivot-1) and (pivot+1, array.length-1)
 - The usual approach for rotated arrays is binary search. But how exactly do I adjust binary search here? Because the array isn't fully sorted, but it has two sorted parts.
