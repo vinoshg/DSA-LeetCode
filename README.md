@@ -965,6 +965,173 @@ class Solution {
     }
 }
 ```
+4. [Meeting Rooms](https://leetcode.com/problems/meeting-rooms/description/) - O(nlog n) & O(1)
+- Question: Determine if a person can attend all meetings, we need to check if any of the meeting intervals overlap.
+- Solution: 1. Sorting the intervals and checking adjacent pairs for overlaps.
+- LeetCode 252: Meeting Rooms, which asks whether a person can attend all meetings. The input is an array of meeting time intervals, and we need to determine if there's any overlap. If all meetings are non-overlapping, return true; otherwise, false.
+- So, the approach here is to check if any two intervals overlap. The standard way to do this is to sort the intervals based on their start times. Then, compare each interval with the next one. If the end time of the current interval is greater than the start time of the next, there's an overlap, so return false. Otherwise, after checking all, return true.
+- Wait, but how do I handle the sorting? In Java, I can sort the array using a custom comparator. The intervals are given as an array of int arrays, like [[start1, end1], [start2, end2], ...]. So, I need to sort this array based on the start times.
+- Let me outline the steps:
+- Check if the input array is empty or has one interval. If so, return true.
+- Sort the intervals based on the start time in ascending order.
+- Iterate through the sorted intervals starting from the first one up to the second last. For each interval i, check if its end time is greater than the start time of interval i+1. If yes, return false.
+- If all checks pass, return true.
+- Wait, but what if the input is empty? According to the problem statement, maybe the person can attend zero meetings, which is considered possible, so return true. Similarly for a single meeting.
+- Now, about the sorting. How to implement the comparator in Java? For an array of int arrays, the Arrays.sort method can take a comparator. Since Java 8, we can use a lambda expression. For example:
+- Arrays.sort(intervals, (a, b) -> Integer.compare(a[0], b[0]));
+- This will sort the intervals based on their start times.
+- Then, loop through the sorted intervals from index 0 to intervals.length - 2. For each index i, check if intervals[i][1] > intervals[i+1][0]. If so, return false. Because the next meeting starts before the current one ends.
+- Edge cases to consider:
+- Empty array: return true.
+- Single interval: return true.
+```
+public class Solution {
+    public boolean canAttendMeetings(int[][] intervals) {
+        if (intervals.length <= 1) {
+            return true;
+        }
+        
+        // Sort the intervals based on start time
+        Arrays.sort(intervals, (a, b) -> Integer.compare(a[0], b[0]));
+        
+        // Check each consecutive pair of intervals
+        for (int i = 0; i < intervals.length - 1; i++) {
+            if (intervals[i][1] > intervals[i + 1][0]) {
+                return false;
+            }
+        }
+        
+        return true;
+    }
+}
+```
+5. [[Meeting Rooms II](https://leetcode.com/problems/meeting-rooms-ii/description/) - O(nlog n) & O(n)
+- Question: Determining the minimum number of conference rooms required for given meeting intervals
+- Solution: 1. Use a priority queue (min-heap) to efficiently track the end times of meetings and determine room availability. 2. Two-pointer approach - O(n) & O(n)
+- Hmm, I remember that this problem can be tackled using a priority queue (or a min-heap) to keep track of the end times of the meetings. The idea is to sort the meetings by their start times and then check if a new meeting can be accommodated in an existing room or if a new room is needed.
+- Wait, let me break it down. First, if there are no meetings, return 0. Then, sort the intervals based on their start times. Then, use a priority queue to keep track of the earliest ending time of the currently occupied rooms. For each meeting, if its start time is after the earliest end time in the queue, we can reuse that room (by polling the end time and adding the new end time). Otherwise, we need to add a new room. The size of the priority queue at the end will be the minimum number of rooms required.
+- Alternatively, another approach is the chronological ordering method. Split the start and end times into two separate arrays, sort them, and then use two pointers to iterate through them. Increment the count when a start time is encountered and decrement when an end time is encountered. The maximum count during this process is the answer. But I think the heap method is more straightforward.
+- Wait, let me think through an example. Suppose we have intervals like [[0,30],[5,10],[15,20]]. After sorting by start time, we have the same order. The heap starts empty. Add 30's end time. Next meeting starts at 5, which is before 30, so add a new room (heap now has 10 and 30). Then next meeting starts at 15, which is after 10, so we can replace 10 with 20. So the heap size is 2. So answer is 2. That makes sense.
+- So the steps are:
+- Sort the intervals by start time.
+- Initialize a min-heap to keep track of end times.
+- Iterate through each interval:
+a. If the current interval's start time is >= the earliest end time in the heap, remove the earliest end time.
+b. Add the current interval's end time to the heap.
+- The size of the heap is the minimum rooms needed.
+- But wait, for step 3a: even if the start time is >= earliest end time, we can remove that end time and add the current end time. This effectively reuses the room. If not, we have to add a new room. The heap will always contain all the end times of the currently occupied rooms.
+- Yes, that makes sense. So the heap's size at the end is the answer.
+- Let me test this logic with the example. The first interval [0,30] is added to the heap. Heap has 30. Next interval [5,10]. Since 5 < 30, we can't reuse, so add to heap. Heap size 2. Next interval [15,20]. The earliest end time is 10. 15 >=10, so we remove 10 and add 20. Heap size remains 2. So answer is 2. Correct.
+- Another example: [[7,10],[2,4]]. Sorted by start time: [[2,4], [7,10]]. First interval added to heap (4). Second starts at 7 >=4, so remove 4, add 10. Heap size is 1. So answer 1. Correct.
+- Now, how to implement this in Java. The priority queue in Java is a min-heap by default. So for the earliest end time, we can just use a priority queue.
+- So code steps:
+- Check if intervals is empty, return 0.
+- Sort the intervals array based on start time.
+- Initialize a priority queue (min-heap) for end times.
+- Iterate over each interval in the sorted list:
+- if the queue is not empty and current interval's start >= queue.peek(), then poll the queue.
+- add the current interval's end to the queue.
+- The size of the queue is the minimum rooms.
+- Yes. That should work.
+- Now, code:
+- But first, how to sort the intervals. Since in Java, we can use Arrays.sort with a comparator. For intervals, which is an int[][], we can sort using a comparator that compares the start times.
+- So: Arrays.sort(intervals, (a, b) -> a[0] - b[0]); Then, the priority queue is a PriorityQueue<Integer>.
+-  The time complexity is O(n log n) for sorting and each heap operation is O(log n), so total O(n log n). Space O(n) for the heap.
+- Alternatively, the two-pointer approach:
+- Sort start times and end times. Then, use two pointers. When a start time is less than the current end time, we need a room. Otherwise, we can reuse a room. The maximum number of overlapping meetings at any point is the answer.
+- But how to track that. For example: Sort starts: [0,5,15] Sort ends: [10,20,30]
+- Initialize startPointer=0, endPointer=0. rooms=0.
+- Loop over each start:
+- start=0, end=10. 0 <10: need room. rooms=1. startPointer++.
+- start=5 <10: need another room. rooms=2. startPointer++.
+- start=15 >=10: can reuse a room. endPointer++. rooms remains 2.
+- Then startPointer moves beyond array. So answer is 2.
+- But how to track the maximum. Wait, here's the approach:
+- Sort all the start times and end times.
+- Initialize two pointers, startPtr and endPtr, both at 0.
+- Initialize rooms=0 and maxRooms=0.
+- While startPtr < n:
+- If the current start time < current end time:
+- rooms++ startPtr++ update maxRooms if needed
+- Else: rooms-- endPtr++
+- This way, for each start time, if it's before the current end time, you need a room. Once a meeting ends (i.e., when the start time is >= end time), you can reuse that room.
+```
+public class Solution {
+    public int minMeetingRooms(int[][] intervals) {
+        if (intervals == null || intervals.length == 0) {
+            return 0;
+        }
+        
+        // Sort the intervals based on their start times
+        Arrays.sort(intervals, (a, b) -> a[0] - b[0]);
+        
+        // Min-heap to keep track of the end times of the meetings in rooms
+        PriorityQueue<Integer> heap = new PriorityQueue<>();
+        
+        for (int[] interval : intervals) {
+            // If the current meeting starts after the earliest ending meeting, reuse that room
+            if (!heap.isEmpty() && interval[0] >= heap.peek()) {
+                heap.poll();
+            }
+            // Add the current meeting's end time to the heap
+            heap.offer(interval[1]);
+        }
+        
+        // The size of the heap is the minimum number of rooms required
+        return heap.size();
+    }
+}
+```
+```
+//Two-pointer approach
+public int minMeetingRooms(int[][] intervals) {
+
+    if (intervals.length == 0) return 0;
+
+    int[] starts = new int[intervals.length];
+
+    int[] ends = new int[intervals.length];
+
+    for (int i = 0; i < intervals.length; i++) {
+
+        starts[i] = intervals[i][0];
+
+        ends[i] = intervals[i][1];
+
+    }
+
+    Arrays.sort(starts);
+
+    Arrays.sort(ends);
+
+    int startPtr = 0, endPtr = 0;
+
+    int rooms = 0, maxRooms = 0;
+
+    while (startPtr < intervals.length) {
+
+        if (starts[startPtr] < ends[endPtr]) {
+
+            rooms++;
+
+            maxRooms = Math.max(maxRooms, rooms);
+
+            startPtr++;
+
+        } else {
+
+            rooms--;
+
+            endPtr++;
+
+        }
+
+    }
+
+    return maxRooms;
+
+}
+```
 
 ## Backtracking
 1. [Combination Sum](https://leetcode.com/problems/combination-sum/description/) - O(N^(T/M + 1)) & O(T/M)  N is the number of candidates, T is the target, and M is the minimum value among the candidates. Space complexity due to the recursion stack depth
@@ -3441,7 +3608,107 @@ public class AlienDictionary {
 ```
 20. [Number of connected components in an undirected graph](https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/description/) - O(E * α(n)) & O(n) where α is the inverse Ackermann function, which grows very slowly
 - Question: Finding the number of connected components in an undirected graph
-- Solution: 1. Union-Find (Disjoint Set Union) algorithm
-- 
-
+- Solution: 1. Union-Find (Disjoint Set Union) algorithm (Given list of edges) 2. DFS/BFS (Given  adjacency list) - O(V + E) & O(V + E)
+-  Let me start by understanding what a connected component is. In an undirected graph, a connected component is a subgraph where every pair of vertices is connected via a path, and no edges exist connecting to vertices outside this subgraph. So the task is to count how many such components exist in the given graph.
+- First, I should think about how the graph is represented. The problem probably gives the graph as a set of nodes and edges. Let's say the input is n nodes numbered from 0 to n-1, and a list of edges. So each edge is a pair of nodes. Since the graph is undirected, each edge connects two nodes both ways.
+- Now, the approach to find connected components. The standard methods are either Depth-First Search (DFS) or Breadth-First Search (BFS), or using Union-Find (Disjoint Set Union, DSU). Each method has its pros and cons.
+- Let me consider each approach:
+- **DFS/BFS**: For each node that hasn't been visited yet, perform a DFS or BFS to visit all reachable nodes, marking them as visited. Each time I start a new search, that's a new component. The count of such starts gives the number of components.
+- **Union-Find**: Create a parent array where each node starts as its own parent. For each edge, union the two nodes. After processing all edges, the number of distinct parents (roots) represents the number of components. But wait, in union-find, after all unions, the number of roots (nodes where parent[i] == i) gives the count of components. So that's another way.
+- Which method is better? It depends on the constraints. If the graph is given as an adjacency list, DFS/BFS is straightforward. If it's given as a list of edges, Union-Find might be efficient, especially with path compression and union by rank. But let's see the problem statement again.
+- Assuming the input is the number of nodes and the list of edges, let's proceed.
+- So, let's outline the steps for each approach.
+- **Approach 1: DFS or BFS**
+- Create an adjacency list from the edges.
+- Keep a visited array to track visited nodes.
+- Iterate through each node, and if not visited, perform DFS/BFS, mark all reachable nodes as visited, and increment the component count.
+- **Approach 2: Union-Find**
+- Initialize parent array where parent[i] = i.
+- For each edge, union the two nodes.
+- After processing all edges, count the number of nodes where parent[i] == i. That's the number of components.
+- But wait, what if there are nodes that are not connected to any others? Like, if the graph has 5 nodes but only edges between 0-1 and 2-3, then nodes 4 is a component by itself. The union-find approach will correctly count it because 4's parent is itself.
+- So, for Union-Find, after all unions, the number of roots (parent[i] == i) is the answer.
+- So both approaches should work. Let's think about time and space.
+- For DFS/BFS:
+- Time: O(V + E) since each node and edge is processed once.
+- Space: O(V + E) for adjacency list and visited array.
+- For Union-Find with path compression and union by rank:
+- Time: O(E * α(V)), where α is the inverse Ackermann function (very slow growing).
+- Space: O(V) for parent and rank arrays.
+- If the number of nodes is large, Union-Find is more efficient. But for the problem here, either approach should be manageable unless there's a very high constraint.
+- Now, let's think about implementing each approach.
+- First, let's consider the input. The problem may be given as:
+- int n: the number of nodes.
+- int[][] edges: array of edges.
+- So, for example, n=5, edges = [[0,1], [1,2], [3,4]] would result in 2 components: 0-1-2 and 3-4, plus node 4 if it's 5 nodes? The problem states that nodes are numbered from 0 to n-1. So if n=5, nodes are 0,1,2,3,4. So in the example above, the components are 0-1-2, 3-4. So two components. But then, what about node 4? No, in the example, 3 and 4 are connected. So the total components are two. So the code must account for all nodes. So if a node is not present in any edge, it's a component by itself.
+- For example, if n=5 and edges are empty, then each node is its own component, so count is 5.
+- So in the problem, the number of nodes is given, and edges. So when building the adjacency list, nodes with no edges are isolated, and each contributes to the component count.
+- So, for the DFS/BFS approach:
+- Create adjacency list for all nodes. For each node, even if it has no edges, it's present as a key with an empty list.
+- But when building the adjacency list, how to handle nodes with no edges. For example, if we loop through all nodes from 0 to n-1 and create an entry for each.
+- Now, the Union-Find approach.
+- Implement the DSU with path compression and union by rank.
+- The steps are:
+- Initialize parent array where parent[i] = i.
+- Initialize rank array (for union by rank) with all zeros.
+- For each edge, perform a union operation on the two nodes.
+- After all unions, count the number of elements where parent[i] == i (the roots). Each root represents a component.
+- But wait, the initial count is n (each node is its own parent). Each union reduces the count by 1 if the two nodes were in different sets.
+- So alternatively, during the union steps, we can track the count.
+- But perhaps it's easier to process all edges and then count the number of roots.
+- But here's the problem: some nodes may not be part of any edge. For example, if a node is isolated (no edges), then it's its own component. So the union operations do not touch it, so parent[i] remains i. So when we count the number of roots, it's correct.
+```
+class Solution {
+    public int countComponents(int n, int[][] edges) {
+        int[] parent = new int[n];
+        int[] rank = new int[n];
+        
+        // Initialize each node as its own parent with rank 0
+        for (int i = 0; i < n; i++) {
+            parent[i] = i;
+            rank[i] = 0;
+        }
+        
+        // Union each pair of nodes in the edges
+        for (int[] edge : edges) {
+            union(parent, rank, edge[0], edge[1]);
+        }
+        
+        // Count the number of unique roots (components)
+        int components = 0;
+        for (int i = 0; i < n; i++) {
+            if (find(parent, i) == i) {
+                components++;
+            }
+        }
+        return components;
+    }
+    
+    private int find(int[] parent, int x) {
+        if (parent[x] != x) {
+            parent[x] = find(parent, parent[x]); // Path compression - Each compression moving towards the common parent, it'll update both parent[x] and x
+        }
+        return parent[x];
+    }
+    
+    private void union(int[] parent, int[] rank, int x, int y) {
+        int rootX = find(parent, x);
+        int rootY = find(parent, y);
+        
+        if (rootX == rootY) {
+            return; // Already in the same set
+        }
+        
+        // Union by rank: attach smaller rank tree under root of higher rank tree
+        if (rank[rootX] < rank[rootY]) { //Updating parent based on rank. parent[lower_rank] = higher_rank root
+            parent[rootX] = rootY;
+        } else if (rank[rootX] > rank[rootY]) {
+            parent[rootY] = rootX;
+        } else {
+            parent[rootY] = rootX; //Both rank is same then parent[2nd_rank]=1st_rank and rank[1st_rank]++;
+            rank[rootX]++;
+        }
+    }
+}
+```
 
