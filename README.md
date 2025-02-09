@@ -1005,7 +1005,7 @@ public class Solution {
     }
 }
 ```
-5. [[Meeting Rooms II](https://leetcode.com/problems/meeting-rooms-ii/description/) - O(nlog n) & O(n)
+5. [Meeting Rooms II](https://leetcode.com/problems/meeting-rooms-ii/description/) - O(nlog n) & O(n)
 - Question: Determining the minimum number of conference rooms required for given meeting intervals
 - Solution: 1. Use a priority queue (min-heap) to efficiently track the end times of meetings and determine room availability. 2. Two-pointer approach - O(n) & O(n)
 - Hmm, I remember that this problem can be tackled using a priority queue (or a min-heap) to keep track of the end times of the meetings. The idea is to sort the meetings by their start times and then check if a new meeting can be accommodated in an existing room or if a new room is needed.
