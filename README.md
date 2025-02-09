@@ -968,7 +968,7 @@ class Solution {
 4. [Meeting Rooms](https://leetcode.com/problems/meeting-rooms/description/) - O(nlog n) & O(1)
 - Question: Determine if a person can attend all meetings, we need to check if any of the meeting intervals overlap.
 - Solution: 1. Sorting the intervals and checking adjacent pairs for overlaps.
-- LeetCode 252: Meeting Rooms, which asks whether a person can attend all meetings. The input is an array of meeting time intervals, and we need to determine if there's any overlap. If all meetings are non-overlapping, return true; otherwise, false.
+- Meeting Rooms, which asks whether a person can attend all meetings. The input is an array of meeting time intervals, and we need to determine if there's any overlap. If all meetings are non-overlapping, return true; otherwise, false.
 - So, the approach here is to check if any two intervals overlap. The standard way to do this is to sort the intervals based on their start times. Then, compare each interval with the next one. If the end time of the current interval is greater than the start time of the next, there's an overlap, so return false. Otherwise, after checking all, return true.
 - Wait, but how do I handle the sorting? In Java, I can sort the array using a custom comparator. The intervals are given as an array of int arrays, like [[start1, end1], [start2, end2], ...]. So, I need to sort this array based on the start times.
 - Let me outline the steps:
@@ -1914,6 +1914,51 @@ public class Codec {
             i = slash + 1 + length;
         }
         return decoded;
+    }
+}
+```
+9. [Roman to Integer](https://leetcode.com/problems/roman-to-integer/description/) - O(n) & O(1)
+- Question: Converting a Roman numeral string to an integer, we need to handle both additive and subtractive combinations of Roman numeral symbols. 
+- Solution: 1.
+- Let's think about how Roman numerals work. The basic symbols are I, V, X, L, C, D, M, which correspond to 1, 5, 10, 50, 100, 500, 1000. But there are cases where subtraction is used, like IV for 4 or IX for 9. Similarly, XL is 40, CD is 400, etc.
+- So the idea is that normally, each character adds its value, but if a smaller number comes before a larger one, it means subtract. For example, in IV, I (1) is before V (5), so it's 5-1=4.
+- So the plan is to iterate through each character in the string, compare the current value with the next one. If the current is less than the next, subtract it; otherwise, add it.
+- Wait, but how to handle that? Let's see. For each symbol, check the next symbol. If current < next, then subtract current from the total, else add current. Wait, no. Wait, for example, in IV: we have I (1) followed by V (5). So the total is 5 -1 =4. But how to compute that. Maybe we can start from the end. Or maybe process each character, and add its value, but if the previous character is less than current, subtract twice the previous value. Hmm.
+- Another approach: Initialize total to 0. For each character, add its value. If the previous character is less than current, subtract twice the previous value. Because, for example, IV: when we process I first, add 1. Then process V, add 5. But since I (1) is less than V (5), we subtract 2*1. So total becomes 1+5 -2=4. That works.
+- So the steps would be:
+- Create a mapping of Roman characters to integers. Like a hashmap or a switch case.
+- Initialize total to 0.
+- Iterate over each character in the string from left to right.
+- For each character, get its value. Add to total.
+- Check if the previous character's value is less than the current. If so, subtract twice the previous value. Because when we added the previous value, it was part of the total, but since it's part of a subtractive pair, we need to subtract it twice: once to reverse the previous addition, and once to account for the subtraction. Like in IV: first add I (1), then add V (5). Now total is 6. But since I is before V, we subtract 2*1 =2, resulting in 4.
+```
+class Solution {
+    public int romanToInt(String s) {
+        int total = 0;
+        int prev = 0;
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            int current = getValue(c);
+            total += current;
+            if (prev < current) {
+                total -= 2 * prev;
+            }
+            prev = current;
+        }
+        return total;
+    }
+    
+    private int getValue(char c) {
+        switch(c) {
+            case 'I': return 1;
+            case 'V': return 5;
+            case 'X': return 10;
+            case 'L': return 50;
+            case 'C': return 100;
+            case 'D': return 500;
+            case 'M': return 1000;
+            default: return 0;
+        }
     }
 }
 ```
