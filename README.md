@@ -11,7 +11,7 @@
 9. [Two Pointers - O(n) and O(1)](#two-pointers)
 10. [Overlapping Intervals - O(nlogn) & O(n)](#overlapping-intervals)
 11. [Backtracking](#backtracking)
-12. [Dynamic Programming](#dynamic-programming) - Longest Common Subsequence | Target Sum | Coin Change | Climbing Stairs | Longest Increasing Subsequence | Word Break | Maximum Product Subarray | Unique Paths | House Robber | House Robber II | Decode Ways | Edit Distance   
+12. [Dynamic Programming](#dynamic-programming) - Longest Common Subsequence (LCS) | Target Sum | Coin Change | Climbing Stairs | Longest Increasing Subsequence (LIS) | Word Break | Maximum Product Subarray | Unique Paths | House Robber | House Robber II | Decode Ways | Edit Distance   
 13. [Ad-hoc](#ad-hoc)
 14. [Greedy Algorithm](#greedy-algorithm)
 15. [Linked List](#linked-list)
