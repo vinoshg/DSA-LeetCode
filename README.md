@@ -1,7 +1,7 @@
 ## Data Structures & Algorithm
 
-1. [Binary Search](##binary-search)
-2. [Dynamic Programming](##dynamic-programming)
+1. [Binary Search](#binary-search)
+2. [Dynamic Programming](#dynamic-programming)
 3. [Usage](#usage)
 4. [Contributing](#contributing)
 5. [License](#license)
