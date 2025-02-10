@@ -9,7 +9,18 @@
 7. [Monotonic Stack - O(n) & O(n)](#monotonic-stack) 
 8. [Sliding Window - O(n) & O(1)](#sliding-window)
 9. [Two Pointers - O(n) and O(1)](#two-pointers)
-10. [Dynamic Programming](#dynamic-programming)
+10. [Overlapping Intervals - O(nlogn) & O(n)](#overlapping-intervals)
+11. [Backtracking](#backtracking)
+12. [Dynamic Programming](#dynamic-programming)
+13. [Ad-hoc](#ad-hoc)
+14. [Greedy Algorithm](#greedy-algorithm)
+15. [Linked List](#linked-list)
+16. [Stack](#stack)
+17. [Queue](#queue) 
+18. [Heap (Priority Queue)](#heap-(priority-queue))
+19. [Trie - O(L) & O(N*L)](#trie)
+20. [Tree](#tree)
+21. [Graph - O(V+E) & O(V)](#graph)
 
 ## Binary Search
 1. Binary Search - O(nlog n) & O(1)
@@ -655,8 +666,8 @@ public class Solution {
 }
 ```
 
-## Two Pointers - O(n) and O(1) 
-- Applicable to Linear Data Structure Arrays, String, LinkedList - Converging pointers (Two pointers start at 0th and array.length-1 and converge together) | Parallel pointers (Right pointer is used to get new info and the left is used to track. Both start from 0/1) | Trigger based pointers (left pointer move only after right pointer reaches particular position) | Expand Around Center
+## Two Pointers 
+- Applicable to Linear Data Structure Arrays, String, LinkedList - Converging pointers (Two pointers start at 0th and array.length-1 and converge together) | Parallel pointers (Right pointer is used to get new info and the left is used to track. Both start from 0/1) | Trigger based pointers (left pointer move only after right pointer reaches particular position) | Expand Around Center - O(n) and O(1) 
 1. [Valid Palindrome](https://leetcode.com/problems/valid-palindrome/description/) - O(n) & O(1)
 - Question: To determine if a given string is a palindrome after ignoring non-alphanumeric characters and case differences - Applicable for both Subarray/Substrings
 - Solution: 1. Two-pointer approach
@@ -997,8 +1008,8 @@ class Solution {
 }
 ```
 
-## Overlapping Intervals - O(nlogn) & O(n)
-- Question: Overlapping intervals, scheduling conflicts - Approach: Sort intervals and merge overlapping ones
+## Overlapping Intervals 
+- Question: Overlapping intervals, scheduling conflicts - Approach: Sort intervals and merge overlapping ones - O(nlogn) & O(n)
 1. [Merge Intervals](https://leetcode.com/problems/merge-intervals/description/) - O(nlogn) & O(n)
 - Question: Merging overlapping intervals - intervals[][] (2D Array)
 - Solution: 1. Overlapping Intervals - Dealing with intervals, a common approach is to sort them
@@ -2784,6 +2795,7 @@ class Solution {
     }
 }
 ```
+## Queue
 
 ## Heap (Priority Queue)
 1. [Find Median from Data Stream](https://leetcode.com/problems/find-median-from-data-stream/description/) - O(log n) & O(n)
@@ -2831,7 +2843,8 @@ class MedianFinder {
 }
 ```
 
-## Trie - O(L) and O(N*L)
+## Trie 
+- O(L) and O(N*L)
 1. [Implement Trie - Prefix Tree](https://leetcode.com/problems/implement-trie-prefix-tree/description/) - Insert : O(n) & O(n), Search and Prefix check : O(n) & O(1)
 - Question: insert, search, startsWithPrefix
 - Solution: Trie has Node[] children; boolean eow;
@@ -3518,8 +3531,8 @@ class Solution {
 }
 ```
 
-## Graph - Time:O(V+E) Space:O(V)
-1. Connected and Disconnected Graph - BFS (Using Queue) and DFS (Using Recursion) along with the visited boolean array
+## Graph 
+1. Connected and Disconnected Graph - BFS (Using Queue) and DFS (Using Recursion) along with the visited boolean array - Time:O(V+E) Space:O(V)
 2. All Paths From Source to Target
 - Solution: 1. DFS with Backtracking (As per the question nodes are to be visited multiple times, so the visited array is not required and backtracking will handle this list.remove(list.size() - 1))
 3. Cycle Detection - Directed Graph
