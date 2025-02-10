@@ -1,13 +1,17 @@
 ## Data Structures & Algorithm
 
-1. [Binary Search](#binary-search)
-2. [Dynamic Programming](#dynamic-programming)
-3. [Usage](#usage)
-4. [Contributing](#contributing)
-5. [License](#license)
+1. [Binary Search - O(nlog n) & O(1)](#binary-search)
+2. [Cyclic Sort - O(n) & O(1)](#cyclic-sort)
+3. [Bitwise](#bitwise)
+4. [Prefix Sum - O(n) & O(1)](#prefix-sum)
+5. [Kadane's Algorithm - O(n) & O(1)](#kadane's-algorithm)
+6. [Top K elements - O(nlogk) and O(k)](#top-k-elements)
+7. [Monotonic Stack - O(n) & O(n)](#monotonic-stack) 
+8. [Sliding Window - O(n) & O(1)](#sliding-window)
+9. [Dynamic Programming](#dynamic-programming)
 
 ## Binary Search
-1. Binary Search 
+1. Binary Search - O(nlog n) & O(1)
 - Question: Find a target in a Sorted Array or range
 - Solution: 1. Take start and end pointers, while loop start <= end calculate mid and compare the target with mid to reduce the range update start and end
 2. Search Insert Position / Ceiling of a Number (start) and Floor of a Number (end)
@@ -113,8 +117,8 @@ class Solution {
 }
 ```
 
-## Cyclic Sort - O(n) and O(1)
-1. Cyclic Sort 
+## Cyclic Sort 
+1. Cyclic Sort - O(n) and O(1)
 - Question: Range (0,n) or (1,n) - Find the target element in an unsorted array
 - Solution: 1. while loop i<array.length index=array[i]-1, if array[i]!=array[index] then swap else i++
 2. Sort an Array - Sorting Algorithm - O(n*n) and O(1)
@@ -307,15 +311,15 @@ class Solution {
 }
 ```
 
-## Prefix Sum - O(n)
-1. Prefix Sum Array
+## Prefix Sum 
+1. Prefix Sum Array - O(n)
 - Solution: 1. For loop i=1 to array.length array[i] = array[i-1] + array[i] 
 2. Range Sum Query
 - Solution: 1. Build Prefix Sum Array and return prefixSum[right] - prefixSum[left-1]. Handle if left==0 then return prefixSum[right]
 3. Number of Subarrays whose sum is k
 - Solution: 1. PrefixSum with HashMap for if map.containsKey(prefixSum-k) after map.put(prefixSum, map.getOrDefault(prefixSum,0) + 1)          2. Nested loops
 
-## Kadane's Algorithm - O(n) & O(1)
+## Kadane's Algorithm 
 1. [Maximum Subarray](https://leetcode.com/problems/maximum-subarray/description/) - O(n) & O(1) 
 - Question: Finding the maximum subarray sum in an array of integers (Array has -ve elements as well)
 - Solution: 1. Kadane's Algorithm 2. Nested loop
@@ -337,8 +341,8 @@ class Solution {
     }
 }
 ```
-## Top K elements - O(nlogk) and O(k)
-- Question: K largest/smallest, K most/least frequent, Top k elements
+## Top K elements
+- Question: K largest/smallest, K most/least frequent, Top k elements  - O(nlogk) and O(k)
 1. Top K largest elements
 - Solution: 1. Min heap(Priority Queue) add at max k elements and remaining poll 2. Sort Array and take elements - O(nlogn)
 2. [Top K Frequent Elements](https://leetcode.com/problems/top-k-frequent-elements/description/) - O(nlogk) & O(n+k)
@@ -413,16 +417,16 @@ class Solution {
 3. K closest points to the origin
 - Solution: 1. Max heap - PriorityQueue<int[]> maxHeap = new PriorityQueue<>((a,b) -> getDistance(b) - getDistance(a)) and getDistance is point[0]^2+point[1]^2
 
-## Monotonic Stack - O(n)
-- Question: 1. Next greater/smaller, previous greater/smaller
+## Monotonic Stack 
+- Question: 1. Next greater/smaller, previous greater/smaller - O(n)
 1. Next greater element for each number in an array
 - Solution: 1. Monotonic decreasing stack i.e. greater element index at top -For loop and  while !stack.isEmpty() && array[i]>array[stack.peek()] then index= stack.pop(); result[index]=array[i] afer while stack.push(i); 2. Nested loops - O(n^2)
 - For Smaller element : change while !stack.isEmpty() && array[i]<array[stack.peek()]
 2. Given a list of daily temperatures, determine how many days you've to wait for the next warmer day
 - Solution: 1. Like Next greater element - result[index]=i - index
 
-## Sliding Window - O(n) & O(1)
-- Fixed Sliding window (Find Subarray/Substring of a fixed length) 2. Dynamic Sliding window (Longest/Shortest Subarray or Substring that satisfies the condition) - (e.g., max sum, longest substring with unique characters) - I remember that sliding window techniques are useful for substring problems. 
+## Sliding Window 
+- Fixed Sliding window (Find Subarray/Substring of a fixed length) 2. Dynamic Sliding window (Longest/Shortest Subarray or Substring that satisfies the condition) - (e.g., max sum, longest substring with unique characters) - I remember that sliding window techniques are useful for substring problems. - O(n) & O(1)
 1. [Maximum Sum of Subarrays With Length K / Maximum sum of a subarray of size k](https://leetcode.com/problems/maximum-average-subarray-i/description/) - O(n) & O(1)
 - Question: Find the maximum sum of any contiguous subarray of length k / Max avg sum of Subarray (avg=max/array.length) - Fixed Sliding window
 - Solution: 1. Sliding Window 2. Nested loops - O(n^2) & O(1)
