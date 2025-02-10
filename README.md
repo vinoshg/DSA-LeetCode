@@ -113,8 +113,66 @@ class Solution {
 - Solution: 1. Bubble Sort - Nested loops i=0 to array.length and j=0 to array.length-i, if array[j]>array[j+1] swap and end ith loop flag break; 2. Insertion Sort - Nested loops i=0 to array.length and j=i+1;j>0;j--, if array[j]<array[j-1] swap else break; 3. Selection Sort - For loop i=0 to array.length last=array.length-i-1 getMaxIndex= range(0, last) swap(last,maxIndex)
 3. [Missing Number / Find all numbers disappeared in an array](https://leetcode.com/problems/missing-number/description/) - O(n) & O(1)
 - Solution: 1. Apply Cyclic Sort and then For loop if array[i]!=i+1 got and(i+1)
-4. Find the Duplicate Number / Find all Duplicates in an array
-- Solution: 1. Apply Cyclic Sort and then For loop if array[i]!=i+1 got ans(array[i])
+4. [Find the Duplicate Number / Find all Duplicates in an array](https://leetcode.com/problems/find-the-duplicate-number/description/) - O(n) & O(1)
+- Question: Find the duplicate number in an array of integers where each integer is in the range [1, n] and there is exactly one duplicate number. 
+- Solution: 1. Apply Cyclic Sort and then For loop if array[i]!=i+1 got ans(array[i]) 2. Binary Search -O(nlog n) & O(1)
+```
+class Solution {
+    public int findDuplicate(int[] arr) {
+        int i = 0;
+        
+        while (i < arr.length) {
+            if(arr[i] != i + 1) {
+                int correct = arr[i] - 1;
+                if(arr[i] != arr[correct]) {
+                    swap(arr, i, correct);
+                } else {
+                    return arr[i];
+                }
+            } else {
+                i++;
+            }
+        }
+        return -1;
+    }
+
+    public void swap(int[] arr, int first, int second) {
+        int temp = arr[first];
+        arr[first] = arr[second];
+        arr[second] = temp;
+    }
+}
+```
+- Solution: 2. Binary Search -O(nlog n) & O(1)
+- The approach we use here is the binary search method. This method leverages the properties of numbers in a range and the pigeonhole principle. The key idea is to count how many numbers in the array are less than or equal to a midpoint value. Based on this count, we adjust our search range to narrow down the duplicate number.
+- Initialization: Start with low as 1 and high as n (where n is the length of the array minus 1).
+- Binary Search: While low is less than high, calculate the midpoint mid of the current range.
+- Count Elements: Count how many numbers in the array are less than or equal to mid.
+- Adjust Search Range: If the count exceeds mid, it means the duplicate number is in the lower half; otherwise, it is in the upper half.
+- Converge: Continue narrowing the search range until low equals high, which will be the duplicate number.
+```
+class Solution {
+    public int findDuplicate(int[] nums) {
+        int low = 1;
+        int high = nums.length - 1;
+        while (low < high) {
+            int mid = (low + high) / 2;
+            int count = 0;
+            for (int num : nums) {
+                if (num <= mid) {
+                    count++;
+                }
+            }
+            if (count > mid) {
+                high = mid;
+            } else {
+                low = mid + 1;
+            }
+        }
+        return low;
+    }
+}
+```
 5. Set Mismatch
 - Solution: 1. Apply Cyclic Sort and then For loop if array[i]!=i+1 got ans(array[i], i+1)
 6. First missing Positive
