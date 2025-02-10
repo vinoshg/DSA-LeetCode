@@ -4,7 +4,7 @@
 2. [Cyclic Sort - O(n) & O(1)](#cyclic-sort) - Find the Duplicate Number
 3. [Bitwise](#bitwise) - Missing Number || Reverse Bits || Number of 1 Bits || Counting Bits || Sum of Two Integers 
 4. [Prefix Sum - O(n) & O(1)](#prefix-sum)
-5. [Kadane's Algorithm - O(n) & O(1)](#kadane-s-algorithm) - Maximum Subarray 
+5. [Kadane's Algorithm - O(n) & O(1)](#kadanes-algorithm) - Maximum Subarray 
 6. [Top K elements - O(nlogk) and O(k)](#top-k-elements) - Top K Frequent Elements || 
 7. [Monotonic Stack - O(n) & O(n)](#monotonic-stack) 
 8. [Sliding Window - O(n) & O(1)](#sliding-window) - Maximum Sum of Subarrays With Length K || Maximum Sum of Distinct Subarrays With Length K || Longest Substring Without Repeating Characters || Longest Repeating Character Replacement || Minimum Window Substring 
