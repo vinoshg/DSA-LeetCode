@@ -8,7 +8,8 @@
 6. [Top K elements - O(nlogk) and O(k)](#top-k-elements)
 7. [Monotonic Stack - O(n) & O(n)](#monotonic-stack) 
 8. [Sliding Window - O(n) & O(1)](#sliding-window)
-9. [Dynamic Programming](#dynamic-programming)
+9. [Two Pointers - O(n) and O(1)](#two-pointers)
+10. [Dynamic Programming](#dynamic-programming)
 
 ## Binary Search
 1. Binary Search - O(nlog n) & O(1)
