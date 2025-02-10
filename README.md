@@ -17,7 +17,7 @@
 15. [Linked List](#linked-list)
 16. [Stack](#stack)
 17. [Queue](#queue) 
-18. [Heap (Priority Queue)](#heap-(priority-queue))
+18. [Heap - Priority Queue](#heap-priority-queue)
 19. [Trie - O(L) & O(N*L)](#trie)
 20. [Tree](#tree)
 21. [Graph - O(V+E) & O(V)](#graph)
@@ -2797,7 +2797,7 @@ class Solution {
 ```
 ## Queue
 
-## Heap (Priority Queue)
+## Heap - Priority Queue
 1. [Find Median from Data Stream](https://leetcode.com/problems/find-median-from-data-stream/description/) - O(log n) & O(n)
 - Question: Find the median from a data stream. Hmm, the median is the middle value when the numbers are ordered. If there's an odd number of elements, it's the middle one. If even, the average of the two middle ones.
 - Solution: 1. Using two heaps 2. If I just keep a list and add numbers, then when finding the median, I have to sort it every time. But that would be O(n log n) for each insertion
