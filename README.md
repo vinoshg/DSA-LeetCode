@@ -1,3 +1,11 @@
+## Data Structures & Algorithm
+
+1. [Binary Search](## Binary Search - O(logn) and O(1))
+2. [Dynamic Programming](## Dynamic Programming - Iteration(Two variable & dp[] array) and Memoization(Recursion))
+3. [Usage](#usage)
+4. [Contributing](#contributing)
+5. [License](#license)
+
 ## Binary Search - O(logn) and O(1)
 1. Binary Search 
 - Question: Find a target in a Sorted Array or range
@@ -1683,6 +1691,10 @@ class Solution {
     }
 }
 ```
+12. [Edit Distance](https://leetcode.com/problems/edit-distance/description/) - O(mn) & O(mn)
+- Question: Compute the minimum number of operations required to convert one string into another using insert, delete, or replace operations.
+- Solution: 1. DP - classic example of the edit distance (Levenshtein distance) problem
+- 
 
 ## Ad-hoc 
 - Problems that don’t fit into a standard category and require a unique approach like Swapping, Sorting, HashMap, Manipulation
@@ -2448,6 +2460,167 @@ class Solution {
         }
         
         return dummy.next;
+    }
+}
+```
+9. [LRU Cache](https://leetcode.com/problems/lru-cache/description/) - O(1) & O(capacity)
+- Question: Implement an LRU (Least Recently Used) cache that supports get and put operations in O(1) average time complexity. The LRU cache evicts the least recently used item when it reaches its capacity.
+- Solution: 1. HashMap and a doubly linked list.
+- Hmm, what's LRU again? Oh right, Least Recently Used. So when the cache reaches capacity, the least recently accessed item gets evicted. Right. So the operations required are get and put.
+- For the data structures, I remember that a combination of a hash map and a doubly linked list is commonly used. The hash map allows O(1) access to the nodes, and the doubly linked list allows maintaining the order of usage. Because when a node is accessed (get or put), it needs to be moved to the front (most recently used). And when inserting a new node, if the capacity is exceeded, we remove the last node (least recently used).
+- So the plan is: create a Node class that has key, value, prev, next pointers. The doubly linked list will have a head and tail dummy nodes to make edge cases easier. The hash map will map keys to their corresponding nodes.
+- Wait, for the linked list, the head could be the most recently used, and the tail is the least. So every time a node is accessed, it's moved to the head. When evicting, we remove the node before the tail.
+- So let's outline the steps:
+- When initializing the LRUCache, we need to set the capacity. Also, initialize the hash map (like a HashMap in Java), the head and tail nodes. The head and tail are connected initially.
+- For the get method:
+- Check if the key exists in the hash map.
+- If not, return -1.
+- If it does, move the node to the front (after head), then return the value.
+- For the put method:
+- If the key exists, update the value and move the node to the front.
+- If it doesn't exist:
+- Check if the capacity is reached. If yes, remove the node before the tail (least recently used), and also remove it from the hash map.
+- Create a new node, add it to the hash map, and insert it after the head.
+- Wait, but inserting after the head would make it the most recent. Yes.
+- So the helper functions needed would be:
+- addNode(Node node): adds a node right after the head.
+- removeNode(Node node): removes the node from the linked list.
+- moveToHead(Node node): removes the node and adds it after the head.
+- popTail(): removes the node before the tail and returns it (for eviction).
+- Wait, maybe the steps are:
+- For adding a new node, add it right after the head. Then add to the map. If the capacity is exceeded, we remove the node before tail (tail.prev) and remove it from the map.
+- Now, in Java, the data structures. The hash map is straightforward using a HashMap<Integer, Node>. The linked list needs to be managed manually.
+- So the Node class should have key and value, because when we remove the tail node (for eviction), we need to get the key to remove it from the map.
+- Wait, when we evict the least recently used node (the node before tail), we need to get its key so we can remove it from the hash map. So each Node must store the key and value.
+- So the Node structure would be:
+class Node {
+  int key;
+  int value;
+  Node prev;
+  Node next;
+  public Node(int k, int v) {
+    key = k;
+    value = v;
+  }
+}
+- Then, the LRUCache class will have:
+- capacity: int
+- size: int (current number of elements)
+- map: HashMap<Integer, Node>
+- head, tail: Node
+- In the constructor:
+- Initialize head and tail as dummy nodes. Connect head.next to tail, and tail.prev to head.
+- For the get method:
+- Check if the key is in the map. If not, return -1. Otherwise, get the node, move it to the front (using moveToHead), then return the value.
+- For the put method:
+- If the key exists in the map, update the node's value and move it to the front.
+- If the key doesn't exist:
+- Create a new node.
+- Add the node to the map.
+- Add the node to the front (addNode).
+- Increment size.
+- If size exceeds capacity, remove the tail.prev node (popTail), remove it from the map, decrement size.
+- Wait, but when you add a new node, you have to check if capacity is reached. So the steps would be:
+- Check if key exists. If not:
+- create new node
+- add to map
+- add to head
+- increment size
+- if size > capacity:
+- evict the last node (tail.prev)
+- remove from map
+- decrement size
+- But when evicting, the size would be capacity +1, so after removal, size becomes capacity.
+- Now, implementing the helper methods.
+- AddNode: add the node right after the head.
+- node.prev = head;
+node.next = head.next;
+head.next.prev = node;
+head.next = node;
+Similarly, removeNode is:
+node.prev.next = node.next;
+node.next.prev = node.prev;
+MoveToHead is just removeNode followed by addNode.
+- PopTail: get the tail.prev node (the least recently used), then remove it from the list and return it.
+- So, when evicting, we call popTail, get the node, remove it from the map using its key, then decrease size.
+- So putting this all together.
+```
+public class LRUCache {
+
+    class Node {
+        int key;
+        int value;
+        Node prev;
+        Node next;
+        public Node(int key, int value) {
+            this.key = key;
+            this.value = value;
+        }
+    }
+
+    private HashMap<Integer, Node> map;
+    private int capacity;
+    private int size;
+    private Node head, tail;
+
+    public LRUCache(int capacity) {
+        this.capacity = capacity;
+        this.map = new HashMap<>();
+        this.size = 0;
+        this.head = new Node(0, 0);
+        this.tail = new Node(0, 0);
+        head.next = tail;
+        tail.prev = head;
+    }
+
+    public int get(int key) {
+        Node node = map.get(key);
+        if (node == null) {
+            return -1;
+        }
+        moveToHead(node);
+        return node.value;
+    }
+
+    public void put(int key, int value) {
+        Node node = map.get(key);
+        if (node != null) {
+            node.value = value;
+            moveToHead(node);
+        } else {
+            Node newNode = new Node(key, value);
+            map.put(key, newNode);
+            addNode(newNode);
+            size++;
+            if (size > capacity) {
+                Node tailNode = popTail();
+                map.remove(tailNode.key);
+                size--;
+            }
+        }
+    }
+
+    private void addNode(Node node) {
+        node.prev = head;
+        node.next = head.next;
+        head.next.prev = node;
+        head.next = node;
+    }
+
+    private void removeNode(Node node) {
+        node.prev.next = node.next;
+        node.next.prev = node.prev;
+    }
+
+    private void moveToHead(Node node) {
+        removeNode(node);
+        addNode(node);
+    }
+
+    private Node popTail() {
+        Node res = tail.prev;
+        removeNode(res);
+        return res;
     }
 }
 ```
