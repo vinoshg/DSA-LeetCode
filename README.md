@@ -2,7 +2,7 @@
 
 1. [Binary Search - O(nlog n) & O(1)](#binary-search)
 2. [Cyclic Sort - O(n) & O(1)](#cyclic-sort)
-3. [Bitwise](#bitwise) - Missing Number | Reverse Bits | Number of 1 Bits | Counting Bits | Sum of Two Integers 
+3. [Bitwise](#bitwise) - Missing Number || Reverse Bits || Number of 1 Bits || Counting Bits || Sum of Two Integers 
 4. [Prefix Sum - O(n) & O(1)](#prefix-sum)
 5. [Kadane's Algorithm - O(n) & O(1)](#kadane's-algorithm)
 6. [Top K elements - O(nlogk) and O(k)](#top-k-elements)
