@@ -11,7 +11,7 @@
 9. [Two Pointers - O(n) and O(1)](#two-pointers)
 10. [Overlapping Intervals - O(nlogn) & O(n)](#overlapping-intervals)
 11. [Backtracking](#backtracking)
-12. [Dynamic Programming](#dynamic-programming) - Longest Common Subsequence (LCS) | Target Sum | Coin Change | Climbing Stairs | Longest Increasing Subsequence (LIS) | Word Break | Maximum Product Subarray | Unique Paths | House Robber | House Robber II | Decode Ways | Edit Distance   
+12. [Dynamic Programming](#dynamic-programming) - Longest Common Subsequence(LCS) | Target Sum | Coin Change | Climbing Stairs | Longest Increasing Subsequence(LIS) | Word Break | Maximum Product Subarray | Unique Paths | House Robber | House Robber II | Decode Ways | Edit Distance   
 13. [Ad-hoc](#ad-hoc)
 14. [Greedy Algorithm](#greedy-algorithm)
 15. [Linked List](#linked-list)
@@ -19,8 +19,8 @@
 17. [Queue](#queue) 
 18. [Heap - Priority Queue](#heap)
 19. [Trie - O(L) & O(N*L)](#trie)
-20. [Tree](#tree)
-21. [Graph - O(V+E) & O(V)](#graph)
+20. [Tree](#tree) - Serialize and Deserialize Binary Tree | Subtree of Another Tree | Validate Binary Search Tree(BST) | Invert Binary Tree | Same Tree | Binary Tree Level Order Traversal | Kth Smallest Element in a BST | Maximum Depth of Binary Tree | Construct Binary Tree from Preorder and Inorder Traversal | Lowest Common Ancestor of a Binary Search Tree (BST) | Binary Tree Maximum Path Sum 
+21. [Graph - O(V+E) & O(V)](#graph) - Number of Islands | Clone Graph | Pacific Atlantic Water Flow | Word Search | Course Schedule | Graph Valid Tree | Alien Dictionary | Number of connected components in an undirected graph | 
 
 ## Binary Search
 1. Binary Search - O(nlog n) & O(1)
