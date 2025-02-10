@@ -1,4 +1,4 @@
-## Data Structures & Algorithm
+## Data Structures & Algorithms
 
 1. [Binary Search - O(nlog n) & O(1)](#binary-search)
 2. [Cyclic Sort - O(n) & O(1)](#cyclic-sort)
@@ -1711,7 +1711,55 @@ class Solution {
 12. [Edit Distance](https://leetcode.com/problems/edit-distance/description/) - O(mn) & O(mn)
 - Question: Compute the minimum number of operations required to convert one string into another using insert, delete, or replace operations.
 - Solution: 1. DP - classic example of the edit distance (Levenshtein distance) problem
-- 
+- I have to find the minimum number of operations required to convert word1 into word2. The operations allowed are insert, delete, or replace a character. Hmm, this reminds me of the edit distance problem. Right, because that's exactly what this is. So I need to compute the Levenshtein distance between the two words.
+- Let me think about how to approach this. The standard approach for edit distance is dynamic programming. So, the idea is to build a DP table where dp[i][j] represents the minimum number of operations needed to convert the first i characters of word1 to the first j characters of word2.
+- The base cases would be when one of the strings is empty. For example, if word1 is empty, we need to insert all characters of word2, so the distance is the length of word2. Similarly, if word2 is empty, we need to delete all characters of word1, so the distance is the length of word1.
+- For the general case, if the characters at positions i-1 and j-1 (since we start from 0) are the same, then we don't need any operation, and dp[i][j] = dp[i-1][j-1]. Otherwise, we have three choices: replace the character (1 + dp[i-1][j-1]), delete from word1 (1 + dp[i-1][j]), or insert into word1 (which is similar to deleting from word2, so 1 + dp[i][j-1]). The minimum of these three options is the value for dp[i][j].
+- So the DP table needs to be (m+1) x (n+1), where m and n are the lengths of word1 and word2, respectively.
+- Let me try to work through an example. Suppose word1 is "horse", word2 is "ros". The DP table would start with the base cases:
+- For i=0 (word1 is empty), each j would be j. For j=0 (word2 is empty), each i would be i.
+- Then filling the table:
+- For i from 1 to m (length of word1), and j from 1 to n (length of word2):
+- If word1[i-1] == word2[j-1], then dp[i][j] = dp[i-1][j-1]
+- Else, take the min of the three possible operations and add 1.
+- Wait, the replace operation is taking the previous value (i-1, j-1) and adding 1. Delete from word1 would be (i-1, j) +1. Insert into word1 would be (i, j-1) +1. So the min of those three.
+- So the steps are:
+- Initialize a DP table of (m+1) rows and (n+1) columns.
+- Fill the first row and first column with the base cases.
+- Then iterate through each cell from (1,1) to (m,n), filling in based on the above logic.
+- But wait, since the DP table could be space-optimized. Because each row only depends on the previous row and the current row. So maybe we can use a 1D array. But maybe for the first time, let's code the 2D version for clarity.
+```
+class Solution {
+    public int minDistance(String word1, String word2) {
+        int m = word1.length();
+        int n = word2.length();
+        int[][] dp = new int[m + 1][n + 1];
+        
+        // Initialize base cases for converting to/from empty string
+        // Initialize first row and column with 0,1,2,3.. m or n
+        for (int i = 0; i <= m; i++) {
+            dp[i][0] = i;
+        }
+        for (int j = 0; j <= n; j++) {
+            dp[0][j] = j;
+        }
+        
+        // Fill the DP table
+        for (int i = 1; i <= m; i++) {
+            for (int j = 1; j <= n; j++) {
+                if (word1.charAt(i - 1) == word2.charAt(j - 1)) {
+                    dp[i][j] = dp[i - 1][j - 1];
+                } else {
+                    dp[i][j] = 1 + Math.min(dp[i - 1][j - 1], 
+                                           Math.min(dp[i - 1][j], dp[i][j - 1]));
+                }
+            }
+        }
+        
+        return dp[m][n];
+    }
+}
+```
 
 ## Ad-hoc 
 - Problems that don’t fit into a standard category and require a unique approach like Swapping, Sorting, HashMap, Manipulation
