@@ -843,6 +843,89 @@ class Solution {
     }
 }
 ```
+9. [Trapping Rain Water](https://leetcode.com/problems/trapping-rain-water/description/) - O(n) & O(1)
+- Question: Calculate the amount of rainwater that can be trapped between the bars of an elevation map represented by an array of integers.
+- Solution: 1. Two Pointers 2. Dyanamic programmic left and right array 3. Brute force approach would be for each element, find the maximum height to the left and right. Then calculate the water for that position. But that's O(n^2) time
+- The input is an array of integers representing the heights, and the output is the total trapped water. Hmm, let's think about how to approach this.
+- So, the basic idea is that water can be trapped between two bars (or elevations) if there are higher bars on both sides. The amount of water each position can hold depends on the minimum of the maximum heights on the left and right, minus the height of the current position. Right, that's the key formula: water += min(left_max, right_max) - height[i].
+- But how do I compute this efficiently? The brute force approach would be for each element, find the maximum height to the left and right. Then calculate the water for that position. But that's O(n^2) time, which might not be efficient for large arrays. The problem probably expects a better solution.
+- I remember there are a few approaches to this problem. Let me think: there's the dynamic programming approach where you precompute the left_max and right_max arrays. Then iterate through the array once, using these precomputed values. That's O(n) time and O(n) space. But maybe there's a way to do it with O(1) space?
+- Wait, there's also the two-pointer method. Let me recall. The idea is to have two pointers, left and right, starting at the beginning and end of the array. Also, keep track of the left_max and right_max as you move the pointers. Depending on which side has a lower maximum, you process that side. Because the amount of water trapped is determined by the lower of the two maximums. Let's see:
+- If left_max is less than right_max, then the water trapped at the left pointer's current position is determined by left_max (since the right_max is higher, and the minimum is left_max). So you can calculate the water there, and move the left pointer forward. Otherwise, you do the same for the right pointer. This way, you can do it in O(n) time and O(1) space.
+- Yes, that sounds promising. Let me outline the steps:
+- Initialize left pointer to 0, right pointer to n-1.
+- Initialize left_max and right_max to 0.
+- Initialize result to 0.
+- While left <= right:
+- If height[left] < height[right]:
+- If height[left] > left_max:
+- left_max = height[left]
+- Else:
+- result += left_max - height[left]
+- left += 1
+- Else:
+- If height[right] > right_max:
+- right_max = height[right]
+- Else:
+- result += right_max - height[right]
+- right -=1
+- Wait, why does this work? Because when height[left] is less than height[right], it means the left_max is the limiting factor. Because right_max could be even higher. So for the current left position, the maximum left side is left_max, and the right side is at least as high as the current right pointer's height. So the trapped water is left_max - current height. Similarly for the other case.
+- But how do left_max and right_max get updated? Let's see. For each step, we compare the current height at left and right. If the left is smaller, then we check if the current left height is higher than left_max. If so, update left_max. Otherwise, add the difference (left_max - height[left]) to the result. Then move the left pointer. The same logic applies when the right is smaller.
+- Wait, but in this approach, we are moving the pointers inward, and keeping track of the maximums encountered so far. So left_max is the maximum height from the left up to the current left pointer, and similarly for right_max. But since we process the side which has the smaller current height, the logic is that the other side's maximum is at least as big as the current one. So the trapped water at the current position is determined by the current left_max or right_max, whichever is smaller.
+- Let me test this logic with an example. Take the sample input [0,1,0,2,1,0,1,3,2,1,2,1].
+- According to the solution, let's walk through:
+- Initially, left=0 (height 0), right=11 (height 1). left_max=0, right_max=0.
+- Compare height[left] (0) < height[right] (1): yes. So check if height[left] (0) > left_max (0)? No. So add left_max - height[left] (0-0=0) to result (remains 0). Then left moves to 1.
+- Now left=1 (height 1), right=11 (1). left_max is still 0. Wait, no, because after moving left to 1, the code first checks if height[left] (1) > left_max (0). If so, update left_max. Because in the code, when height[left] < height[right], then:
+- If height[left] > left_max → update left_max. Else add the difference.
+- So in the first step, height[left] is 0, which is not greater than left_max (0), so add 0. Then left increments to 1.
+- Now, height[left] is 1. Since height[left] (1) > left_max (0), so left_max becomes 1. Then left increments to 2.
+- Now left is at 2 (height 0). Compare with right (height 1). So again, height[left] (0) < height[right] (1). So check if height[left] (0) > left_max (1). No. So add left_max (1) - 0 → 1 to result. Result is now 1. left increments to 3.
+- At left=3 (height 2). Now compare with right (height 1). 2 > 1, so we process the right side. Check if height[right] (1) > right_max (0). Yes. So right_max becomes 1. Then right decrements to 10.
+- Now compare left=3 (height 2) with right=10 (height 2). Since 2 equals 2, but the condition is if left height < right height. So else clause. Now check if height[right] (2) > right_max (1). Yes, update right_max to 2. Decrement right to 9.
+- Left=3 (height 2), right=9 (height 1). Since 2 >1, process right side. height[right] is 1, which is less than right_max (2). So add 2-1=1 to result. Result becomes 1+1=2. Then right decrements to 8.
+- Left=3 (height 2), right=8 (height 2). height[left] (2) is equal to height[right] (2). So else clause. Check if height[right] (2) > right_max (2). No. So add 2-2=0. Result remains 2. Right decrements to 7.
+- Now left=3, right=7. Height[right] is 3. Compare left height (2) < 3. So process left. Check if height[left] (2) > left_max (1). Yes. Update left_max to 2. left increments to 4.
+- Left is 4 (height 1). Compare with right=7 (height 3). 1 <3. Process left. Check height[left] (1) > left_max (2). No. Add 2-1=1 to result. Result now 3. left increments to 5.
+- Left=5 (height 0). Compare to 3. 0<3. Process left. height is 0. Add 2-0=2. Result becomes 5. left increments to 6.
+- Left=6 (height 1). 1<3. Process left. Add 2-1=1. Result 6. left increments to 7. Now left is 7 (height 3). Compare to right=7 (3). So height[left] equals height[right]. Process the else clause. Check if height[right] (3) > right_max (2). Yes, update right_max to 3. right decrements to 6. Now left is 7, right is 6. Loop ends.
+- So total trapped water is 6. But the correct answer for this example is 6, right? Wait, the sample input given in the problem description is [0,1,0,2,1,0,1,3,2,1,2,1], and the output is 6. So this approach works here.
+```
+class Solution {
+    public int trap(int[] height) {
+        if (height == null || height.length == 0) {
+            return 0;
+        }
+        
+        int left = 0;
+        int right = height.length - 1;
+        int leftMax = 0;
+        int rightMax = 0;
+        int result = 0;
+        
+        while (left <= right) {
+            if (height[left] < height[right]) {
+                if (height[left] > leftMax) {
+                    leftMax = height[left];
+                } else {
+                    result += leftMax - height[left];
+                }
+                left++;
+            } else {
+                if (height[right] > rightMax) {
+                    rightMax = height[right];
+                } else {
+                    result += rightMax - height[right];
+                }
+                right--;
+            }
+        }
+        
+        return result;
+    }
+}
+```
+
 ## Overlapping Intervals - O(nlogn) & O(n)
 - Question: Overlapping intervals, scheduling conflicts - Approach: Sort intervals and merge overlapping ones
 1. [Merge Intervals](https://leetcode.com/problems/merge-intervals/description/) - O(nlogn) & O(n)
