@@ -1,13 +1,13 @@
 ## Data Structures & Algorithms
 
-1. [Binary Search - O(nlog n) & O(1)](#binary-search)
-2. [Cyclic Sort - O(n) & O(1)](#cyclic-sort)
+1. [Binary Search - O(nlog n) & O(1)](#binary-search) - Search in Rotated Sorted Array || Find Minimum in Rotated Sorted Array 
+2. [Cyclic Sort - O(n) & O(1)](#cyclic-sort) - Find the Duplicate Number
 3. [Bitwise](#bitwise) - Missing Number || Reverse Bits || Number of 1 Bits || Counting Bits || Sum of Two Integers 
 4. [Prefix Sum - O(n) & O(1)](#prefix-sum)
-5. [Kadane's Algorithm - O(n) & O(1)](#kadane's-algorithm)
-6. [Top K elements - O(nlogk) and O(k)](#top-k-elements)
+5. [Kadane's Algorithm - O(n) & O(1)](#kadane-s-algorithm) - Maximum Subarray 
+6. [Top K elements - O(nlogk) and O(k)](#top-k-elements) - Top K Frequent Elements || 
 7. [Monotonic Stack - O(n) & O(n)](#monotonic-stack) 
-8. [Sliding Window - O(n) & O(1)](#sliding-window)
+8. [Sliding Window - O(n) & O(1)](#sliding-window) - Maximum Sum of Subarrays With Length K || Maximum Sum of Distinct Subarrays With Length K || Longest Substring Without Repeating Characters || Longest Repeating Character Replacement || Minimum Window Substring 
 9. [Two Pointers - O(n) and O(1)](#two-pointers) - Valid Palindrome || Move Zeroes || Container With Most Water || Remove Duplicates from Sorted Array || Two Sum II - Input Array Is Sorted || Longest Palindromic Substring(LPS) || Palindromic Substrings || 3Sum || Trapping Rain Water 
 10. [Overlapping Intervals - O(nlogn) & O(n)](#overlapping-intervals) - Merge Intervals || Insert Interval || Non-overlapping Intervals || Meeting Rooms || Meeting Rooms II 
 11. [Backtracking](#backtracking) - Combination Sum || 
