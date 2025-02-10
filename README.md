@@ -1,4 +1,4 @@
-## Data Structures & Algorithms
+## [Data Structures & Algorithms](https://leetcode.com/problemset/)
 
 1. [Binary Search - O(nlog n) & O(1)](#binary-search) - Search in Rotated Sorted Array || Find Minimum in Rotated Sorted Array 
 2. [Cyclic Sort - O(n) & O(1)](#cyclic-sort) - Find the Duplicate Number
