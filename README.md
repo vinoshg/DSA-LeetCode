@@ -1,12 +1,12 @@
 ## Data Structures & Algorithm
 
-1. [Binary Search](## Binary Search - O(logn) and O(1))
-2. [Dynamic Programming](## Dynamic Programming - Iteration(Two variable & dp[] array) and Memoization(Recursion))
+1. [Binary Search](##binary-search)
+2. [Dynamic Programming](##dynamic-programming)
 3. [Usage](#usage)
 4. [Contributing](#contributing)
 5. [License](#license)
 
-## Binary Search - O(logn) and O(1)
+## Binary Search
 1. Binary Search 
 - Question: Find a target in a Sorted Array or range
 - Solution: 1. Take start and end pointers, while loop start <= end calculate mid and compare the target with mid to reduce the range update start and end
