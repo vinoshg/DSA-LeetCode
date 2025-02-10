@@ -2312,6 +2312,7 @@ class Solution {
 ```
 
 ## Stack
+- Stacks are often useful in problems where we need to track sequences and handle consecutive elements
 1. [Valid Parentheses](https://leetcode.com/problems/valid-parentheses/description/) - O(n) & O(n)
 - Question: Determine if a string of parentheses is valid
 - Solution: 1. Stack data structures
@@ -2348,6 +2349,118 @@ class Solution {
         }
         
         return stack.isEmpty();
+    }
+}
+```
+2. [Remove All Adjacent Duplicates in String II](https://leetcode.com/problems/remove-all-adjacent-duplicates-in-string-ii/description/) - O(n) & O(n)
+- Question: Reducing a string by removing K consecutive identical characters
+- Solution: 1. Use a stack-based deque approach to efficiently track consecutive characters and their counts. 2. Brute-force approach would be to scan the string for k-length runs, remove them, and repeat until no more can be removed.
+-  I have to reduce a string by removing k consecutive identical characters. Let's see. So the task is, given a string like "aabbccd" and a k value, say 2, I have to remove any group of exactly k identical consecutive characters. But wait, maybe it's any group of at least k? Wait, the problem says "K consecutive identical characters". So if there are more than k, like 3, and k is 2, do I remove 2 and leave 1? Or do I need to remove exactly k?
+- Wait, looking back at the problem statement: "Reduce the string by removing K consecutive identical characters". So perhaps whenever there are k consecutive identical characters, they are removed. But after removal, the remaining parts are concatenated, and this process is repeated until no more K-length consecutive duplicates can be removed. For example, if the string is "aabbccd" and k=2, then removing "aa", "bb", "cc" would leave "d".
+- Alternatively, maybe we need to do it in a single pass. Hmm. But how? Because after removing some parts, new groups of k duplicates might form. For example, consider "aaabbb" and k=3. Remove the first three 'a's to get "bbb", then remove those three 'b's. But if the input is "abbbaa" and k=3, first the "bbb" is removed, then the "aaa" is formed and removed.
+- So the approach would need to process the string and handle these cases where after a removal, new k-length groups are formed.
+- The challenge is to do this efficiently. For example, a brute-force approach would be to scan the string for k-length runs, remove them, and repeat until no more can be removed. However, this could be inefficient for large strings because each iteration requires scanning the entire string again.
+- So, how can we do this more efficiently? Let's think about using a stack-based approach. Stacks are often useful in problems where we need to track sequences and handle consecutive elements.
+- The idea is to use a stack that keeps track of the characters and their counts. For each character in the input string, we check the top of the stack. If the top character is the same as the current one, we increment the count. If the count reaches k, we pop the character from the stack. Otherwise, we update the count. If the top character is different, we push the current character with a count of 1.
+- This approach processes the string in a single pass and uses a stack to keep track of consecutive counts. Let's see how this works with an example.
+- But what about a case where after popping, the previous elements combine? For example, "abbaaa" with k=2. Processing 'a' (count 1), 'b' (count 1), then another 'b' (count 2, so pop 'b's). Now the stack has 'a' with count 1. Then 'a's start: count becomes 2 (after first two), then third 'a' makes count 3. Since k=2, but count 3, so we can't pop. Wait, but k is 2. So after two 'a's, the count is 2, which would be popped. Then the third 'a' would be pushed again with count 1. So the final string would be 'a'.
+- Wait, let's walk through "abbaaa" with k=2:
+- Initial stack: empty.
+Process 'a': stack becomes [ ('a',1) ]
+Process 'b': stack becomes [ ('a',1), ('b',1) ]
+Process 'b': stack top is 'b', so increment count to 2. Now count ==k=2, so pop. Stack becomes [ ('a',1) ]
+Process 'a': stack top is 'a', count becomes 2. Now count ==k, so pop. Stack is empty.
+Process 'a': stack becomes [ ('a',1) ]
+Process 'a': stack top is 'a', count becomes 2. Pop. Stack is empty.
+- So the plan is to implement a stack where each element is a pair of (character, current consecutive count). For each character in the input string, check the top of the stack. If same character, increment count. If the count reaches k, pop. Otherwise, update the count. If different, push the new character with count 1.
+- Once the entire string is processed, the stack contains the remaining characters with their counts, which can be used to build the resulting string.
+- In Java, a stack can be implemented using a Deque or a custom class to hold the character and count. Each stack element can be an object of a helper class, or we can use an array of objects. Alternatively, since Java doesn't have tuples, we can use a class with two fields: character and count.
+- But perhaps the most straightforward way is to use a Stack of objects, each containing the character and the count.
+- So, first, define a helper class:
+- Then, create a stack of Pair objects.
+- Initialize the stack as empty.
+- Loop through each character in the input string:
+- For each character:
+- If the stack is not empty and the top element's character is equal to current character:
+- Increment the count.
+- If the count == k, then pop the top element.
+- Else, update the top element's count.
+- Else:
+- Push a new Pair with current character and count 1.
+```
+class Solution {
+    public String reduceString(String s, int k) {
+        Deque<Pair> deque = new ArrayDeque<>();
+        for (char c : s.toCharArray()) {
+            if (!deque.isEmpty() && deque.peekLast().c == c) {
+                Pair top = deque.peekLast();
+                top.count++;
+                if (top.count == k) {
+                    deque.removeLast();
+                }
+            } else {
+                deque.addLast(new Pair(c, 1));
+            }
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (Pair p : deque) {
+            for (int i = 0; i < p.count; i++) {
+                sb.append(p.c);
+            }
+        }
+        return sb.toString();
+    }
+
+    private static class Pair {
+        char c;
+        int count;
+        Pair(char c, int count) {
+            this.c = c;
+            this.count = count;
+        }
+    }
+}
+```
+3. [Remove All Adjacent Duplicates In String](https://leetcode.com/problems/remove-all-adjacent-duplicates-in-string/description/) - O(n) & O(n)
+- Question: Need to repeatedly remove  two adjacent and equal duplicate characters from a string until no such duplicates remain.
+- Solution: 1. Using Stack 2. Brut force - O(n^2)
+- The example given is like, if the input is "abbaca", the output should be "ca". Because first, the two 'b's are adjacent and removed, resulting in "aaca", then the two 'a's are adjacent, leaving "ca".
+- Hmm, how do I approach this? Let's think. The straightforward way is to simulate the process. But simulating each step by checking adjacent pairs and removing them might be inefficient, especially for large strings. Because each removal could cause new adjacent duplicates. So like, in the worst case, the string could be all the same characters, and each step removes two, which would take O(n^2) time. That's probably not good enough for big inputs.
+- Wait, maybe there's a smarter way. Oh right! Using a stack. Because when we process each character, we can check if it's the same as the top of the stack. If it is, then we pop it (since they form a pair and get removed). Otherwise, push the current character onto the stack. This way, we process the string in one pass, which is O(n) time. Let's see how that works.
+- Let me think of an example. Take "abbaca". Let's process each character:
+- Start with stack empty. First character 'a' is pushed. Stack: [a]
+- Next 'b' is not the same as 'a', push. Stack: [a, b]
+- Next 'b' is same as top. Pop. Stack becomes [a]
+- Next 'a' is same as top. Pop. Stack is empty.
+- Next 'c' is pushed. Stack: [c]
+- Next 'a' is pushed. Stack: [c, a]
+- So the final stack is ['c','a'], which is "ca". That works.
+- So the plan is:
+- Initialize a stack (could use a Deque in Java, or even a StringBuilder as a stack for efficiency).
+- Iterate through each character in the string.
+- For each character, check if the stack is not empty and the top element is equal to the current character.
+- If yes, pop the top element.
+- If no, push the current character.
+- At the end, convert the stack to a string and return.
+- Now, implementing this in Java. Let's see.
+- Using a StringBuilder as a stack:
+- Initialize a StringBuilder. For each character in s:
+- Check if the length of the StringBuilder is > 0 and the last character is equal to current char.
+- If yes, delete the last character.
+- Else, append the current character.
+```
+class Solution {
+    public String removeDuplicates(String s) {
+        StringBuilder sb = new StringBuilder();
+        for (char c : s.toCharArray()) {
+            if (sb.length() > 0 && sb.charAt(sb.length() - 1) == c) {
+                sb.deleteCharAt(sb.length() - 1);
+            } else {
+                sb.append(c);
+            }
+        }
+        return sb.toString();
     }
 }
 ```
