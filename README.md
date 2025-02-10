@@ -8,17 +8,17 @@
 6. [Top K elements - O(nlogk) and O(k)](#top-k-elements)
 7. [Monotonic Stack - O(n) & O(n)](#monotonic-stack) 
 8. [Sliding Window - O(n) & O(1)](#sliding-window)
-9. [Two Pointers - O(n) and O(1)](#two-pointers)
-10. [Overlapping Intervals - O(nlogn) & O(n)](#overlapping-intervals)
-11. [Backtracking](#backtracking)
+9. [Two Pointers - O(n) and O(1)](#two-pointers) - Valid Palindrome || Move Zeroes || Container With Most Water || Remove Duplicates from Sorted Array || Two Sum II - Input Array Is Sorted || Longest Palindromic Substring(LPS) || Palindromic Substrings || 3Sum || Trapping Rain Water 
+10. [Overlapping Intervals - O(nlogn) & O(n)](#overlapping-intervals) - Merge Intervals || Insert Interval || Non-overlapping Intervals || Meeting Rooms || Meeting Rooms II 
+11. [Backtracking](#backtracking) - Combination Sum || 
 12. [Dynamic Programming](#dynamic-programming) - Longest Common Subsequence(LCS) || Target Sum || Coin Change || Climbing Stairs || Longest Increasing Subsequence(LIS) || Word Break || Maximum Product Subarray || Unique Paths || House Robber || House Robber II || Decode Ways || Edit Distance   
-13. [Ad-hoc](#ad-hoc)
-14. [Greedy Algorithm](#greedy-algorithm)
-15. [Linked List](#linked-list)
-16. [Stack](#stack)
+13. [Ad-hoc](#ad-hoc) - Rotate Image || Group Anagrams || Spiral Matrix || Set Matrix Zeroes || Contains Duplicate || Product of Array Except Self || Valid Anagram || Encode and Decode Strings || Roman to Integer
+14. [Greedy Algorithm](#greedy-algorithm) - Longest Consecutive Sequence(LCS) || Jump Game || Best Time to Buy and Sell Stock (Single trade) || Best Time to Buy and Sell Stock II (Multiple trades) || 
+15. [Linked List](#linked-list) - Linked List Cycle || Reverse Linked List || Reorder List || Remove Nth Node From End of List || Merge Two Sorted Lists || Merge k Sorted Lists || LRU Cache 
+16. [Stack](#stack) - Valid Parentheses || Remove All Adjacent Duplicates in String II || Remove All Adjacent Duplicates In String
 17. [Queue](#queue) 
-18. [Heap - Priority Queue](#heap)
-19. [Trie - O(L) & O(N*L)](#trie)
+18. [Heap - Priority Queue](#heap) - Find Median from Data Stream || 
+19. [Trie - O(L) & O(N*L)](#trie) - Implement Trie - Prefix Tree || Design Add and Search Words Data Structure || Word Search II 
 20. [Tree](#tree) - Serialize and Deserialize Binary Tree || Subtree of Another Tree || Validate Binary Search Tree(BST) || Invert Binary Tree || Same Tree || Binary Tree Level Order Traversal || Kth Smallest Element in a BST || Maximum Depth of Binary Tree || Construct Binary Tree from Preorder and Inorder Traversal || Lowest Common Ancestor of a Binary Search Tree (BST) || Binary Tree Maximum Path Sum 
 21. [Graph - O(V+E) & O(V)](#graph) - Number of Islands || Clone Graph || Pacific Atlantic Water Flow || Word Search || Course Schedule || Graph Valid Tree || Alien Dictionary || Number of connected components in an undirected graph 
 
