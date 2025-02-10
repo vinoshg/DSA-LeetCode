@@ -54,7 +54,6 @@ List<int[]> merged = new ArrayList<>();
 merged.toArray(new int[merged.size()][]); //2D Array
 List<Integer> currentLevel = new ArrayList<>();
 currentLevel.add(node.val);
-
 ```
 ## Set
 ```
