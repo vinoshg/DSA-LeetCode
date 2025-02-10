@@ -1327,7 +1327,8 @@ class Solution {
 }
 ```
 
-## Dynamic Programming - Iteration(Two variable & dp[] array) and Memoization(Recursion)
+## Dynamic Programming
+- Iteration(Two variable & dp[] array) and Memoization(Recursion)
 - Maximise/Minimise/Fewest of certain value or number of ways
 - Question: Optimize recursive problems with overlapping subproblems - 0/1 Knapsack | Unbounded Knapsack | Longest Common Subsequence (LCS) | Fibonacci sequence pattern
 - 0/1 Knapsack(Subset selection with constraints) | Unbounded Knapsack(Unlimited item usage) | LCS(String alignment problems)
