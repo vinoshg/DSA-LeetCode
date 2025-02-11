@@ -35,7 +35,6 @@
 - Example: “We delivered the product 2 days ahead of the revised deadline, which led to a 15% increase in client satisfaction and a repeat contract worth $50K.”
 - Key tips: Highlight skills demonstrated (e.g., adaptability, teamwork). If the result wasn’t ideal, explain lessons learned.
 
-Example STAR Answer
 ## Question: “Tell me about a time you resolved a conflict.”
 - Situation: “Two team members disagreed on the design approach for a client project, causing delays.”
 - Task: “As team lead, I needed to mediate the conflict and align everyone on a solution.”
