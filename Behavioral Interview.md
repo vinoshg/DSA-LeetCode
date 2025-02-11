@@ -121,3 +121,38 @@ General Tips for Success:
 - Categories of questions with example questions and sample answers for each.
 - a. Teamwork b. Leadership c. Problem-Solving d. Conflict Resolution e. Adaptability f. Time Management g. Handling Pressure h. Failure/Mistakes i. Communication
 j. Decision-Making k. Customer Service l. Innovation/Creativity m. Ethical Challenges
+
+- Tell me about a project you’re proud of. What challenges did you face?
+- Describe a time you disagreed with a teammate. How did you resolve it?
+- How do you handle tight deadlines or competing priorities?
+- What’s a technical decision you made that you later regretted?
+- How do you stay updated with new technologies?
+- Why do you want to work at Google?
+
+1. Project I’m Proud Of
+- Situation: I led the development of a real-time analytics dashboard for a healthcare client to monitor patient data.
+- Task: The challenge was processing high-throughput data with <100ms latency and integrating with legacy systems.
+- Action: Chose a stack with React (frontend), Node.js + WebSockets (real-time updates), and Apache Kafka (data streaming). Optimized database queries and introduced caching.
+- Result: Reduced latency by 60%, and the client reported a 30% improvement in decision-making efficiency. Learned the value of scalability planning.
+
+2. Disagreement with a Teammate
+- Situation: A teammate advocated for adopting a new GraphQL-based API, while I favored REST due to team familiarity.
+- Resolution: We built parallel prototypes for a non-critical feature. Analysis showed GraphQL reduced payload size but increased complexity. Compromised by using GraphQL for specific high-efficiency modules while retaining REST elsewhere. Outcome: Balanced innovation and practicality, strengthening team trust.
+
+3. Handling Tight Deadlines
+- Example: When two projects converged, I used the Eisenhower Matrix to prioritize tasks, delegated non-core work to interns, and held daily standups to track progress. Transparently communicated risks to stakeholders, renegotiating one deadline. Delivered both projects on time without quality loss. Key takeaway: Proactive communication prevents burnout.
+
+4. Regretted Technical Decision
+- Decision: Using MongoDB for a finance app requiring complex transactions.
+- Issue: Lack of ACID compliance led to data inconsistencies.
+- Fix: Migrated to PostgreSQL, which took three weeks. Now, I rigorously evaluate use cases against database strengths and involve stakeholders in tech decisions.
+
+5. Staying Updated
+- Approach: Weekly: Follow Hacker News, listen to "Software Engineering Daily," and take Coursera courses (e.g., recent ML course). Monthly: Attend local DevOps meetups. Annually: Allocate time for a hands-on project (e.g., built a GPT-4 chatbot using LangChain last month).
+
+6. Why Google?
+- Alignment with Values: Google’s mission to organize global information aligns with my passion for scalable tech. Projects like TensorFlow and privacy-focused innovations inspire me.
+- Culture: Thrive in collaborative, intellectually curious environments. Eager to contribute to open-source projects like Kubernetes and learn from top-tier peers.
+- Impact: Want to solve challenges that affect billions, such as improving AI accessibility or enhancing cybersecurity—areas where Google leads.
+
+- This structure highlights problem-solving, adaptability, and alignment with Google’s ethos, while keeping answers specific and outcome-focused.
