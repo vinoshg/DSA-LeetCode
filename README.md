@@ -3,7 +3,7 @@
 1. [Binary Search - O(nlog n) & O(1)](#binary-search) - Search in Rotated Sorted Array || Find Minimum in Rotated Sorted Array || Median of Two Sorted Arrays
 2. [Cyclic Sort - O(n) & O(1)](#cyclic-sort) - Find the Duplicate Number
 3. [Bitwise](#bitwise) - Missing Number || Reverse Bits || Number of 1 Bits || Counting Bits || Sum of Two Integers 
-4. [Prefix Sum - O(n) & O(1)](#prefix-sum)
+4. [Prefix Sum - O(n) & O(1)](#prefix-sum) - Number of Subarrays whose sum is k
 5. [Kadane's Algorithm - O(n) & O(1)](#kadanes-algorithm) - Maximum Subarray 
 6. [Top K elements - O(nlogk) and O(k)](#top-k-elements) - Top K Frequent Elements || 
 7. [Monotonic Stack - O(n) & O(n)](#monotonic-stack) 
