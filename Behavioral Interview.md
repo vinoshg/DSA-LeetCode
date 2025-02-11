@@ -122,6 +122,7 @@ General Tips for Success:
 - a. Teamwork b. Leadership c. Problem-Solving d. Conflict Resolution e. Adaptability f. Time Management g. Handling Pressure h. Failure/Mistakes i. Communication
 j. Decision-Making k. Customer Service l. Innovation/Creativity m. Ethical Challenges
 
+## Behavioral & Cultural Fit Questions
 - Tell me about a project you’re proud of. What challenges did you face?
 - Describe a time you disagreed with a teammate. How did you resolve it?
 - How do you handle tight deadlines or competing priorities?
