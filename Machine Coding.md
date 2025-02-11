@@ -183,3 +183,161 @@ public class RateLimiter {
     }
 }
 ```
+## Design a flexible and extensible payment type integration
+To design a flexible payment integration system that supports multiple payment types (e.g., UPI, NetBanking, NFC, BNPL) and allows easy addition of new methods, follow this structured approach:
+
+1. Interface Definition (Strategy Pattern)
+Define a PaymentGateway interface to standardize payment processing across all methods:
+
+```
+public interface PaymentGateway {
+    PaymentResponse processPayment(PaymentRequest request) throws PaymentException;
+    void validateRequest(PaymentRequest request) throws ValidationException;
+}
+```
+2. Request and Response Models
+Use a base request class with common fields and a map for method-specific parameters:
+
+```
+public class PaymentRequest {
+    private String paymentType;
+    private double amount;
+    private String senderAccountId;
+    private String receiverAccountId;
+    private Map<String, Object> params; // For method-specific parameters (e.g., UPI ID)
+    
+    // Getters and setters
+}
+```
+Define a standardized response:
+
+```
+public class PaymentResponse {
+    private String transactionId;
+    private String status;
+    private String message;
+    
+    // Getters and setters
+}
+```
+3. Concrete Implementations
+Implement the PaymentGateway for each payment method. Example for UPI:
+
+```
+public class UpiGateway implements PaymentGateway {
+    @Override
+    public void validateRequest(PaymentRequest request) {
+        if (!request.getParams().containsKey("upiId")) {
+            throw new ValidationException("UPI ID is required");
+        }
+    }
+
+    @Override
+    public PaymentResponse processPayment(PaymentRequest request) {
+        String upiId = (String) request.getParams().get("upiId");
+        // Call UPI API endpoint and handle response
+        return new PaymentResponse("txn123", "SUCCESS", "Payment processed");
+    }
+}
+```
+4. Gateway Factory
+Use a factory to dynamically select the payment gateway:
+
+```
+public class PaymentGatewayFactory {
+    private static final Map<String, PaymentGateway> gateways = new HashMap<>();
+    
+    static {
+        gateways.put("UPI", new UpiGateway());
+        gateways.put("NETBANKING", new NetBankingGateway());
+        // Add others
+    }
+    
+    public static PaymentGateway getGateway(String paymentType) {
+        return gateways.get(paymentType.toUpperCase());
+    }
+    
+    // Method to register new gateways dynamically if needed
+    public static void registerGateway(String paymentType, PaymentGateway gateway) {
+        gateways.put(paymentType.toUpperCase(), gateway);
+    }
+}
+```
+5. Controller Layer
+Create a REST controller to accept requests and delegate processing:
+
+```
+@RestController
+public class PaymentController {
+    @PostMapping("/pay")
+    public ResponseEntity<PaymentResponse> processPayment(
+        @RequestBody PaymentRequest request
+    ) {
+        try {
+            PaymentGateway gateway = PaymentGatewayFactory.getGateway(request.getPaymentType());
+            if (gateway == null) {
+                throw new PaymentException("Unsupported payment type");
+            }
+            gateway.validateRequest(request);
+            PaymentResponse response = gateway.processPayment(request);
+            return ResponseEntity.ok(response);
+        } catch (ValidationException | PaymentException e) {
+            return ResponseEntity.badRequest().body(new PaymentResponse(null, "FAILED", e.getMessage()));
+        }
+    }
+}
+```
+6. Adding New Payment Methods
+Implement a new gateway:
+Create a class (e.g., BnplGateway) that implements PaymentGateway.
+
+Register the gateway:
+Add it to the factory’s static block or use registerGateway dynamically:
+
+```
+PaymentGatewayFactory.registerGateway("BNPL", new BnplGateway());
+```
+7. Validation and Error Handling
+Custom Exceptions: Define ValidationException and PaymentException for error handling.
+
+Parameter Validation: Each gateway validates its specific parameters in validateRequest().
+
+8. Dynamic Parameters
+Clients send payment-specific parameters in the params field. For example, a BNPL request might include:
+
+```
+{
+    "paymentType": "BNPL",
+    "amount": 100,
+    "senderAccountId": "acc123",
+    "receiverAccountId": "acc456",
+    "params": {
+        "tenure": 3,
+        "provider": "XYZ"
+    }
+}
+```
+9. External Configuration
+Store payment endpoints and credentials in a configuration file (e.g., application.yml):
+
+```
+payment:
+  upi:
+    url: https://api.upi.com/pay
+    timeout: 5000
+  netbanking:
+    url: https://api.netbank.com/transfer
+```
+10. Testing and Extensions
+Test Each Gateway: Ensure validations and API integrations work as expected.
+
+Asynchronous Payments: Extend the system to handle webhooks for pending transactions.
+
+Idempotency: Add idempotency keys to prevent duplicate payments.
+
+Key Benefits
+Extensibility: Add new payment types without modifying existing code.
+
+Separation of Concerns: Each gateway encapsulates its own logic.
+
+Unified Interface: Simplified integration for clients via a single endpoint.
