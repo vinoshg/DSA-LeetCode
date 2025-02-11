@@ -119,5 +119,5 @@ General Tips for Success:
 - Describe a situation where you had to work with someone difficult.
 - Share a time when you went above and beyond for a customer.
 - Categories of questions with example questions and sample answers for each.
-a. Teamwork b. Leadership c. Problem-Solving d. Conflict Resolution e. Adaptability f. Time Management g. Handling Pressure h. Failure/Mistakes i. Communication
+- a. Teamwork b. Leadership c. Problem-Solving d. Conflict Resolution e. Adaptability f. Time Management g. Handling Pressure h. Failure/Mistakes i. Communication
 j. Decision-Making k. Customer Service l. Innovation/Creativity m. Ethical Challenges
