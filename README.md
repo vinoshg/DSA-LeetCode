@@ -1,6 +1,6 @@
 ## [Data Structures & Algorithms](https://leetcode.com/problemset/)
 
-1. [Binary Search - O(nlog n) & O(1)](#binary-search) - Search in Rotated Sorted Array || Find Minimum in Rotated Sorted Array 
+1. [Binary Search - O(nlog n) & O(1)](#binary-search) - Search in Rotated Sorted Array || Find Minimum in Rotated Sorted Array || Median of Two Sorted Arrays
 2. [Cyclic Sort - O(n) & O(1)](#cyclic-sort) - Find the Duplicate Number
 3. [Bitwise](#bitwise) - Missing Number || Reverse Bits || Number of 1 Bits || Counting Bits || Sum of Two Integers 
 4. [Prefix Sum - O(n) & O(1)](#prefix-sum)
@@ -125,6 +125,70 @@ class Solution {
         }
         
         return nums[left];
+    }
+}
+```
+13. [Median of Two Sorted Arrays](https://leetcode.com/problems/median-of-two-sorted-arrays/description/) - O(log min(m, n)) & O(1)
+- Question: Finding the median of two sorted arrays
+- Solution: 1. Binary search approach to efficiently partition the arrays such that all elements in the left partitions are less than or equal to all elements in the right partitions. This allows us to determine the median without merging the arrays
+- Hmm, the median is the middle value when the combined array is sorted. If the total number of elements is even, then it's the average of the two middle numbers. But how do I do this efficiently without merging the arrays, since that would take O(m+n) time and space, which might not be optimal?
+- Wait, the user probably wants a solution that's better than O(m+n). Oh right, the optimal solution runs in O(log(min(m,n))) time. So I need to think about a binary search approach here.
+- Let me recall. The key idea is to partition both arrays into left and right parts such that all elements in the left parts are less than or equal to the elements in the right parts. And the median is determined based on the maximum of the left parts and the minimum of the right parts.
+- So, first, I should make sure that nums1 is the shorter array. If not, swap them. That way, the binary search is done on the smaller array, reducing the time complexity.
+- Then, perform binary search on the smaller array to find the correct partition. For each partition in nums1, calculate the corresponding partition in nums2. Check if the max of left parts is less than or equal to the min of right parts. If so, find the median based on whether the total length is even or odd.
+- But how do I handle edge cases where a partition might take all elements from one array or none? Like, when the partition index is 0 or the full length.
+- Also, need to handle cases where one array is entirely to the left or right of the other. For example, all elements in nums1 are smaller than nums2, or vice versa.
+- Let me outline the steps:
+- Ensure nums1 is the shorter array. If not, swap nums1 and nums2.
+- Initialize variables for binary search: low = 0, high = len(nums1).
+- While low <= high, find the partition in nums1 (mid = (low + high)/2). The partition in nums2 is determined by (total_length + 1)/2 - partition1. The +1 here is to handle both even and odd total lengths correctly.
+- Determine the maxLeft and minRight for both partitions. If the max of left parts is <= min of right parts, then we found the correct partition. Otherwise, adjust the binary search range.
+- Wait, why (total_length +1)/2? Because when the total number of elements is odd, the median is the middle element, which would be in the left partition. So the left partition has one more element than the right. For even, both partitions have equal elements.
+- So the partition positions must satisfy that the left parts of both arrays combined have one more element (if total is odd) or equal (if even). Wait, actually, the formula (m + n +1)/2 ensures that the left part has (m+n+1)/2 elements, which accounts for both cases.
+- For example, if m + n is even, (m+n+1)/2 is (even +1)/2 which is a .5, but since we are using integer division, it would be (m+n)/2 + 0.5? Wait, no. Wait, in Java, integer division truncates. So if m+n is even, (m+n+1)/2 is (even+1)/2. Let's take an example: m+n=4, (4+1)/2=2.5, which truncates to 2. But (m+n)/2 is 2. So perhaps the formula is designed to get the correct partition point.
+```
+class Solution {
+    public double findMedianSortedArrays(int[] nums1, int[] nums2) {
+        // Ensure nums1 is the shorter array to optimize binary search
+        if (nums1.length > nums2.length) {
+            int[] temp = nums1;
+            nums1 = nums2;
+            nums2 = temp;
+        }
+        int m = nums1.length;
+        int n = nums2.length;
+        int low = 0, high = m;
+        int halfLen = (m + n + 1) / 2; // Correct partition point for left part
+        
+        while (low <= high) {
+            int i = (low + high) / 2; // Partition point for nums1
+            int j = halfLen - i; // Partition point for nums2
+            
+            // Handle edge cases where partitions are at the boundaries
+            int maxLeft1 = (i == 0) ? Integer.MIN_VALUE : nums1[i - 1]; //i=0 then maxLeft1=Integer.MIN_VALUE otherwise nums1[i - 1]
+            int minRight1 = (i == m) ? Integer.MAX_VALUE : nums1[i];
+            int maxLeft2 = (j == 0) ? Integer.MIN_VALUE : nums2[j - 1];
+            int minRight2 = (j == n) ? Integer.MAX_VALUE : nums2[j];
+            
+            if (maxLeft1 <= minRight2 && maxLeft2 <= minRight1) {
+                // Found the correct partition
+                if ((m + n) % 2 == 0) {
+                    // Even length: average of max of left and min of right
+                    return (Math.max(maxLeft1, maxLeft2) + Math.min(minRight1, minRight2)) / 2.0;
+                } else {
+                    // Odd length: max of left part
+                    return Math.max(maxLeft1, maxLeft2);
+                }
+            } else if (maxLeft1 > minRight2) {
+                // Move partition in nums1 to the left
+                high = i - 1;
+            } else {
+                // Move partition in nums1 to the right
+                low = i + 1;
+            }
+        }
+        // This return is theoretically unreachable with valid input
+        throw new IllegalArgumentException("Input arrays are not sorted.");
     }
 }
 ```
