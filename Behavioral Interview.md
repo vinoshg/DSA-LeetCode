@@ -1,4 +1,5 @@
 The STAR method is a structured approach to answering behavioral interview questions by outlining a Situation, Task, Action, and Result. Here’s how to apply it effectively:
+
 Let's start by breaking down what STAR stands for. I remember it's Situation, Task, Action, Result. Right? So, the idea is to structure your answer by first describing the situation, then the task you had to accomplish, the actions you took, and finally the results of those actions.
 
 Wait, but why is this important? I guess because behavioral questions are all about past experiences, and interviewers want to see how you handled specific scenarios. They ask things like "Tell me about a time you faced a challenge" or "Describe a situation where you had to work under pressure." Using STAR helps organize the answer so it's clear and concise.
