@@ -3,9 +3,9 @@
 1. [Binary Search - O(nlog n) & O(1)](#binary-search) - Search in Rotated Sorted Array || Find Minimum in Rotated Sorted Array || Median of Two Sorted Arrays
 2. [Cyclic Sort - O(n) & O(1)](#cyclic-sort) - Find the Duplicate Number
 3. [Bitwise](#bitwise) - Missing Number || Reverse Bits || Number of 1 Bits || Counting Bits || Sum of Two Integers 
-4. [Prefix Sum - O(n) & O(1)](#prefix-sum) - Number of Subarrays whose sum is k
+4. [Prefix Sum - O(n) & O(1)](#prefix-sum) - Range Sum Query - Immutable || Contiguous Array || Subarray Sum Equals K
 5. [Kadane's Algorithm - O(n) & O(1)](#kadanes-algorithm) - Maximum Subarray 
-6. [Top K elements - O(nlogk) and O(k)](#top-k-elements) - Top K Frequent Elements || 
+6. [Top K elements - O(nlogk) and O(k)](#top-k-elements) - Kth Largest Element in an Array || Top K Frequent Elements || 
 7. [Monotonic Stack - O(n) & O(n)](#monotonic-stack) 
 8. [Sliding Window - O(n) & O(1)](#sliding-window) - Maximum Sum of Subarrays With Length K || Maximum Sum of Distinct Subarrays With Length K || Longest Substring Without Repeating Characters || Longest Repeating Character Replacement || Minimum Window Substring 
 9. [Two Pointers - O(n) and O(1)](#two-pointers) - Valid Palindrome || Move Zeroes || Container With Most Water || Remove Duplicates from Sorted Array || Two Sum II - Input Array Is Sorted || Longest Palindromic Substring(LPS) || Palindromic Substrings || 3Sum || Trapping Rain Water 
@@ -388,13 +388,111 @@ class Solution {
 ```
 
 ## Prefix Sum 
-1. Prefix Sum Array - O(n)
-- Solution: 1. For loop i=1 to array.length array[i] = array[i-1] + array[i] 
-2. Range Sum Query
-- Solution: 1. Build Prefix Sum Array and return prefixSum[right] - prefixSum[left-1]. Handle if left==0 then return prefixSum[right]
-3. Number of Subarrays whose sum is k
-- Solution: 1. PrefixSum with HashMap for if map.containsKey(prefixSum-k) after map.put(prefixSum, map.getOrDefault(prefixSum,0) + 1)          2. Nested loops
+- Prefix Sum Array - O(n) & O(1)
+1. [Range Sum Query - Immutable](https://leetcode.com/problems/range-sum-query-immutable/description/) - O(n) & O(n)
+- Question: Compute the sum of elements of a given array between two indices multiple times.
+- Solution: 1. Build Prefix Sum Array and return prefixSum[right] - prefixSum[left-1] if array's itself modified
+- The idea is to precompute some data so that each sumRange query can be answered quickly. Oh right, the standard approach here is to use a prefix sum array. Like, create an array where each element at index i represents the sum of elements from the start up to i-1. Then, the sum from left to right would be prefix[right+1] - prefix[left]. That makes sense.
+- So for example, if the original array is [1,2,3,4], the prefix sum array would be [0,1,3,6,10]. Then sum from index 1 to 2 (elements 2 and 3) would be prefix[3] - prefix[1] = 6 -1 =5. Right.
+- So the plan is: in the NumArray constructor, compute this prefix sum array. Then, for sumRange, just subtract the appropriate elements.
+- Let me think about the steps.
+- In the constructor:
+- Initialize the prefix array. The prefix array's length is nums.length +1. Because for 0 elements, the sum is 0. Then for each i from 0 to nums.length-1, prefix[i+1] = prefix[i] + nums[i].
+- Yes. Then sumRange(left, right) would be prefix[right+1] - prefix[left]. Because prefix[right+1] is sum up to index right, and prefix[left] is sum up to index left-1. Subtracting gives the sum from left to right.
+- So the code for the constructor would loop through nums and build the prefix array.
+- For example, if nums is empty, the prefix array is just [0].
+- So in Java, the class would have a private int array called prefixSums.
+- Wait, but what if the nums array is modified after the NumArray is constructed? Oh, the problem statement says that sumRange is called multiple times, but I don't see any mention of updates. So we can assume the array is immutable. That's good, because if there were updates, we would need a more complex data structure like a segment tree or a binary indexed tree. But here, since the array doesn't change, the prefix sum approach is perfect.
+- So the steps are:
+- In the constructor, build the prefix sum array.
+- In sumRange, compute the difference between the right+1 index and left index of the prefix array.
+```
+class NumArray {
+    private int[] prefixSums;
 
+    public NumArray(int[] nums) {
+        prefixSums = new int[nums.length + 1];
+        for (int i = 0; i < nums.length; i++) {
+            prefixSums[i + 1] = prefixSums[i] + nums[i]; //If I use same origional modified array : prefixSums[i] = prefixSums[i-1] + nums[i] and i=1 to array.length
+        }
+    }
+    
+    public int sumRange(int left, int right) {
+        return prefixSums[right + 1] - prefixSums[left]; //If I use same origional modified array : prefixSums[right] - prefixSums[left - 1]
+    }
+}
+```
+2. [Contiguous Array](https://leetcode.com/problems/contiguous-array/description/) - O(n) & O(n)
+- Question: Find the maximum length of a contiguous subarray with an equal number of 0s and 1s.
+- Solution: 1.
+- Hmm, the array is binary, right? So, all elements are 0 or 1. The goal is to find the longest contiguous subarray where the count of 0s and 1s is the same.
+- Wait, how can I approach this? Let me think. Maybe using a hash map to track the balance between 0s and 1s. Oh right, because each time I encounter a 0, I can subtract 1 from a counter, and add 1 when I encounter a 1. Or maybe the other way around. Wait, the idea is that when the balance (or sum) is the same at two different indices, then the subarray between those indices has equal 0s and 1s. Because the difference between their sums would be zero, indicating equal counts.
+- So for example, if at index i the sum is S, and at index j it's also S, then from i+1 to j, the sum is zero, which means equal 0s and 1s. Oh right! So the key is to track the first occurrence of each sum. Then, for each subsequent occurrence of the same sum, calculate the distance between indices and keep track of the maximum length.
+- But wait, how to initialize this? Because if the sum is zero, that would mean that from the start of the array up to that point, there's equal count. So maybe we need to put a dummy entry in the hashmap with sum 0 at index -1. That way, when the current sum is 0, the length is current index minus (-1) which is index+1.
+- Let me think through an example. Let's take the array [0,1]. The sum starts at 0 (index -1). Then first element is 0: sum is -1. Then next element is 1: sum is 0. So when we reach index 1, sum is 0, which is in the map. The previous index for sum 0 is -1. So the length is 1 - (-1) = 2. Which is correct.
+- So the steps are:
+- Initialize a HashMap called sum_map. Put (0, -1) into it. This handles the case where the subarray starts from index 0.
+- Initialize variables max_length = 0, current_sum = 0.
+- Loop over each element in nums with index i:
+a. If nums[i] is 0, subtract 1 from current_sum. Else, add 1.
+b. Check if current_sum is in sum_map:
+i. If yes, compute the length as i - sum_map.get(current_sum). Compare to max_length and update if larger.
+ii. If no, add current_sum and i to sum_map.
+- Return max_length.
+```
+class Solution {
+    public int findMaxLength(int[] nums) {
+        HashMap<Integer, Integer> map = new HashMap<>();
+        map.put(0, -1); // Initialize with balance 0 at index -1
+        int maxLength = 0;
+        int balance = 0;
+        for (int i = 0; i < nums.length; i++) {
+            balance += (nums[i] == 1) ? 1 : -1;
+            if (map.containsKey(balance)) {
+                maxLength = Math.max(maxLength, i - map.get(balance));
+            } else {
+                map.put(balance, i);
+            }
+        }
+        return maxLength;
+    }
+}
+```
+3. [Subarray Sum Equals K](https://leetcode.com/problems/subarray-sum-equals-k/description/) -
+- Question: Find the number of continuous subarrays in a given array that sum up to a specified target value, k
+- Solution: 1. Hashmap (dictionary) to keep track of prefix sums encountered while iterating through the array -  for if map.containsKey(prefixSum-k) 2. Nested loops
+-  Hmm. Let's see. The problem is called subarray sum equals k. The function is supposed to return the total number of continuous subarrays whose sum equals k exactly.
+- First, I need to think about the brute force approach. But wait, the brute force would involve checking every possible subarray. For each starting index i, iterate through all ending indices j >= i, compute the sum, and check if it's equal to k. But that's O(n^2) time
+- Wait, right. There's a way to do this with a hashmap and prefix sums. Oh right, I remember something about using cumulative sums and checking the difference between current sum and previous sums. Let me think.
+- The idea is that for each index j, the sum from index i to j is equal to prefix_sum[j] - prefix_sum[i]. If this difference equals k, then that subarray is valid. So we can keep track of the prefix sums and how many times each sum has occurred. Then, as we compute the current prefix sum, we check if (current_sum - k) exists in the hashmap. If it does, then we add the count of that sum to our result.
+- Let me try to formalize this. Let's say we have a variable current_sum that accumulates the sum of the elements up to the current index. We also have a hashmap that stores how many times a particular prefix_sum has occurred. Initially, we put 0 into the hashmap with a count of 1, because before the array starts, the sum is 0.
+- As we iterate through the array:
+- Compute current_sum += nums[i].
+- Check if (current_sum - k) is in the hashmap. If yes, add the count of that key to the result.
+- Update the hashmap by incrementing the count of current_sum in the hashmap.
+- This way, for each position, we're checking how many times a prefix sum of (current_sum - k) has occurred before. Each occurrence corresponds to a starting index where the sum from that index to current index is exactly k.
+```
+class Solution {
+    public int subarraySum(int[] nums, int k) {
+        int count = 0;
+        int currentSum = 0;
+        Map<Integer, Integer> sumCount = new HashMap<>();
+        sumCount.put(0, 1); // Initialize with sum 0 occurring once
+        
+        for (int num : nums) {
+            currentSum += num;
+            // Check if (currentSum - k) exists in the map and add its count to the result
+            if (sumCount.containsKey(currentSum - k)) {
+                count += sumCount.get(currentSum - k);
+            }
+            // Update the map with the current sum
+            sumCount.put(currentSum, sumCount.getOrDefault(currentSum, 0) + 1);
+        }
+        
+        return count;
+    }
+}
+```
 ## Kadane's Algorithm 
 1. [Maximum Subarray](https://leetcode.com/problems/maximum-subarray/description/) - O(n) & O(1) 
 - Question: Finding the maximum subarray sum in an array of integers (Array has -ve elements as well)
@@ -418,9 +516,97 @@ class Solution {
 }
 ```
 ## Top K elements
-- Question: K largest/smallest, K most/least frequent, Top k elements  - O(nlogk) and O(k)
-1. Top K largest elements
-- Solution: 1. Min heap(Priority Queue) add at max k elements and remaining poll 2. Sort Array and take elements - O(nlogn)
+- Question: Top K largest/smallest, K most/least frequent, Top k elements  - O(nlogk) and O(k)
+1. [Kth Largest Element in an Array](https://leetcode.com/problems/kth-largest-element-in-an-array/description/) - Time Average: O(n), Worst case: O(n²) and Space - O(1), recursive calls in the worst case can take O(n) stack space, Average case: O(log n)
+- Question: Find the kth largest element in an unsorted array efficiently. 
+- Solution: 1. Quickselect Algorithm - average O(n) 2. Min heap(Priority Queue) add at max k elements and remaining poll - O(nlogk) and O(k) 3. Sort Array and take elements - O(nlogn)
+- Hmm, let's think about how to approach this. So the problem is, given an unsorted array of integers, return the kth largest element. Oh right, and you have to do it without sorting the entire array, probably for better efficiency. Wait, but what's the best way here?
+- Let me recall some algorithms. Oh right, the quickselect algorithm comes to mind. Quickselect is a selection algorithm to find the kth smallest or largest element in an unordered list. It's related to quicksort. So the idea is to partition the array, and then recursively select one side, depending on where the desired element is.
+- Wait, since we want the kth largest, maybe we can think of it as finding the (n - k + 1)th smallest element. For example, if the array has 6 elements and k is 2, then the 2nd largest is the 5th smallest (since 6-2+1=5). So maybe adjust the k accordingly before applying quickselect.
+- Alternatively, during the partition step, we can rearrange elements such that larger elements are on the left. That way, each pivot partitions the array into elements larger than it and smaller than it. Then, depending on where the pivot index is, we can decide whether to look left or right.
+- Let's outline the steps for quickselect:
+- Choose a pivot element from the array. There are various strategies here, like choosing the first element, last, middle, or a random element. A random pivot might help avoid worst-case scenarios.
+- Partition the array such that elements greater than the pivot come before it, and elements less come after. Or wait, since we want the kth largest, maybe we partition into elements >= pivot and <= pivot. Hmm, need to get that right.
+- Wait, the partition process in quicksort usually arranges elements such that elements less than the pivot are on the left and greater on the right (or vice versa, depending on the implementation). For quickselect, we need to adjust this based on whether we're looking for the kth largest or smallest.
+- So for kth largest, after partitioning, if the pivot's index is equal to k-1 (since arrays are 0-indexed), then the pivot is the answer. If the pivot index is less than k-1, then we need to look to the right side. Otherwise, look to the left.
+- Wait, but how does the partition work here? Let me think. Let's say we partition the array into two parts: elements larger than the pivot and elements smaller. Then, the pivot's position is the number of elements larger than it. So if the pivot is at position p, then there are p elements larger than or equal to it (assuming the partition includes equals). Wait, maybe I should structure the partition so that the pivot is placed in its correct position, with elements larger than it to the left and smaller to the right. Then, the index of the pivot is the number of elements larger than it plus one (if the pivot is part of the left group). Hmm, not sure.
+- Alternatively, maybe during the partition step, after choosing a pivot, we move all elements larger than the pivot to the left, and elements smaller to the right. Then, the pivot's index (after partition) will tell us how many elements are larger than it. So if we want the kth largest element, and the pivot is at index i, then if i == k-1, that's our element. If i > k-1, then the kth largest is in the left partition. If i < k-1, then it's in the right partition and we adjust k accordingly.
+- Yes, that makes sense. So the process would be:
+- Select a pivot.
+- Partition the array so that elements larger than pivot are on the left, smaller on the right.
+- After partitioning, check the pivot's index. If it's exactly k-1, return it.
+- If it's greater than k-1, recurse on the left part.
+- If it's less, recurse on the right part, but adjust k by subtracting (i + 1) since we've already accounted for those elements.
+- So the key is the partition function. Let's think about how to implement that.
+- The standard Lomuto partition scheme for quicksort uses a pivot (say, last element) and partitions the array into elements less than pivot, then the pivot, then elements greater. But for our case, we need to arrange elements larger than pivot first.
+- So maybe we can adjust the partition function. Let's pick a pivot (say, the element at a random index), swap it to the end, then have two pointers: one at the start (i) and iterate through the array. For each element, if it's larger than the pivot, swap it with the element at position i and increment i. At the end, swap the pivot with the element at i, so that all elements before i are larger than the pivot, and elements after are smaller. Then, the pivot is at position i.
+- Wait, for example:
+- Original array: [3,2,1,5,6,4], pivot is 3 (index 0). Swap it to end: [4,2,1,5,6,3]. Then iterate through from 0 to 4 (since pivot is at 5). For each element, compare to pivot (3). If element is larger than 3, swap with position i. So:
+- Start with i = 0.
+- Element 0 is 4: >3. Swap with i (0, same position). i becomes 1.
+- Element 1 is 2: <=3. Do nothing.
+- Element 2 is 1: <=3. Do nothing.
+- Element 3 is 5: >3. Swap with i=1. Now array becomes [4,5,1,2,6,3]. i increments to 2.
+- Element 4 is 6: >3. Swap with i=2. Array becomes [4,5,6,2,1,3]. i increments to 3.
+- End of loop. Now swap pivot (index5) with i=3. Array becomes [4,5,6,3,1,2]. So the pivot is at index3, with elements [4,5,6] (left) being larger than 3, and elements [1,2] (right) smaller. So the pivot's index is 3. So, in this setup, if we were looking for k=4th largest element (since the array is [4,5,6,3,1,2], sorted in descending order, the 4th is 3. So if during quickselect, after partitioning, the pivot's index is 3, which is k-1 (since k=4, 3 is the index), so return 3.
+- So the partition function here would arrange elements larger than the pivot to the left, and return the index of the pivot.
+- So the steps are:
+- Select a random pivot index to avoid worst-case scenarios. Let's say we select a random index between low and high (the current subarray being considered).
+- Swap the pivot element with the last element (to make it easy to partition).
+- Initialize a pointer i at low.
+- Iterate from low to high-1 (since pivot is at high). For each element, if it is larger than the pivot, swap it with the element at position i and increment i.
+- After the loop, swap the pivot (at high) with i. Now the pivot is at i, with all elements before it larger, and after smaller.
+- So in code, the partition function would take the array, left, right, and return the index of the pivot after partitioning.
+```
+import java.util.Random;
+
+class Solution {
+    public int findKthLargest(int[] nums, int k) {
+        return quickSelect(nums, 0, nums.length - 1, k - 1); //0 based index, k-1
+    }
+
+    private int quickSelect(int[] nums, int left, int right, int target) {
+        if (left == right) {
+            return nums[left]; //Base case left became = to right after recursion
+        }
+
+        Random rand = new Random();
+        int pivotIndex = left + rand.nextInt(right - left + 1);
+
+        pivotIndex = partition(nums, left, right, pivotIndex);
+
+        if (pivotIndex == target) {
+            return nums[pivotIndex];
+        } else if (pivotIndex > target) {
+            return quickSelect(nums, left, pivotIndex - 1, target);
+        } else {
+            return quickSelect(nums, pivotIndex + 1, right, target);
+        }
+    }
+
+    private int partition(int[] nums, int left, int right, int pivotIndex) {
+        int pivotValue = nums[pivotIndex];
+        swap(nums, pivotIndex, right); //swap pivotIndex with last
+        int storeIndex = left;
+
+        for (int i = left; i < right; i++) {
+            if (nums[i] > pivotValue) {
+                swap(nums, i, storeIndex);
+                storeIndex++;
+            }
+        }
+
+        swap(nums, storeIndex, right); //swap pivotIndex(last now) with with storeIndex(which is original left)
+        return storeIndex; //This is a pivotIndex
+    }
+
+    private void swap(int[] nums, int i, int j) {
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
+    }
+}
+```
 2. [Top K Frequent Elements](https://leetcode.com/problems/top-k-frequent-elements/description/) - O(nlogk) & O(n+k)
 - Question: Find the top k frequent elements in an integer array.
 - Solution: 1. Min heap having HashMap 2. Sort
