@@ -5,7 +5,7 @@
 3. [Bitwise](#bitwise) - Missing Number || Reverse Bits || Number of 1 Bits || Counting Bits || Sum of Two Integers 
 4. [Prefix Sum - O(n) & O(1)](#prefix-sum) - Range Sum Query - Immutable || Contiguous Array || Subarray Sum Equals K
 5. [Kadane's Algorithm - O(n) & O(1)](#kadanes-algorithm) - Maximum Subarray 
-6. [Top K elements - O(nlogk) and O(k)](#top-k-elements) - Kth Largest Element in an Array || Top K Frequent Elements || 
+6. [Top K elements - O(nlogk) and O(k)](#top-k-elements) - Kth Largest Element in an Array || Top K Frequent Elements || K Closest Points to Origin || Find K Pairs with Smallest Sums
 7. [Monotonic Stack - O(n) & O(n)](#monotonic-stack) 
 8. [Sliding Window - O(n) & O(1)](#sliding-window) - Maximum Sum of Subarrays With Length K || Maximum Sum of Distinct Subarrays With Length K || Longest Substring Without Repeating Characters || Longest Repeating Character Replacement || Minimum Window Substring 
 9. [Two Pointers - O(n) and O(1)](#two-pointers) - Valid Palindrome || Move Zeroes || Container With Most Water || Remove Duplicates from Sorted Array || Two Sum II - Input Array Is Sorted || Longest Palindromic Substring(LPS) || Palindromic Substrings || 3Sum || Trapping Rain Water 
@@ -517,9 +517,28 @@ class Solution {
 ```
 ## Top K elements
 - Question: Top K largest/smallest, K most/least frequent, Top k elements  - O(nlogk) and O(k)
-1. [Kth Largest Element in an Array](https://leetcode.com/problems/kth-largest-element-in-an-array/description/) - Time Average: O(n), Worst case: O(n²) and Space - O(1), recursive calls in the worst case can take O(n) stack space, Average case: O(log n)
-- Question: Find the kth largest element in an unsorted array efficiently. 
-- Solution: 1. Quickselect Algorithm - average O(n) 2. Min heap(Priority Queue) add at max k elements and remaining poll - O(nlogk) and O(k) 3. Sort Array and take elements - O(nlogn)
+1. [Kth Largest Element in an Array](https://leetcode.com/problems/kth-largest-element-in-an-array/description/)  - O(nlogk) and O(k) 
+- Question: Find the kth largest element in an unsorted array efficiently.
+- Solution: 1. Min heap(Priority Queue) add at max k elements and remaining poll - O(nlogk) and O(k)  2. Quickselect Algorithm - average O(n)3. Sort Array and take elements - O(nlogn)
+- Quickselect Time Average: O(n), Worst case: O(n²) and Space - O(1), recursive calls in the worst case can take O(n) stack space, Average case: O(log n)
+```
+class Solution {
+    public int findKthLargest(int[] nums, int k) {
+        // Use a min-heap (PriorityQueue) to store the k largest elements.
+        PriorityQueue<Integer> minHeap = new PriorityQueue<>();
+
+        for (int num : nums) {
+            minHeap.offer(num); // Add the current number to the heap.
+
+            if (minHeap.size() > k) {
+                minHeap.poll(); // Remove the smallest element if the heap size exceeds k.
+            }
+        }
+
+        return minHeap.peek(); // The root of the min-heap is the kth largest element.
+    }
+}
+```
 - Hmm, let's think about how to approach this. So the problem is, given an unsorted array of integers, return the kth largest element. Oh right, and you have to do it without sorting the entire array, probably for better efficiency. Wait, but what's the best way here?
 - Let me recall some algorithms. Oh right, the quickselect algorithm comes to mind. Quickselect is a selection algorithm to find the kth smallest or largest element in an unordered list. It's related to quicksort. So the idea is to partition the array, and then recursively select one side, depending on where the desired element is.
 - Wait, since we want the kth largest, maybe we can think of it as finding the (n - k + 1)th smallest element. For example, if the array has 6 elements and k is 2, then the 2nd largest is the 5th smallest (since 6-2+1=5). So maybe adjust the k accordingly before applying quickselect.
@@ -558,8 +577,6 @@ class Solution {
 - After the loop, swap the pivot (at high) with i. Now the pivot is at i, with all elements before it larger, and after smaller.
 - So in code, the partition function would take the array, left, right, and return the index of the pivot after partitioning.
 ```
-import java.util.Random;
-
 class Solution {
     public int findKthLargest(int[] nums, int k) {
         return quickSelect(nums, 0, nums.length - 1, k - 1); //0 based index, k-1
@@ -676,8 +693,89 @@ class Solution {
     }
 }
 ```
-3. K closest points to the origin
+3. [K closest points to the origin](https://leetcode.com/problems/k-closest-points-to-origin/description/) -  O(nlog k) & O(k)
+- Question: Find the k closest points to the origin (0,0) from a given list of points. 
 - Solution: 1. Max heap - PriorityQueue<int[]> maxHeap = new PriorityQueue<>((a,b) -> getDistance(b) - getDistance(a)) and getDistance is point[0]^2+point[1]^2
+```
+class Solution {
+    public int[][] kClosest(int[][] points, int k) {
+        // Use a max-heap (PriorityQueue) to store the k closest points.
+        PriorityQueue<int[]> maxHeap = new PriorityQueue<>((a, b) -> (b[0] * b[0] + b[1] * b[1]) - (a[0] * a[0] + a[1] * a[1]));
+
+        for (int[] point : points) {
+            maxHeap.offer(point); // Add the current point to the heap.
+
+            if (maxHeap.size() > k) {
+                maxHeap.poll(); // Remove the farthest point if the heap size exceeds k.
+            }
+        }
+
+        int[][] result = new int[k][2];
+        for (int i = 0; i < k; i++) {
+            result[i] = maxHeap.poll();
+        }
+
+        return result;
+    }
+}
+```
+
+4. [Find K Pairs with Smallest Sums](https://leetcode.com/problems/find-k-pairs-with-smallest-sums/description/) - O(m log m + k log m) & O(k)
+- Question: Find the k smallest pairs from two sorted arrays, where each pair consists of one element from each array. The pairs should be ordered by their sum.
+- Solution: Heap
+- I have to find the k smallest pairs from two sorted arrays. The pairs are formed by taking one element from nums1 and one from nums2, and the sum of the pair is what determines the order. The result should be the k pairs with the smallest sums. Hmm.
+- First, I remember that since both arrays are sorted, there might be a way to efficiently generate the smallest pairs without checking every possible combination. Because if I just generate all possible pairs and then sort them, that would be O(n^2 log n) time, which is not feasible for large arrays.
+- So what's the smarter approach here? Oh right, using a priority queue (min-heap or max-heap) to keep track of the smallest sums. But how exactly to structure that?
+- Wait, since both arrays are sorted in ascending order, the smallest possible pair is (nums1[0], nums2[0]). The next candidates could be either (nums1[0], nums2[1]) or (nums1[1], nums2[0]). But if I naively explore all possible next steps, it might not be efficient.
+- I think the priority queue can be used to track the next possible pairs. Each time we take the smallest sum pair from the heap, then add the next possible pairs from that position. But how to avoid duplicates?
+- Alternatively, maybe we can use a min-heap that starts with the first element of nums1 paired with all elements of nums2. But that could be O(k) space and O(k log k) time. Wait, but nums1 and nums2 can be large. Let's see.
+- Wait, let's think about this. Let's say we start by adding all pairs (i, 0) where i is the index from nums1. Then, for each step, we extract the minimum sum (i, j) from the heap and add the next possible pair (i, j+1) if j+1 is within bounds. This way, we generate pairs in a way that covers all possible combinations without duplicates. Because each time, when you take (i,j), you then add (i,j+1), which is the next possible pair in nums2 for the same i. But this approach would require initializing the heap with the first element of nums2 for each element in nums1. However, if nums1 is large, like size n, then initializing the heap with n elements could be O(n) time, which is manageable if n is not too big. But if n is up to 1e5, then that's a problem. Wait, but the constraints for the problem? Let's check the problem's constraints.
+- Wait, looking at the problem statement, the constraints for nums1 and nums2's lengths can be up to 1e4 each. So initializing the heap with all (i,0) pairs would take O(m) time where m is the size of nums1, which is 1e4. That's manageable. Then, each heap operation is O(log m) time. Since we need to do this k times, the total time would be O(m + k log m). If k is up to 1e4, then this is feasible.
+- But wait, if k is larger than m * n, then the answer is all possible pairs. So we need to handle that case as well. So first, we take the minimum between k and m*n to avoid processing more than necessary.
+- So the steps would be:
+- Initialize a min-heap. Each element in the heap is a triplet (sum, i, j), where i is the index in nums1 and j is the index in nums2. The sum is nums1[i] + nums2[j].
+- Start by adding all possible (i, 0) pairs for i from 0 to nums1.length-1. Because those are the smallest possible pairs for each starting element in nums1.
+- Then, perform the following k times (or until the heap is empty):
+a. Extract the pair with the smallest sum.
+b. Add this pair to the result list.
+c. Then, if j+1 is within nums2's bounds, add the pair (i, j+1) to the heap.
+- However, this approach can lead to duplicates. Wait, how? Because if two different i's have the same j's. But the heap will process them in order of sum. Wait, no. Because each time we extract a pair (i,j), we add (i,j+1). So the same j+1 for different i's could be added multiple times. But the heap will manage the order based on their sums.
+```
+class Solution {
+    public List<List<Integer>> kSmallestPairs(int[] nums1, int[] nums2, int k) {
+        List<List<Integer>> result = new ArrayList<>();
+        if (nums1.length == 0 || nums2.length == 0 || k == 0) {
+            return result;
+        }
+
+        // Priority queue to store indices (i, j) with comparator based on the sum of the elements
+        PriorityQueue<int[]> heap = new PriorityQueue<>(
+            (a, b) -> Integer.compare(nums1[a[0]] + nums2[a[1]], nums1[b[0]] + nums2[b[1]])
+        );
+        
+        // Only push the first k elements from nums1 (paired with nums2[0])
+        for (int i = 0; i < Math.min(k, nums1.length); i++) {
+            heap.offer(new int[]{i, 0});
+        }
+        
+        while (k > 0 && !heap.isEmpty()) {
+            int[] indices = heap.poll();
+            int i = indices[0];
+            int j = indices[1];
+            
+            result.add(Arrays.asList(nums1[i], nums2[j]));
+            k--;
+            
+            if (j + 1 < nums2.length) {
+                heap.offer(new int[]{i, j + 1});
+            }
+        }
+        
+        return result;
+    }
+}
+
+```
 
 ## Monotonic Stack 
 - Question: 1. Next greater/smaller, previous greater/smaller - O(n)
