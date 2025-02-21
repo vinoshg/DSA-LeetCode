@@ -47,6 +47,41 @@ Arrays.fill(answer, 1);
 int[][] dp = new int[m + 1][n + 1];
 char[] chars = s.toCharArray(); //Char Array
 for (int[] interval : intervals) { }
+
+//Array Sort
+class Student {
+    String name;
+    int score;
+
+    Student(String name, int score) {
+        this.name = name;
+        this.score = score;
+    }
+
+    @Override
+    public String toString() {
+        return name + "(" + score + ")";
+    }
+}
+Student[] students = {
+            new Student("Alice", 85),
+            new Student("Bob", 92),
+            new Student("Charlie", 78)
+        };
+
+        // Sort by score in ascending order
+        Arrays.sort(students, (s1, s2) -> Integer.compare(s1.score, s2.score));
+        System.out.println(Arrays.toString(students));
+
+// Sort by score in ascending order
+        Arrays.sort(students, (s1, s2) -> Integer.compare(s1.score, s2.score));
+        System.out.println(Arrays.toString(students)); 
+        // Output: [Charlie(78), Alice(85), Bob(92)]
+
+        // Sort by score in descending order
+        Arrays.sort(students, (s1, s2) -> Integer.compare(s2.score, s1.score));
+        System.out.println(Arrays.toString(students)); 
+        // Output: [Bob(92), Alice(85), Charlie(78)]
 ```
 ## List
 ```
