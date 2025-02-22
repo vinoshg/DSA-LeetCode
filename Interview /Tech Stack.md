@@ -1,4 +1,4 @@
-1. TensorFlow
+## 1. TensorFlow
 What it is:
 
 An open-source deep learning framework developed by Google for building and training neural networks.
@@ -15,7 +15,7 @@ Use Cases:
 
 Image/Video recognition (CNNs), NLP (RNNs, Transformers), Recommender Systems.
 
-2. PyTorch
+## 2. PyTorch
 What it is:
 
 An open-source deep learning framework by Facebook (Meta) with dynamic computation graphs.
@@ -32,7 +32,7 @@ Use Cases:
 
 Cutting-edge research (GANs, Transformers), Real-time inference.
 
-3. Scikit-learn
+## 3. Scikit-learn
 What it is:
 
 A Python library for traditional machine learning (non-deep learning).
@@ -47,7 +47,7 @@ Use Cases:
 
 Linear regression, Random Forests, SVM, PCA.
 
-4. AWS SageMaker
+## 4. AWS SageMaker
 What it is:
 
 A fully managed cloud service (AWS) for end-to-end ML workflows.
@@ -64,7 +64,7 @@ Use Cases:
 
 Enterprise-scale model training/deployment, MLOps pipelines.
 
-5. MLflow
+## 5. MLflow
 What it is:
 
 An open-source platform for managing the ML lifecycle.
@@ -81,7 +81,7 @@ Use Cases:
 
 Tracking experiments, comparing models, deploying to Kubernetes.
 
-Comparison Table
+C## omparison Table
 Tool	Purpose	Strengths	Weaknesses
 TensorFlow	Deep Learning (Production)	Scalability, Deployment Tools	Steeper Learning Curve
 PyTorch	Deep Learning (Research)	Flexibility, Debugging Ease	Less Optimized for Mobile/Web
