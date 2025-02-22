@@ -81,7 +81,7 @@ Use Cases:
 
 Tracking experiments, comparing models, deploying to Kubernetes.
 
-C## omparison Table
+## Comparison Table
 Tool	Purpose	Strengths	Weaknesses
 TensorFlow	Deep Learning (Production)	Scalability, Deployment Tools	Steeper Learning Curve
 PyTorch	Deep Learning (Research)	Flexibility, Debugging Ease	Less Optimized for Mobile/Web
