@@ -20,7 +20,352 @@
 18. [Heap - Priority Queue](#heap) - Find Median from Data Stream || 
 19. [Trie - O(L) & O(N*L)](#trie) - Implement Trie - Prefix Tree || Design Add and Search Words Data Structure || Word Search II 
 20. [Tree](#tree) - Serialize and Deserialize Binary Tree || Subtree of Another Tree || Validate Binary Search Tree(BST) || Invert Binary Tree || Same Tree || Binary Tree Level Order Traversal || Kth Smallest Element in a BST || Maximum Depth of Binary Tree || Construct Binary Tree from Preorder and Inorder Traversal || Lowest Common Ancestor of a Binary Search Tree (BST) || Binary Tree Maximum Path Sum 
-21. [Graph - O(V+E) & O(V)](#graph) - Number of Islands || Clone Graph || Pacific Atlantic Water Flow || Word Search || Course Schedule || Graph Valid Tree || Alien Dictionary || Number of connected components in an undirected graph 
+21. [Graph - O(V+E) & O(V)](#graph) - Number of Islands || Clone Graph || Pacific Atlantic Water Flow || Word Search || Course Schedule || Graph Valid Tree || Alien Dictionary || Number of connected components in an undirected graph
+22. [Leetcode]
+
+## Leetcode
+1. Tarjan's Algorithm
+```
+import java.util.*;
+
+public class ArticulationPoints {
+    private int time = 0;
+    private List<List<Integer>> graph;
+    private int[] disc;
+    private int[] low;
+    private boolean[] visited;
+    private boolean[] isArticulation;
+    private int[] parent;
+
+    public List<Integer> findArticulationPoints(int n, List<List<Integer>> graph) {
+        this.graph = graph;
+        disc = new int[n];
+        low = new int[n];
+        visited = new boolean[n];
+        isArticulation = new boolean[n];
+        parent = new int[n];
+        Arrays.fill(disc, -1);
+        Arrays.fill(parent, -1);
+
+        for (int i = 0; i < n; i++) {
+            if (!visited[i]) {
+                dfs(i);
+            }
+        }
+
+        List<Integer> result = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            if (isArticulation[i]) {
+                result.add(i);
+            }
+        }
+        return result;
+    }
+
+    private void dfs(int u) {
+        visited[u] = true;
+        disc[u] = low[u] = ++time;
+        int children = 0;
+
+        for (int v : graph.get(u)) {
+            if (!visited[v]) {
+                children++;
+                parent[v] = u;
+                dfs(v);
+                low[u] = Math.min(low[u], low[v]);
+
+                // Check if u is root and has two children
+                if (parent[u] == -1 && children > 1) {
+                    isArticulation[u] = true;
+                }
+                // If u is not root and low[v] >= disc[u]
+                if (parent[u] != -1 && low[v] >= disc[u]) {
+                    isArticulation[u] = true;
+                }
+            } else if (v != parent[u]) { // Back edge
+                low[u] = Math.min(low[u], disc[v]);
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        // Example usage
+        int n = 3;
+        List<List<Integer>> graph = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            graph.add(new ArrayList<>());
+        }
+        graph.get(0).add(1);
+        graph.get(1).add(0);
+        graph.get(1).add(2);
+        graph.get(2).add(1);
+
+        ArticulationPoints ap = new ArticulationPoints();
+        List<Integer> points = ap.findArticulationPoints(n, graph);
+        System.out.println("Articulation points: " + points); // Output: [1]
+    }
+}
+```
+```
+import java.util.*;
+
+public class BridgesInGraph {
+    private int time = 0;
+    private List<List<Integer>> graph;
+    private int[] disc;
+    private int[] low;
+    private boolean[] visited;
+    private List<int[]> bridges;
+
+    public List<int[]> findBridges(int n, List<List<Integer>> graph) {
+        this.graph = graph;
+        disc = new int[n];
+        low = new int[n];
+        visited = new boolean[n];
+        bridges = new ArrayList<>();
+        Arrays.fill(disc, -1);
+
+        for (int i = 0; i < n; i++) {
+            if (!visited[i]) {
+                dfs(i, -1);
+            }
+        }
+
+        return bridges;
+    }
+
+    private void dfs(int u, int parent) {
+        visited[u] = true;
+        disc[u] = low[u] = ++time;
+
+        for (int v : graph.get(u)) {
+            if (!visited[v]) {
+                dfs(v, u);
+                low[u] = Math.min(low[u], low[v]);
+
+                // Check if the edge (u, v) is a bridge
+                if (low[v] > disc[u]) {
+                    bridges.add(new int[]{u, v});
+                }
+            } else if (v != parent) { // Back edge
+                low[u] = Math.min(low[u], disc[v]);
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        // Example usage
+        int n = 4;
+        List<List<Integer>> graph = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            graph.add(new ArrayList<>());
+        }
+        graph.get(0).add(1);
+        graph.get(1).add(0);
+        graph.get(1).add(2);
+        graph.get(2).add(1);
+        graph.get(2).add(0);
+        graph.get(0).add(2);
+        graph.get(1).add(3);
+        graph.get(3).add(1);
+
+        BridgesInGraph bg = new BridgesInGraph();
+        List<int[]> bridges = bg.findBridges(n, graph);
+        System.out.println("Bridges in the graph:");
+        for (int[] bridge : bridges) {
+            System.out.println(bridge[0] + " - " + bridge[1]);
+        }
+        // Output: [1 - 3]
+    }
+}
+```
+2. Determine the maximum number of bombs that can be detonated starting from a single bomb. Each bomb can trigger other bombs within its blast radius, creating a chain reaction. This problem can be efficiently modeled and solved using a directed graph approach combined with Breadth-First Search (BFS).
+```
+class Solution {
+    public int maximumDetonation(int[][] bombs) {
+        int n = bombs.length;
+        List<List<Integer>> adj = new ArrayList<>(n);
+        
+        // Build adjacency list
+        for (int i = 0; i < n; i++) {
+            adj.add(new ArrayList<>());
+            long x1 = bombs[i][0], y1 = bombs[i][1], rSq = (long) bombs[i][2] * bombs[i][2];
+            for (int j = 0; j < n; j++) {
+                if (i == j) continue;
+                long dx = bombs[j][0] - x1, dy = bombs[j][1] - y1;
+                if (dx * dx + dy * dy <= rSq) {
+                    adj.get(i).add(j); // Bomb i can detonate bomb j
+                }
+            }
+        }
+        
+        // BFS from each bomb to find max reachable
+        int maxDetonated = 0;
+        for (int i = 0; i < n; i++) {
+            boolean[] visited = new boolean[n];
+            Queue<Integer> q = new LinkedList<>();
+            q.add(i);
+            visited[i] = true;
+            int count = 1;
+            
+            while (!q.isEmpty()) {
+                int u = q.poll();
+                for (int v : adj.get(u)) { // Directly access precomputed neighbors
+                    if (!visited[v]) {
+                        visited[v] = true;
+                        count++;
+                        q.add(v);
+                    }
+                }
+            }
+            maxDetonated = Math.max(maxDetonated, count);
+        }
+        return maxDetonated;
+    }
+}
+```
+3. Determine if a message can be broadcast from a source router to a target router, considering that each router can transmit the message to other routers within a 10-unit range and then shuts down immediately. This problem can be efficiently solved using a Breadth-First Search (BFS) approach to model the propagation of the message through the network.
+```
+import java.util.*;
+
+class Router { 
+    String name; 
+    int x, y; 
+}
+
+public class RouterBroadcast {
+    public boolean isReachable(Router source, Router target, List<Router> routers) {
+        // Check if source and target are the same
+        if (source.name.equals(target.name)) {
+            return true;
+        }
+        
+        // Use BFS to explore reachable routers
+        Queue<Router> queue = new LinkedList<>();
+        Set<String> visited = new HashSet<>();
+        
+        queue.add(source);
+        visited.add(source.name);
+        
+        while (!queue.isEmpty()) {
+            Router current = queue.poll();
+            
+            for (Router router : routers) {
+                if (!visited.contains(router.name)) {
+                    if (distance(current, router) <= 10) {
+                        if (router.name.equals(target.name)) {
+                            // Found the target
+                            return true;
+                        }
+                        // Mark as visited and enqueue
+                        visited.add(router.name);
+                        queue.add(router);
+                    }
+                }
+            }
+        }
+        
+        // Target not reachable
+        return false;
+    }
+    
+    // Assume this method is provided
+    private int distance(Router a, Router b) {
+        // Calculate Euclidean distance
+        int dx = a.x - b.x;
+        int dy = a.y - b.y;
+        return (int) Math.sqrt(dx * dx + dy * dy);
+    }
+}
+```
+4. Finding the largest square containing only '1's in a binary matrix using a recursive approach with memoization, we can leverage the same dynamic programming (DP) logic but implemented in a top-down manner. This approach efficiently tracks the maximum square size ending at each cell using recursion and memoization to avoid redundant calculations.
+```
+class Solution {
+    public int maximalSquare(char[][] matrix) {
+        if (matrix == null || matrix.length == 0 || matrix[0].length == 0) {
+            return 0;
+        }
+        
+        int m = matrix.length;
+        int n = matrix[0].length;
+        int[] dp = new int[n];
+        int maxSide = 0;
+        
+        // Initialize the first row
+        for (int j = 0; j < n; j++) {
+            dp[j] = matrix[0][j] == '1' ? 1 : 0;
+            maxSide = Math.max(maxSide, dp[j]);
+        }
+        
+        for (int i = 1; i < m; i++) {
+            int prev = dp[0]; // previous row's previous column value
+            dp[0] = matrix[i][0] == '1' ? 1 : 0;
+            maxSide = Math.max(maxSide, dp[0]);
+            
+            for (int j = 1; j < n; j++) {
+                int temp = dp[j]; // Save the previous row's current column value before updating
+                if (matrix[i][j] == '1') {
+                    dp[j] = Math.min(Math.min(dp[j - 1], dp[j]), prev) + 1;
+                    maxSide = Math.max(maxSide, dp[j]);
+                } else {
+                    dp[j] = 0;
+                }
+                prev = temp; // Update prev to previous row's value for next iteration
+            }
+        }
+        
+        return maxSide * maxSide;
+    }
+}
+```
+```
+class Solution {
+    public int maximalSquare(char[][] matrix) {
+        if (matrix == null || matrix.length == 0 || matrix[0].length == 0) {
+            return 0;
+        }
+        
+        int m = matrix.length;
+        int n = matrix[0].length;
+        int[][] memo = new int[m][n];
+        for (int[] row : memo) {
+            Arrays.fill(row, -1);
+        }
+        
+        int maxSide = 0;
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (matrix[i][j] == '1') {
+                    maxSide = Math.max(maxSide, dfs(matrix, i, j, memo));
+                }
+            }
+        }
+        
+        return maxSide * maxSide;
+    }
+    
+    private int dfs(char[][] matrix, int i, int j, int[][] memo) {
+        if (matrix[i][j] == '0') {
+            return 0;
+        }
+        if (memo[i][j] != -1) {
+            return memo[i][j];
+        }
+        if (i == 0 || j == 0) {
+            memo[i][j] = 1;
+            return 1;
+        }
+        
+        int up = dfs(matrix, i - 1, j, memo);
+        int left = dfs(matrix, i, j - 1, memo);
+        int diag = dfs(matrix, i - 1, j - 1, memo);
+        
+        int res = Math.min(Math.min(up, left), diag) + 1;
+        memo[i][j] = res;
+        return res;
+    }
+}
+```
 
 ## Binary Search
 1. Binary Search - O(nlog n) & O(1)
