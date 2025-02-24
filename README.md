@@ -21,7 +21,7 @@
 19. [Trie - O(L) & O(N*L)](#trie) - Implement Trie - Prefix Tree || Design Add and Search Words Data Structure || Word Search II 
 20. [Tree](#tree) - Serialize and Deserialize Binary Tree || Subtree of Another Tree || Validate Binary Search Tree(BST) || Invert Binary Tree || Same Tree || Binary Tree Level Order Traversal || Kth Smallest Element in a BST || Maximum Depth of Binary Tree || Construct Binary Tree from Preorder and Inorder Traversal || Lowest Common Ancestor of a Binary Search Tree (BST) || Binary Tree Maximum Path Sum 
 21. [Graph - O(V+E) & O(V)](#graph) - Number of Islands || Clone Graph || Pacific Atlantic Water Flow || Word Search || Course Schedule || Graph Valid Tree || Alien Dictionary || Number of connected components in an undirected graph
-22. [Leetcode]
+22. [Leetcode](#leetcode)
 
 ## Leetcode
 1. Tarjan's Algorithm
