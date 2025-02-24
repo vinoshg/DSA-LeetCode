@@ -366,7 +366,107 @@ class Solution {
     }
 }
 ```
+5. Kruskals Algorithm
+```
+import java.util.*;
 
+class Edge implements Comparable<Edge> {
+    int src, dest, weight;
+
+    public Edge(int src, int dest, int weight) {
+        this.src = src;
+        this.dest = dest;
+        this.weight = weight;
+    }
+
+    @Override
+    public int compareTo(Edge other) {
+        return this.weight - other.weight;
+    }
+}
+
+class UnionFind {
+    private int[] parent;
+    private int[] rank;
+
+    public UnionFind(int size) {
+        parent = new int[size];
+        rank = new int[size];
+        for (int i = 0; i < size; i++) {
+            parent[i] = i; // Each node is its own parent initially
+            rank[i] = 1; // Rank is 1 initially
+        }
+    }
+
+    public int find(int x) {
+        if (parent[x] != x) {
+            parent[x] = find(parent[x]); // Path compression
+        }
+        return parent[x];
+    }
+
+    public void union(int x, int y) {
+        int rootX = find(x);
+        int rootY = find(y);
+
+        if (rootX != rootY) {
+            // Union by rank
+            if (rank[rootX] > rank[rootY]) {
+                parent[rootY] = rootX;
+            } else if (rank[rootX] < rank[rootY]) {
+                parent[rootX] = rootY;
+            } else {
+                parent[rootY] = rootX;
+                rank[rootX]++;
+            }
+        }
+    }
+}
+
+public class KruskalsAlgorithm {
+    public static List<Edge> kruskalMST(List<Edge> edges, int vertices) {
+        // Sort edges by weight
+        Collections.sort(edges);
+
+        UnionFind uf = new UnionFind(vertices);
+        List<Edge> mst = new ArrayList<>();
+
+        for (Edge edge : edges) {
+            int srcRoot = uf.find(edge.src);
+            int destRoot = uf.find(edge.dest);
+
+            // If adding this edge does not form a cycle
+            if (srcRoot != destRoot) {
+                mst.add(edge);
+                uf.union(srcRoot, destRoot);
+            }
+        }
+
+        return mst;
+    }
+
+    public static void main(String[] args) {
+        // Example usage
+        int vertices = 4;
+        List<Edge> edges = new ArrayList<>();
+        edges.add(new Edge(0, 1, 10));
+        edges.add(new Edge(0, 2, 6));
+        edges.add(new Edge(0, 3, 5));
+        edges.add(new Edge(1, 3, 15));
+        edges.add(new Edge(2, 3, 4));
+
+        List<Edge> mst = kruskalMST(edges, vertices);
+        System.out.println("Edges in the Minimum Spanning Tree:");
+        for (Edge edge : mst) {
+            System.out.println(edge.src + " - " + edge.dest + " : " + edge.weight);
+        }
+        // Output:
+        // 2 - 3 : 4
+        // 0 - 3 : 5
+        // 0 - 1 : 10
+    }
+}
+```
 ## Binary Search
 1. Binary Search - O(nlog n) & O(1)
 - Question: Find a target in a Sorted Array or range
