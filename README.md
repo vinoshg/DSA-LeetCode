@@ -34,20 +34,6 @@
 31. Maximum Appearing Element
 ```
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ##
 1. [Binary Search - O(nlog n) & O(1)](#binary-search) - Search in Rotated Sorted Array || Find Minimum in Rotated Sorted Array || Median of Two Sorted Arrays
 2. [Cyclic Sort - O(n) & O(1)](#cyclic-sort) - Find the Duplicate Number
