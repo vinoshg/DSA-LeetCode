@@ -1,5 +1,38 @@
 ## [Data Structures & Algorithms](https://leetcode.com/problemset/)
-1. Arrays - Introduction to Arrays || Array Types || Vector in C++ || ArrayList in Java || Operations on Arrays (Part 1) || Operations on Arrays (Part 2) || Largest Element in an Array || Second Largest Element in Array || Check if an Array is Sorted || Reverse an Array || Remove duplicates from a sorted array || Move Zeros to End || Left Rotate an Array by One || Left Rotate an Array by D places || Leaders in an Array problem || Maximum Difference Problem with Order || Frequencies in a Sorted Array || Stock Buy and Sell Problem (Part 1) || Stock Buy and Sell problem  (Part 2) || Trapping Rain Water || Maximum consecutive 1s || Maximum subarray sum || Longest Even Odd Subarray || Maximum Circular Sum Subarray || Majority Element || Minimum Consecutive Flips || Sliding Window Technique || Subarray with Given Sum || Prefix Sum || Equilibrium Point || Maximum Appearing Element || Question1 || Question2 || Question3 || Question4 || Question5 || Array insert at end || Array insert at index || Maximum Index || Max and Second Max || Mean And Median of Array || Check if array is sorted and rotated || Reverse array in groups || Rearrange an array with O(1) extra space || Rotate Array || Array Leaders || Rearrange Array Alternately || Smallest Positive Missing || Frequencies in a Limited Array || Stock buy and sell || Trapping Rain Water || Kadane's Algorithm || Max Circular Subarray Sum || Minimum adjacent difference in a circular array || Wave Array || Maximum occured integer || Who has the majority? || Fraction Trouble || Print Pattern || Longest Subarray Of Evens And Odds || Betting game || Equilibrium Point || Strongest Neighbour || Introduction to Arrays || Implementing Arrays in C++ using STL || Iterators in C++ STL || Implementing Arrays in Java || Operations on Arrays || Insertion and Deletion in Arrays || Sample Problems on Array || Largest Element in an Array || Second Largest Element in Array || Check if an Array is Sorted || Reverse an Array || Remove duplicates from a sorted array || Move Zeros to End || Left Rotate an Array by D places || Leaders in an Array problem || Maximum Difference Problem with Order || Frequencies in a Sorted Array || Stock Buy and Sell Problem || Trapping Rain Water || Maximum Subarray Sum || Longest Even Odd Subarray || Maximum Circular Sum Subarray || Majority Element || Minimum Consecutive Flips || Sliding Window Technique || Prefix Sum Technique || Maximum Appearing Element
+1. Arrays
+```
+1. Introduction to Arrays
+2. Array Types
+3. Vector in C++
+4. ArrayList in Java
+5. Operations on Arrays (Part 1)
+6. Operations on Arrays (Part 2)
+7. Largest Element in an Array
+8. Second Largest Element in Array
+9. Check if an Array is Sorted
+10. Reverse an Array
+11. Remove duplicates from a sorted array
+12. Move Zeros to End
+13. Left Rotate an Array by One
+14. Left Rotate an Array by D places
+15. Leaders in an Array problem
+16. Maximum Difference Problem with Order
+17. Frequencies in a Sorted Array
+18. Stock Buy and Sell Problem (Part 1)
+19. Stock Buy and Sell problem  (Part 2)
+20. Trapping Rain Water
+21. Maximum consecutive 1s
+22. Maximum subarray sum
+23. Longest Even Odd Subarray
+24. Maximum Circular Sum Subarray
+25. Majority Element
+26. Minimum Consecutive Flips
+27. Sliding Window Technique
+28. Subarray with Given Sum
+29. Prefix Sum
+30. Equilibrium Point
+31. Maximum Appearing Element
+```
 
 
 
